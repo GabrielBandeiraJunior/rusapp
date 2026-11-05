@@ -1,0 +1,451 @@
+pos	bare	hint	pt
+noun	дом		casa
+noun	день		dia
+noun	час		hora
+noun	мир		mundo; paz
+noun	вопрос		pergunta; questão
+noun	город		cidade
+noun	глаз		olho
+noun	стол		mesa
+noun	язык		língua; idioma
+noun	магазин		loja
+noun	телефон		telefone
+noun	ключ		chave
+noun	номер		número; quarto (de hotel)
+noun	план		plano
+noun	вечер		noite; fim de tarde
+noun	конец		fim
+noun	путь		caminho
+noun	список		lista
+noun	ответ		resposta
+noun	разговор		conversa
+noun	звонок		chamada; toque
+noun	ужин		jantar
+noun	обед		almoço
+noun	подарок		presente
+noun	закон		lei
+noun	совет		conselho
+noun	класс		classe; sala de aula
+noun	огонь		fogo
+noun	палец		dedo
+noun	самолёт		avião
+noun	центр		centro
+noun	результат		resultado
+noun	клуб		clube
+noun	секрет		segredo
+noun	выход		saída
+noun	банк		banco
+noun	шаг		passo
+noun	рот		boca
+noun	документ		documento
+noun	уровень		nível
+noun	фильм		filme
+noun	корабль		navio
+noun	мозг		cérebro
+noun	курс		curso
+noun	голос		voz
+noun	момент		momento
+noun	случай		caso; ocasião
+noun	способ		modo; método
+noun	выбор		escolha
+noun	хлеб		pão
+noun	чай		chá
+noun	сад		jardim
+noun	лес		floresta
+noun	поезд		trem
+noun	автобус		ônibus
+noun	паспорт		passaporte
+noun	билет		bilhete; ingresso
+noun	дождь		chuva
+noun	снег		neve
+noun	ветер		vento
+noun	нож		faca
+noun	урок		lição; aula
+noun	экзамен		exame
+noun	вокзал		estação (de trem)
+noun	аэропорт		aeroporto
+noun	ресторан		restaurante
+noun	университет		universidade
+noun	театр		teatro
+noun	музей		museu
+noun	парк		parque
+noun	мост		ponte
+noun	двор		pátio
+noun	этаж		andar
+noun	рынок		mercado
+noun	завод		fábrica
+noun	суп		sopa
+noun	сок		suco
+noun	сыр		queijo
+noun	салат		salada
+noun	телевизор		televisão
+noun	компьютер		computador
+noun	стакан		copo
+noun	чемодан		mala
+noun	год		ano
+noun	месяц		mês
+noun	жизнь		vida
+noun	правда		verdade
+noun	работа		trabalho
+noun	мама		mamãe
+noun	рука		mão; braço
+noun	ночь		noite
+noun	машина		carro
+noun	проблема		problema
+noun	женщина		mulher
+noun	семья		família
+noun	тема		tema
+noun	минута		minuto
+noun	вещь		coisa
+noun	жена		esposa
+noun	неделя		semana
+noun	голова		cabeça
+noun	дорога		estrada; caminho
+noun	школа		escola
+noun	сторона		lado
+noun	история		história
+noun	часть		parte
+noun	дверь		porta
+noun	любовь		amor
+noun	комната		quarto; sala
+noun	кровь		sangue
+noun	игра		jogo
+noun	сила		força
+noun	сестра		irmã
+noun	идея		ideia
+noun	земля		terra
+noun	причина		motivo
+noun	вода		água
+noun	нога		perna; pé
+noun	встреча		encontro; reunião
+noun	книга		livro
+noun	песня		canção
+noun	квартира		apartamento
+noun	улица		rua
+noun	страна		país
+noun	группа		grupo
+noun	ошибка		erro
+noun	больница		hospital
+noun	мысль		pensamento
+noun	цель		objetivo
+noun	система		sistema
+noun	музыка		música
+noun	свадьба		casamento
+noun	стена		parede
+noun	карта		mapa
+noun	одежда		roupa
+noun	звезда		estrela
+noun	шутка		piada
+noun	форма		forma
+noun	девушка		moça; namorada
+noun	девочка		menina
+noun	дочь		filha
+noun	мать		mãe
+noun	собака		cachorro (cadela)
+noun	подруга		amiga
+noun	бабушка		avó
+noun	кошка		gata
+noun	птица		pássaro; ave
+noun	рыба		peixe
+noun	лошадь		cavalo
+noun	корова		vaca
+noun	тётя		tia
+noun	фотография		fotografia
+noun	погода		tempo (clima)
+noun	зима		inverno
+noun	весна		primavera
+noun	осень		outono
+noun	тарелка		prato
+noun	ложка		colher
+noun	вилка		garfo
+noun	сумка		bolsa
+noun	кухня		cozinha
+noun	кровать		cama
+noun	лампа		lâmpada
+noun	дело		assunto; coisa a fazer
+noun	время		tempo
+noun	место		lugar
+noun	лето		verão
+noun	слово		palavra
+noun	утро		manhã
+noun	лицо		rosto
+noun	начало		começo
+noun	тело		corpo
+noun	сердце		coração
+noun	имя		nome
+noun	письмо		carta
+noun	окно		janela
+noun	здание		prédio
+noun	небо		céu
+noun	море		mar
+noun	вино		vinho
+noun	молоко		leite
+noun	масло		manteiga; óleo
+noun	яблоко		maçã
+noun	яйцо		ovo
+noun	мясо		carne
+noun	пиво		cerveja
+noun	кино		cinema
+noun	число		número; data
+noun	решение		decisão
+noun	сообщение		mensagem
+noun	предложение		frase; oferta
+noun	свидание		encontro (marcado)
+noun	задание		tarefa
+noun	упражнение		exercício
+noun	человек		pessoa; homem
+noun	друг		amigo
+noun	ребёнок		criança
+noun	парень		rapaz; cara
+noun	отец		pai
+noun	брат		irmão
+noun	сын		filho
+noun	муж		marido
+noun	мальчик		menino
+noun	мужчина		homem
+noun	учитель		professor
+noun	врач		médico
+noun	студент		estudante
+noun	директор		diretor
+noun	президент		presidente
+noun	король		rei
+noun	писатель		escritor
+noun	водитель		motorista
+noun	дедушка		avô
+noun	папа		papai
+noun	дядя		tio
+noun	медведь		urso
+noun	волк		lobo
+noun	кот		gato
+noun	лев		leão
+adj	новый		novo
+adj	старый		velho; antigo
+adj	молодой		jovem
+adj	большой		grande
+adj	маленький		pequeno
+adj	хороший		bom
+adj	плохой		ruim
+adj	красивый		bonito
+adj	белый		branco
+adj	чёрный		preto
+adj	красный		vermelho
+adj	синий		azul (escuro)
+adj	жёлтый		amarelo
+adj	добрый		bondoso; bom
+adj	первый		primeiro
+adj	второй		segundo
+adj	последний		último
+adj	главный		principal
+adj	важный		importante
+adj	интересный		interessante
+adj	трудный		difícil
+adj	лёгкий		fácil; leve
+adj	быстрый		rápido
+adj	медленный		lento
+adj	дорогой		caro; querido
+adj	дешёвый		barato
+adj	сильный		forte
+adj	слабый		fraco
+adj	длинный		comprido
+adj	короткий		curto
+adj	высокий		alto
+adj	низкий		baixo
+adj	тёплый		morno; quente
+adj	холодный		frio
+adj	горячий		quente
+adj	свежий		fresco
+adj	вкусный		gostoso
+adj	чистый		limpo
+adj	полный		cheio
+adj	пустой		vazio
+adj	светлый		claro
+adj	тёмный		escuro
+adj	громкий		alto (som)
+adj	тихий		silencioso; baixo (som)
+adj	весёлый		alegre
+adj	грустный		triste
+adj	умный		inteligente
+adj	глупый		bobo; burro
+adj	богатый		rico
+adj	бедный		pobre
+adj	здоровый		saudável
+adj	больной		doente
+adj	свободный		livre
+adj	занятый		ocupado
+adj	готовый		pronto
+adj	правильный		correto
+adj	простой		simples
+adj	русский		russo
+adj	английский		inglês
+adj	другой		outro
+adj	любимый		favorito; querido
+adj	каждый		cada
+adj	мой		meu
+adj	наш		nosso
+adj	твой		teu; seu
+adj	ваш		vosso; seu
+adj	этот		este; esse
+adj	тот		aquele
+adj	весь		todo
+verb	быть		ser; estar
+verb	мочь		poder
+verb	знать		saber; conhecer
+verb	хотеть		querer
+verb	сказать		dizer
+verb	думать		pensar
+verb	говорить		falar
+verb	делать		fazer
+verb	сделать		fazer (concluir)
+verb	видеть		ver
+verb	давать		dar
+verb	дать		dar (uma vez)
+verb	идти		ir (a pé)
+verb	пойти		ir (começar a ir)
+verb	найти		encontrar
+verb	понимать		entender
+verb	понять		compreender
+verb	помогать		ajudar
+verb	помочь		ajudar (concluir)
+verb	любить		amar; gostar
+verb	взять		pegar
+verb	брать		pegar
+verb	иметь		ter
+verb	стоять		estar de pé
+verb	работать		trabalhar
+verb	смотреть		olhar; assistir
+verb	слышать		ouvir
+verb	слушать		escutar
+verb	жить		viver; morar
+verb	начать		começar
+verb	начинать		começar
+verb	получить		receber
+verb	просить		pedir
+verb	ждать		esperar
+verb	помнить		lembrar
+verb	забыть		esquecer
+verb	чувствовать		sentir
+verb	искать		procurar
+verb	звонить		ligar; telefonar
+verb	спать		dormir
+verb	играть		jogar; tocar
+verb	ехать		ir (de veículo)
+verb	купить		comprar
+verb	покупать		comprar
+verb	открыть		abrir
+verb	открывать		abrir
+verb	закрыть		fechar
+verb	читать		ler
+verb	писать		escrever
+verb	учить		ensinar; estudar
+verb	учиться		aprender; estudar
+verb	есть		comer
+verb	пить		beber
+verb	готовить		preparar; cozinhar
+verb	ходить		andar; ir (habitual)
+verb	приходить		chegar; vir
+verb	прийти		chegar
+verb	уйти		ir embora
+verb	вернуться		voltar
+verb	нравиться		agradar; gostar
+verb	спрашивать		perguntar
+verb	спросить		perguntar (concluir)
+verb	отвечать		responder
+verb	ответить		responder (concluir)
+verb	называть		chamar; nomear
+verb	лежать		estar deitado
+verb	сидеть		estar sentado
+verb	бегать		correr
+verb	танцевать		dançar
+verb	петь		cantar
+verb	рисовать		desenhar
+verb	гулять		passear
+verb	отдыхать		descansar
+verb	встречать		encontrar; receber
+verb	показать		mostrar
+verb	показывать		mostrar
+verb	ставить		pôr em pé
+verb	класть		colocar deitado
+verb	мыть		lavar
+verb	платить		pagar
+verb	стоить		custar
+verb	мечтать		sonhar
+verb	решать		decidir
+verb	решить		decidir (concluir)
+verb	терять		perder
+verb	потерять		perder (concluir)
+verb	бояться		ter medo
+verb	верить		acreditar
+other	я		eu
+other	ты		tu; você
+other	он		ele
+other	она		ela
+other	мы		nós
+other	вы		vocês; o senhor
+other	они		eles
+other	и		e
+other	а		e; mas
+other	но		mas
+other	или		ou
+other	в		em; para dentro de
+other	на		sobre; em
+other	с		com
+other	к		para (direção)
+other	у		junto de; ter (posse)
+other	о		sobre (assunto)
+other	из		de (origem)
+other	для		para (finalidade)
+other	от		de (afastamento)
+other	до		até
+other	по		por; ao longo de
+other	за		atrás de; por
+other	не		não
+other	нет		não (resposta)
+other	да		sim
+other	что		que; o quê
+other	кто		quem
+other	где		onde
+other	когда		quando
+other	как		como
+other	почему		por quê
+other	очень		muito
+other	здесь		aqui
+other	там		lá
+other	сейчас		agora
+other	всегда		sempre
+other	никогда		nunca
+other	уже		já
+other	ещё		ainda; mais
+other	тоже		também
+other	только		só; apenas
+other	можно		pode-se; é permitido
+other	нужно		é preciso
+other	надо		é preciso
+other	хорошо		bem
+other	плохо		mal
+other	быстро		rapidamente
+other	много		muito(s)
+other	мало		pouco(s)
+other	спасибо		obrigado
+other	пожалуйста		por favor
+other	привет		oi
+other	если		se
+other	вот		eis; aqui está
+other	сегодня		hoje
+other	завтра		amanhã
+other	вчера		ontem
+other	один		um
+other	два		dois
+other	три		três
+other	четыре		quatro
+other	пять		cinco
+other	потом		depois
+other	теперь		agora
+other	опять		de novo
+other	вместе		juntos
+other	тогда		então
+other	потому		por isso
+other	чтобы		para que
+other	который		que; o qual
+other	это		isto; é
+other	все		todos
+other	всё		tudo

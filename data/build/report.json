@@ -1,0 +1,22 @@
+{
+  "lemmas": 447,
+  "byPos": {
+    "other": 70,
+    "adj": 68,
+    "verb": 88,
+    "noun": 221
+  },
+  "forms": 5468,
+  "gramNouns": 212,
+  "gramAdjs": 63,
+  "sentences": 90,
+  "texts": 14,
+  "skippedLemmas": [
+    "adj:наш — não encontrado/sem acento",
+    "adj:ваш — não encontrado/sem acento"
+  ],
+  "rejectedSentences": [],
+  "glossSource": {
+    "autor (pt)": 447
+  }
+}

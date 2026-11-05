@@ -1,0 +1,10 @@
+node_modules
+.next
+out
+data/raw
+worker/dist
+.wrangler
+*.tsbuildinfo
+test-results
+e2e/screens
+next-env.d.ts
