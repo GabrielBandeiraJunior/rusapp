@@ -4,6 +4,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import {
   loadAdjectives, loadNouns, loadOthers, loadVerbs, readTsv, canon, type RawLemma, type RawForm,
 } from './openrussian.ts';
+import { loadTatoeba } from './tatoeba.ts';
 import { fromApostrophe, normalizeAnswer, stripStress, wordHasRequiredStress } from '../../shared/russian.ts';
 import type { Content, Form, Lemma, Level, Sentence, TextDoc, Token } from '../../shared/types.ts';
 
@@ -241,6 +242,16 @@ export function build(): BuildReport {
     if (r.text && r.text !== '-') s.tx = r.text;
     sentences.push(s);
   });
+  // Tatoeba: frases curtas que resolvem 100% nos dados (se os dumps estiverem disponíveis)
+  let tato = 0;
+  for (const p of loadTatoeba()) {
+    if (tato >= 300) break;
+    if (p.ru.split(/\s+/).length > 9) continue;
+    const res = resolveSentence(p.ru.replace(/ё/g, 'е'), idx, rank);
+    if (!res.tokens) continue;
+    sentences.push({ id: `s${String(sentences.length + 1).padStart(4, '0')}`, ru: res.ru!, pt: p.pt, src: `tatoeba:${p.id}`, tk: res.tokens });
+    tato++;
+  }
   for (const [id, title] of textTitles) {
     const ss = sentences.filter((s) => s.tx === id).map((s) => s.id);
     if (ss.length >= 2) texts.push({ id, title, sentences: ss });

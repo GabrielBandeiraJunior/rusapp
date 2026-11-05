@@ -125,7 +125,7 @@ const SPELL7 = 'г, к, х, ж, ш, ч, щ';
 
 const NOUN_RULES: Partial<Record<Cls, Record<string, string>>> = {
   'm-hard': {
-    'nom.pl': `Masculino terminado em consoante: plural em -ы (-и depois de ${SPELL7}). Alguns têm plural em -а́/-я́ (дом → дома́).`,
+    'nom.pl': `Masculino terminado em consoante: plural em -ы (-и depois de ${SPELL7}). Alguns têm plural acentuado na terminação: -а́ ou -я́ (дом → дома́).`,
     'gen.sg': 'Masculino terminado em consoante: genitivo singular = + а.',
     'gen.pl': 'Masculino terminado em consoante: genitivo plural = + ов (ev/ёв após ц e quando átono; + ей após ж, ш, ч, щ).',
     'acc.sg': 'Masculino: inanimado → acusativo = nominativo; animado → acusativo = genitivo (+ а).',
@@ -171,7 +171,7 @@ const NOUN_RULES: Partial<Record<Cls, Record<string, string>>> = {
     'nom.pl': 'Neutro em -ие: -ие → -ия.', 'gen.sg': 'Neutro em -ие: -ие → -ия.', 'gen.pl': 'Neutro em -ие: -ие → -ий.', 'acc.sg': 'Neutro: acusativo = nominativo.',
   },
   'n-mya': {
-    'nom.pl': 'Neutros em -мя (имя, время): plural em -ена́ (имена́).', 'gen.sg': 'Neutros em -мя: -мя → -мени.',
+    'nom.pl': 'Neutros em -мя: plural em -ена́.', 'gen.sg': 'Neutros em -мя: -мя → -мени.',
     'gen.pl': 'Neutros em -мя: -мя → -мён/-мен.', 'acc.sg': 'Neutro: acusativo = nominativo.',
   },
 };
@@ -181,8 +181,8 @@ const ADJ_NOM: Record<string, string> = {
   'n.sg': 'Neutro sg. nominativo: -ый → -ое (-ий → -ее).', 'pl': 'Plural nominativo: -ый → -ые (-ий/-ой → -ие/-ые).',
 };
 const ADJ_GEN: Record<string, string> = {
-  'm.sg': 'Genitivo masc./neutro sg.: -ого (-его depois de шипящие/мягкий); o г lê-se [в].',
-  'n.sg': 'Genitivo masc./neutro sg.: -ого (-его depois de шипящие/мягкий); o г lê-se [в].',
+  'm.sg': 'Genitivo masc./neutro sg.: -ого (-его depois de sibilantes ou radical mole); o г lê-se [в].',
+  'n.sg': 'Genitivo masc./neutro sg.: -ого (-его depois de sibilantes ou radical mole); o г lê-se [в].',
   'f.sg': 'Genitivo fem. sg.: -ой (-ей).', 'pl': 'Genitivo plural: -ых (-их depois de г, к, х, ж, ш, ч, щ e radical mole).',
 };
 const ADJ_ACC: Record<string, string> = {
@@ -233,8 +233,8 @@ export function explain(ix: ContentIndex, k: GramKey, variants: string[], input 
   const stem = /[аеёиоуыэюяьй]$/.test(b) ? b.slice(0, -1) : b;
   const p = commonPrefix(b, target);
   if (l.pos === 'noun' && target !== b) {
-    if (p < Math.min(2, stem.length)) lines.push('Forma irregular (suplétiva): memorize.');
-    else if (p < stem.length && !(l.an && k.c === 'acc')) lines.push(`A raiz muda (vogal fugitiva ou alternância): ${stripStress(base)} → ${stripStress(correct)}.`);
+    if (p < Math.min(2, stem.length)) { lines.length = 0; lines.push('Forma irregular (suplétiva): memorize.'); }
+    else if (p < stem.length && !(l.an && k.c === 'acc')) lines.push(`A raiz muda (vogal fugitiva ou alternância): ${l.s} → ${correct}.`);
   }
   const s1 = syllableOfStress(l.s), s2 = syllableOfStress(correct);
   if (syllableCount(correct) > 1 && s1 > 0 && s2 > 0 && s1 !== s2) lines.push(`O acento muda de sílaba (${s1}ª → ${s2}ª): ${correct}.`);

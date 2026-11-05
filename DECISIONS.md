@@ -1,0 +1,17 @@
+# Decisões (decisão · motivo · alternativa descartada)
+
+1. **Wiktextract/kaikki indisponível** (proxy do ambiente retorna 403) → usado **OpenRussian** (derivado do Wiktionary; fonte 2 da lista). `fetch.ts` testa kaikki e registra em `data/raw/fetch-report.json`. Descartado: escrever parser de kaikki sem poder testá-lo.
+2. **Tatoeba indisponível** (403) → **frases autorais** (90, 14 textos), com todas as palavras resolvidas contra o índice de formas dos dados; frases com acento ambíguo ou palavra fora do vocabulário são rejeitadas (`data/build/report.json`). O código de Tatoeba (`scripts/pipeline/tatoeba.ts`, testado com fixture) entra automaticamente se os dumps forem baixados (precisa de `bzip2`). Alternativa ru↔en descartada: sem glosas pt confiáveis.
+3. **Glosas em português**: nem OpenRussian nem dicionário aberto acessível têm pt → glosas pt **escritas por mim (autor/IA) para os 447 lemas curados** (`data/curated/lemmas.tsv`). Não são formas gramaticais nem acentos; **revise**. Glosa inglesa fica em `en` no conteúdo como referência. Alternativa (inglês marcado) descartada por inutilizar o app para o público-alvo.
+4. **Seleção de lemas**: lista curada (substantivos 221, adjetivos 68, verbos 88, outras 70) em vez de “top-N por frequência”: a frequência do OpenSubtitles é por forma e contamina com homógrafos/palavrões/nomes (ex.: уж, быль, тут). A frequência (soma das formas por lema) define `freq_rank` e a ordem de ensino. Nível A1/A2/B1 = faixas de rank (≤150, ≤320, resto): heurística.
+5. **Acentos**: apóstrofo do OpenRussian → U+0301. **Monossílabos sem marca** (exceção da regra). ё conta como tônica; comparação trata ё≡е. Formas polissilábicas sem acento nos dados são descartadas. Frases: tokens ambíguos (ex.: мою́/мо́ю) exigem desambiguação explícita pelo autor, mas o acento final **só é aceito se existir nos dados**.
+6. **Adjetivos – acusativo**: a célula do OpenRussian traz variantes juntas; animado = variante igual ao genitivo, inanimado = igual ao nominativo (verificado: todas as variantes ⊆ nom ∪ gen). Neutro: célula como está. Pronomes-adjetivos (мой, этот, тот, весь…) ficam fora do exercício gerativo.
+7. **`год` fora do exercício gerativo**: plural da fonte (лета́/лет) é suspeito para o uso geral.
+8. **наш/ваш** não existem em `adjectives.csv` → ficam de fora.
+9. **Estado do cartão = função das revisões** (replay ordenado por ts,id; fuzz do FSRS desligado). Sync só precisa trocar revisões (idempotentes por id) e converge sem resolver conflitos de estado; tabela `card` do D1 é cache LWW (usada nos lembretes). Descartado: LWW de estado do cartão (perde revisões).
+10. **Rating**: acerto=Bom, com dica=Difícil, erro=Errei, botão “Fácil” opcional. Reconhecimento ru→pt é autoavaliação (4 botões), sem múltipla escolha. Erros voltam 1× ao fim da sessão.
+11. **Transliteração** BGN simplificada, letra a letra (ь/ъ ignorados na comparação). “Leitura” (redução/vozeamento) é aproximação; exceções lexicais (ex.: сегодня) não cobertas.
+12. **Lembretes Telegram**: horários usam `scheduledTime` do cron; ofensiva em risco usa só dias estudados (+ congelamento). Cron a cada 30 min; consulta pesada só se ativado.
+13. **Auth**: Bearer único; todas as rotas de sync exigem (leitura inclusive, pois expõe o histórico). Token do Worker fica em `localStorage` do aparelho.
+14. **Seed D1** inclui conteúdo, mas o app é independente dele (usa o JSON estático); serve a consultas/futuras features.
+15. **Next 15.5 / ESLint 8** (eslintrc) por compatibilidade; `next lint` não usado.

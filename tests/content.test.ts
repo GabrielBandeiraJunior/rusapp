@@ -143,3 +143,25 @@ describe('gramática: currículo e explicações', () => {
     expect(explain(ix, k, answerFor(ix, k)!, 'книгы').join(' ')).toMatch(/nunca se escreve ы/);
   });
 });
+
+describe('UI: explicações nunca exibem palavra russa sem acento', () => {
+  it('todas as explicações de todas as perguntas', () => {
+    const bad = new Set<string>();
+    const V = 'аеёиоуыэюя';
+    for (const k of gramKeys(ix)) {
+      const v = answerFor(ix, k)!;
+      for (const line of [...explain(ix, k, v), ...explain(ix, k, v, 'ъъъ')]) {
+        const re = /[Ѐ-ӿ́]+/g;
+        let m: RegExpExecArray | null;
+        while ((m = re.exec(line))) {
+          const t = m[0];
+          const prev = line[m.index - 1] ?? '';
+          const nv = [...t].filter((c) => V.includes(c.toLowerCase())).length;
+          if (nv < 2 || t.includes('́') || t.includes('ё') || '-+/(→'.includes(prev) || line[m.index + t.length] === '-') continue;
+          bad.add(t);
+        }
+      }
+    }
+    expect([...bad]).toEqual([]);
+  });
+});
