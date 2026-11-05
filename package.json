@@ -10,7 +10,7 @@
     "lint": "eslint src shared scripts worker/src tests --ext .ts,.tsx",
     "typecheck": "tsc --noEmit && tsc --noEmit -p worker/tsconfig.json",
     "test": "vitest run",
-    "test:e2e": "node --test e2e/",
+    "test:e2e": "node --test --test-concurrency=1 e2e/app.test.cjs",
     "worker:dev": "wrangler dev --config worker/wrangler.toml --local",
     "worker:migrate:local": "wrangler d1 migrations apply rusapp --local --config worker/wrangler.toml"
   },

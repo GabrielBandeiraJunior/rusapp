@@ -124,7 +124,7 @@ const VOICED_TRIGGER = new Set('бгджз'.split(''));
 /** Respelling aproximado para falantes de pt: redução (о→а, е/я→и átonos), vozeamento, г→в em -ого/-его. */
 export function phonetic(word: string): string {
   const stressed = stressIndex(word);
-  let chars = [...stripStress(word).toLowerCase()];
+  const chars = [...stripStress(word).toLowerCase()];
   if (/(ого|его)$/.test(chars.join('')) && chars.length > 3) chars[chars.length - 2] = 'в';
   // vozeamento, da direita para a esquerda
   let next: 'end' | 'voiced' | 'voiceless' | 'neutral' = 'end';

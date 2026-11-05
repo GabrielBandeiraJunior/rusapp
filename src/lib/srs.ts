@@ -1,5 +1,5 @@
 // Agendamento FSRS (ts-fsrs) — executa no cliente. Estado do cartão = função pura da sequência de revisões.
-import { createEmptyCard, fsrs, generatorParameters, Rating, State, type Card } from 'ts-fsrs';
+import { createEmptyCard, fsrs, generatorParameters, Rating, State, type Card, type Grade } from 'ts-fsrs';
 
 export { Rating, State };
 
@@ -72,7 +72,7 @@ export function emptyState(at: number): FsrsState {
 }
 
 export function applyRating(state: FsrsState, rating: 1 | 2 | 3 | 4, at: number): FsrsState {
-  return toState(scheduler.next(fromState(state), new Date(at), rating as Rating).card);
+  return toState(scheduler.next(fromState(state), new Date(at), rating as Grade).card);
 }
 
 /** Reconstrói um cartão a partir de TODAS as suas revisões (ordem total: ts, id). */

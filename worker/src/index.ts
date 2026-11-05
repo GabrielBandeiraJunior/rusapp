@@ -147,7 +147,7 @@ export async function runReminders(env: Env, now: number, fetchImpl: typeof fetc
   return kind;
 }
 
-export default {
+const worker = {
   async fetch(req: Request, env: Env): Promise<Response> {
     const url = new URL(req.url);
     if (req.method === 'OPTIONS') return new Response(null, { status: 204, headers: cors(env) });
@@ -170,3 +170,5 @@ export default {
     ctx.waitUntil(runReminders(env, event.scheduledTime).then(() => undefined));
   },
 };
+
+export default worker;

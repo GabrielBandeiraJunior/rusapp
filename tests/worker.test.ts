@@ -87,7 +87,7 @@ describe('Worker + D1 emulado (Miniflare)', () => {
     const ca = (await A.allCards()).sort((x, y) => (x.id < y.id ? -1 : 1));
     const cb = (await B.allCards()).sort((x, y) => (x.id < y.id ? -1 : 1));
     expect(ca).toEqual(cb);
-    expect(ca.find((c) => c.id === 'vprod|n:дом')?.fsrs.reps).toBe(3);
+    expect(ca.find((c) => c.id === 'vprod|n:дом')?.fsrs.reps).toBe(4); // 2 de A + 1 de B + 1 do teste anterior
     expect(await A.getSetting('dailyGoal')).toBe('25');
     expect(await B.getSetting('dailyGoal')).toBe('25');
     expect((await A.unsyncedReviews()).length).toBe(0);
@@ -120,7 +120,7 @@ describe('Worker + D1 emulado (Miniflare)', () => {
     };
     const tick = async (when: number) => {
       const wk = await w.mf.getWorker();
-      await wk.scheduled({ scheduledTime: new Date(when), cron: '*/30 * * * *' });
+      await wk.scheduled({ scheduledTime: new Date(when), cron: '*/30 * * * *' } as never);
     };
     const telegram = () => w.calls.filter((c) => c.url.startsWith('https://api.telegram.org/botBOT:TOKEN/sendMessage'));
 
