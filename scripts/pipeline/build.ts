@@ -71,7 +71,7 @@ function toForms(id: string, l: RawLemma): { forms: Form[]; gramOk: boolean } {
     if (l.pos === 'noun') {
       base.an = l.animate ? 'anim' : 'inan';
       out.push(base);
-    } else if (l.pos === 'adj' && f.case === 'acc' && (f.gender === 'm' || f.gender === 'n' || f.number === 'pl' && !f.gender)) {
+    } else if (l.pos === 'adj' && f.case === 'acc' && (f.gender === 'm' || (f.number === 'pl' && !f.gender))) {
       const nomF = find('nom', f.number!, f.gender);
       const genF = find('gen', f.number!, f.gender);
       if (!nomF || !genF) { gramOk = false; continue; }

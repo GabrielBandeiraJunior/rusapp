@@ -466,8 +466,7 @@ INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,pe
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:этот|decl_n_nom#0','a:этот','это','э́то','nom','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:этот|decl_n_gen#0','a:этот','этого','э́того','gen','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:этот|decl_n_dat#0','a:этот','этому','э́тому','dat','sg','n',NULL,NULL,NULL,NULL);
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:этот|decl_n_acc|inan#0','a:этот','это','э́то','acc','sg','n',NULL,NULL,NULL,'inan');
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:этот|decl_n_acc|anim#0','a:этот','этого','э́того','acc','sg','n',NULL,NULL,NULL,'anim');
+INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:этот|decl_n_acc#0','a:этот','это','э́то','acc','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:этот|decl_n_inst#0','a:этот','этим','э́тим','inst','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:этот|decl_n_prep#0','a:этот','этом','э́том','prep','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:этот|decl_pl_nom#0','a:этот','эти','э́ти','nom','pl',NULL,NULL,NULL,NULL,NULL);
@@ -506,8 +505,7 @@ INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,pe
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:весь|decl_n_nom#0','a:весь','всё','всё','nom','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:весь|decl_n_gen#0','a:весь','всего','всего́','gen','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:весь|decl_n_dat#0','a:весь','всему','всему́','dat','sg','n',NULL,NULL,NULL,NULL);
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:весь|decl_n_acc|inan#0','a:весь','всё','всё','acc','sg','n',NULL,NULL,NULL,'inan');
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:весь|decl_n_acc|anim#0','a:весь','всего','всего́','acc','sg','n',NULL,NULL,NULL,'anim');
+INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:весь|decl_n_acc#0','a:весь','всё','всё','acc','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:весь|decl_n_inst#0','a:весь','всем','всем','inst','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:весь|decl_n_prep#0','a:весь','всём','всём','prep','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:весь|decl_pl_nom#0','a:весь','все','все','nom','pl',NULL,NULL,NULL,NULL,NULL);
@@ -558,8 +556,7 @@ INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,pe
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:тот|decl_n_nom#0','a:тот','то','то','nom','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:тот|decl_n_gen#0','a:тот','того','того́','gen','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:тот|decl_n_dat#0','a:тот','тому','тому́','dat','sg','n',NULL,NULL,NULL,NULL);
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:тот|decl_n_acc|inan#0','a:тот','то','то','acc','sg','n',NULL,NULL,NULL,'inan');
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:тот|decl_n_acc|anim#0','a:тот','того','того́','acc','sg','n',NULL,NULL,NULL,'anim');
+INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:тот|decl_n_acc#0','a:тот','то','то','acc','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:тот|decl_n_inst#0','a:тот','тем','тем','inst','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:тот|decl_n_prep#0','a:тот','том','том','prep','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:тот|decl_pl_nom#0','a:тот','те','те','nom','pl',NULL,NULL,NULL,NULL,NULL);
@@ -586,8 +583,7 @@ INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,pe
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:мой|decl_n_nom#0','a:мой','моё','моё','nom','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:мой|decl_n_gen#0','a:мой','моего','моего́','gen','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:мой|decl_n_dat#0','a:мой','моему','моему́','dat','sg','n',NULL,NULL,NULL,NULL);
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:мой|decl_n_acc|inan#0','a:мой','моё','моё','acc','sg','n',NULL,NULL,NULL,'inan');
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:мой|decl_n_acc|anim#0','a:мой','моего','моего́','acc','sg','n',NULL,NULL,NULL,'anim');
+INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:мой|decl_n_acc#0','a:мой','моё','моё','acc','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:мой|decl_n_inst#0','a:мой','моим','мои́м','inst','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:мой|decl_n_prep#0','a:мой','моём','моём','prep','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:мой|decl_pl_nom#0','a:мой','мои','мои́','nom','pl',NULL,NULL,NULL,NULL,NULL);
@@ -638,8 +634,7 @@ INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,pe
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:хороший|decl_n_nom#0','a:хороший','хорошее','хоро́шее','nom','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:хороший|decl_n_gen#0','a:хороший','хорошего','хоро́шего','gen','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:хороший|decl_n_dat#0','a:хороший','хорошему','хоро́шему','dat','sg','n',NULL,NULL,NULL,NULL);
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:хороший|decl_n_acc|inan#0','a:хороший','хорошее','хоро́шее','acc','sg','n',NULL,NULL,NULL,'inan');
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:хороший|decl_n_acc|anim#0','a:хороший','хорошего','хоро́шего','acc','sg','n',NULL,NULL,NULL,'anim');
+INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:хороший|decl_n_acc#0','a:хороший','хорошее','хоро́шее','acc','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:хороший|decl_n_inst#0','a:хороший','хорошим','хоро́шим','inst','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:хороший|decl_n_prep#0','a:хороший','хорошем','хоро́шем','prep','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:хороший|decl_pl_nom#0','a:хороший','хорошие','хоро́шие','nom','pl',NULL,NULL,NULL,NULL,NULL);
@@ -690,8 +685,7 @@ INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,pe
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:твой|decl_n_nom#0','a:твой','твоё','твоё','nom','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:твой|decl_n_gen#0','a:твой','твоего','твоего́','gen','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:твой|decl_n_dat#0','a:твой','твоему','твоему́','dat','sg','n',NULL,NULL,NULL,NULL);
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:твой|decl_n_acc|inan#0','a:твой','твоё','твоё','acc','sg','n',NULL,NULL,NULL,'inan');
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:твой|decl_n_acc|anim#0','a:твой','твоего','твоего́','acc','sg','n',NULL,NULL,NULL,'anim');
+INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:твой|decl_n_acc#0','a:твой','твоё','твоё','acc','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:твой|decl_n_inst#0','a:твой','твоим','твои́м','inst','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:твой|decl_n_prep#0','a:твой','твоём','твоём','prep','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:твой|decl_pl_nom#0','a:твой','твои','твои́','nom','pl',NULL,NULL,NULL,NULL,NULL);
@@ -716,8 +710,7 @@ INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,pe
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:простой|decl_n_nom#0','a:простой','простое','просто́е','nom','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:простой|decl_n_gen#0','a:простой','простого','просто́го','gen','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:простой|decl_n_dat#0','a:простой','простому','просто́му','dat','sg','n',NULL,NULL,NULL,NULL);
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:простой|decl_n_acc|inan#0','a:простой','простое','просто́е','acc','sg','n',NULL,NULL,NULL,'inan');
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:простой|decl_n_acc|anim#0','a:простой','простого','просто́го','acc','sg','n',NULL,NULL,NULL,'anim');
+INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:простой|decl_n_acc#0','a:простой','простое','просто́е','acc','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:простой|decl_n_inst#0','a:простой','простым','просты́м','inst','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:простой|decl_n_prep#0','a:простой','простом','просто́м','prep','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:простой|decl_pl_nom#0','a:простой','простые','просты́е','nom','pl',NULL,NULL,NULL,NULL,NULL);
@@ -755,8 +748,7 @@ INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,pe
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:который|decl_n_nom#0','a:который','которое','кото́рое','nom','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:который|decl_n_gen#0','a:который','которого','кото́рого','gen','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:который|decl_n_dat#0','a:который','которому','кото́рому','dat','sg','n',NULL,NULL,NULL,NULL);
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:который|decl_n_acc|inan#0','a:который','которое','кото́рое','acc','sg','n',NULL,NULL,NULL,'inan');
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:который|decl_n_acc|anim#0','a:который','которого','кото́рого','acc','sg','n',NULL,NULL,NULL,'anim');
+INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:который|decl_n_acc#0','a:который','которое','кото́рое','acc','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:который|decl_n_inst#0','a:который','которым','кото́рым','inst','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:который|decl_n_prep#0','a:который','котором','кото́ром','prep','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:который|decl_pl_nom#0','a:который','которые','кото́рые','nom','pl',NULL,NULL,NULL,NULL,NULL);
@@ -951,8 +943,7 @@ INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,pe
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:другой|decl_n_nom#0','a:другой','другое','друго́е','nom','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:другой|decl_n_gen#0','a:другой','другого','друго́го','gen','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:другой|decl_n_dat#0','a:другой','другому','друго́му','dat','sg','n',NULL,NULL,NULL,NULL);
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:другой|decl_n_acc|inan#0','a:другой','другое','друго́е','acc','sg','n',NULL,NULL,NULL,'inan');
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:другой|decl_n_acc|anim#0','a:другой','другого','друго́го','acc','sg','n',NULL,NULL,NULL,'anim');
+INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:другой|decl_n_acc#0','a:другой','другое','друго́е','acc','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:другой|decl_n_inst#0','a:другой','другим','други́м','inst','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:другой|decl_n_prep#0','a:другой','другом','друго́м','prep','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:другой|decl_pl_nom#0','a:другой','другие','други́е','nom','pl',NULL,NULL,NULL,NULL,NULL);
@@ -1272,8 +1263,7 @@ INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,pe
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:первый|decl_n_nom#0','a:первый','первое','пе́рвое','nom','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:первый|decl_n_gen#0','a:первый','первого','пе́рвого','gen','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:первый|decl_n_dat#0','a:первый','первому','пе́рвому','dat','sg','n',NULL,NULL,NULL,NULL);
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:первый|decl_n_acc|inan#0','a:первый','первое','пе́рвое','acc','sg','n',NULL,NULL,NULL,'inan');
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:первый|decl_n_acc|anim#0','a:первый','первого','пе́рвого','acc','sg','n',NULL,NULL,NULL,'anim');
+INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:первый|decl_n_acc#0','a:первый','первое','пе́рвое','acc','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:первый|decl_n_inst#0','a:первый','первым','пе́рвым','inst','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:первый|decl_n_prep#0','a:первый','первом','пе́рвом','prep','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:первый|decl_pl_nom#0','a:первый','первые','пе́рвые','nom','pl',NULL,NULL,NULL,NULL,NULL);
@@ -1336,8 +1326,8 @@ INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,pe
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:новый|decl_n_nom#0','a:новый','новое','но́вое','nom','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:новый|decl_n_gen#0','a:новый','нового','но́вого','gen','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:новый|decl_n_dat#0','a:новый','новому','но́вому','dat','sg','n',NULL,NULL,NULL,NULL);
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:новый|decl_n_acc|inan#0','a:новый','новое','но́вое','acc','sg','n',NULL,NULL,NULL,'inan');
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:новый|decl_n_acc|anim#0','a:новый','нового','но́вого','acc','sg','n',NULL,NULL,NULL,'anim');
+INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:новый|decl_n_acc#0','a:новый','новое','но́вое','acc','sg','n',NULL,NULL,NULL,NULL);
+INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:новый|decl_n_acc#1','a:новый','нового','но́вого','acc','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:новый|decl_n_inst#0','a:новый','новым','но́вым','inst','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:новый|decl_n_prep#0','a:новый','новом','но́вом','prep','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:новый|decl_pl_nom#0','a:новый','новые','но́вые','nom','pl',NULL,NULL,NULL,NULL,NULL);
@@ -1388,8 +1378,7 @@ INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,pe
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:большой|decl_n_nom#0','a:большой','большое','большо́е','nom','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:большой|decl_n_gen#0','a:большой','большого','большо́го','gen','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:большой|decl_n_dat#0','a:большой','большому','большо́му','dat','sg','n',NULL,NULL,NULL,NULL);
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:большой|decl_n_acc|inan#0','a:большой','большое','большо́е','acc','sg','n',NULL,NULL,NULL,'inan');
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:большой|decl_n_acc|anim#0','a:большой','большого','большо́го','acc','sg','n',NULL,NULL,NULL,'anim');
+INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:большой|decl_n_acc#0','a:большой','большое','большо́е','acc','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:большой|decl_n_inst#0','a:большой','большим','больши́м','inst','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:большой|decl_n_prep#0','a:большой','большом','большо́м','prep','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:большой|decl_pl_nom#0','a:большой','большие','больши́е','nom','pl',NULL,NULL,NULL,NULL,NULL);
@@ -1429,8 +1418,7 @@ INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,pe
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:каждый|decl_n_nom#0','a:каждый','каждое','ка́ждое','nom','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:каждый|decl_n_gen#0','a:каждый','каждого','ка́ждого','gen','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:каждый|decl_n_dat#0','a:каждый','каждому','ка́ждому','dat','sg','n',NULL,NULL,NULL,NULL);
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:каждый|decl_n_acc|inan#0','a:каждый','каждое','ка́ждое','acc','sg','n',NULL,NULL,NULL,'inan');
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:каждый|decl_n_acc|anim#0','a:каждый','каждого','ка́ждого','acc','sg','n',NULL,NULL,NULL,'anim');
+INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:каждый|decl_n_acc#0','a:каждый','каждое','ка́ждое','acc','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:каждый|decl_n_inst#0','a:каждый','каждым','ка́ждым','inst','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:каждый|decl_n_prep#0','a:каждый','каждом','ка́ждом','prep','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:каждый|decl_pl_nom#0','a:каждый','каждые','ка́ждые','nom','pl',NULL,NULL,NULL,NULL,NULL);
@@ -1530,8 +1518,7 @@ INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,pe
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:последний|decl_n_nom#0','a:последний','последнее','после́днее','nom','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:последний|decl_n_gen#0','a:последний','последнего','после́днего','gen','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:последний|decl_n_dat#0','a:последний','последнему','после́днему','dat','sg','n',NULL,NULL,NULL,NULL);
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:последний|decl_n_acc|inan#0','a:последний','последнее','после́днее','acc','sg','n',NULL,NULL,NULL,'inan');
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:последний|decl_n_acc|anim#0','a:последний','последнего','после́днего','acc','sg','n',NULL,NULL,NULL,'anim');
+INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:последний|decl_n_acc#0','a:последний','последнее','после́днее','acc','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:последний|decl_n_inst#0','a:последний','последним','после́дним','inst','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:последний|decl_n_prep#0','a:последний','последнем','после́днем','prep','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:последний|decl_pl_nom#0','a:последний','последние','после́дние','nom','pl',NULL,NULL,NULL,NULL,NULL);
@@ -1581,8 +1568,7 @@ INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,pe
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:готовый|decl_n_nom#0','a:готовый','готовое','гото́вое','nom','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:готовый|decl_n_gen#0','a:готовый','готового','гото́вого','gen','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:готовый|decl_n_dat#0','a:готовый','готовому','гото́вому','dat','sg','n',NULL,NULL,NULL,NULL);
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:готовый|decl_n_acc|inan#0','a:готовый','готовое','гото́вое','acc','sg','n',NULL,NULL,NULL,'inan');
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:готовый|decl_n_acc|anim#0','a:готовый','готового','гото́вого','acc','sg','n',NULL,NULL,NULL,'anim');
+INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:готовый|decl_n_acc#0','a:готовый','готовое','гото́вое','acc','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:готовый|decl_n_inst#0','a:готовый','готовым','гото́вым','inst','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:готовый|decl_n_prep#0','a:готовый','готовом','гото́вом','prep','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:готовый|decl_pl_nom#0','a:готовый','готовые','гото́вые','nom','pl',NULL,NULL,NULL,NULL,NULL);
@@ -1635,8 +1621,7 @@ INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,pe
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:добрый|decl_n_nom#0','a:добрый','доброе','до́брое','nom','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:добрый|decl_n_gen#0','a:добрый','доброго','до́брого','gen','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:добрый|decl_n_dat#0','a:добрый','доброму','до́брому','dat','sg','n',NULL,NULL,NULL,NULL);
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:добрый|decl_n_acc|inan#0','a:добрый','доброе','до́брое','acc','sg','n',NULL,NULL,NULL,'inan');
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:добрый|decl_n_acc|anim#0','a:добрый','доброго','до́брого','acc','sg','n',NULL,NULL,NULL,'anim');
+INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:добрый|decl_n_acc#0','a:добрый','доброе','до́брое','acc','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:добрый|decl_n_inst#0','a:добрый','добрым','до́брым','inst','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:добрый|decl_n_prep#0','a:добрый','добром','до́бром','prep','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:добрый|decl_pl_nom#0','a:добрый','добрые','до́брые','nom','pl',NULL,NULL,NULL,NULL,NULL);
@@ -1699,8 +1684,7 @@ INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,pe
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:плохой|decl_n_nom#0','a:плохой','плохое','плохо́е','nom','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:плохой|decl_n_gen#0','a:плохой','плохого','плохо́го','gen','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:плохой|decl_n_dat#0','a:плохой','плохому','плохо́му','dat','sg','n',NULL,NULL,NULL,NULL);
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:плохой|decl_n_acc|inan#0','a:плохой','плохое','плохо́е','acc','sg','n',NULL,NULL,NULL,'inan');
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:плохой|decl_n_acc|anim#0','a:плохой','плохого','плохо́го','acc','sg','n',NULL,NULL,NULL,'anim');
+INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:плохой|decl_n_acc#0','a:плохой','плохое','плохо́е','acc','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:плохой|decl_n_inst#0','a:плохой','плохим','плохи́м','inst','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:плохой|decl_n_prep#0','a:плохой','плохом','плохо́м','prep','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:плохой|decl_pl_nom#0','a:плохой','плохие','плохи́е','nom','pl',NULL,NULL,NULL,NULL,NULL);
@@ -1749,8 +1733,7 @@ INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,pe
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:маленький|decl_n_nom#0','a:маленький','маленькое','ма́ленькое','nom','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:маленький|decl_n_gen#0','a:маленький','маленького','ма́ленького','gen','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:маленький|decl_n_dat#0','a:маленький','маленькому','ма́ленькому','dat','sg','n',NULL,NULL,NULL,NULL);
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:маленький|decl_n_acc|inan#0','a:маленький','маленькое','ма́ленькое','acc','sg','n',NULL,NULL,NULL,'inan');
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:маленький|decl_n_acc|anim#0','a:маленький','маленького','ма́ленького','acc','sg','n',NULL,NULL,NULL,'anim');
+INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:маленький|decl_n_acc#0','a:маленький','маленькое','ма́ленькое','acc','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:маленький|decl_n_inst#0','a:маленький','маленьким','ма́леньким','inst','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:маленький|decl_n_prep#0','a:маленький','маленьком','ма́леньком','prep','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:маленький|decl_pl_nom#0','a:маленький','маленькие','ма́ленькие','nom','pl',NULL,NULL,NULL,NULL,NULL);
@@ -1775,8 +1758,7 @@ INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,pe
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:дорогой|decl_n_nom#0','a:дорогой','дорогое','дорого́е','nom','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:дорогой|decl_n_gen#0','a:дорогой','дорогого','дорого́го','gen','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:дорогой|decl_n_dat#0','a:дорогой','дорогому','дорого́му','dat','sg','n',NULL,NULL,NULL,NULL);
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:дорогой|decl_n_acc|inan#0','a:дорогой','дорогое','дорого́е','acc','sg','n',NULL,NULL,NULL,'inan');
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:дорогой|decl_n_acc|anim#0','a:дорогой','дорогого','дорого́го','acc','sg','n',NULL,NULL,NULL,'anim');
+INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:дорогой|decl_n_acc#0','a:дорогой','дорогое','дорого́е','acc','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:дорогой|decl_n_inst#0','a:дорогой','дорогим','дороги́м','inst','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:дорогой|decl_n_prep#0','a:дорогой','дорогом','дорого́м','prep','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:дорогой|decl_pl_nom#0','a:дорогой','дорогие','дороги́е','nom','pl',NULL,NULL,NULL,NULL,NULL);
@@ -2029,8 +2011,7 @@ INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,pe
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:важный|decl_n_nom#0','a:важный','важное','ва́жное','nom','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:важный|decl_n_gen#0','a:важный','важного','ва́жного','gen','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:важный|decl_n_dat#0','a:важный','важному','ва́жному','dat','sg','n',NULL,NULL,NULL,NULL);
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:важный|decl_n_acc|inan#0','a:важный','важное','ва́жное','acc','sg','n',NULL,NULL,NULL,'inan');
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:важный|decl_n_acc|anim#0','a:важный','важного','ва́жного','acc','sg','n',NULL,NULL,NULL,'anim');
+INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:важный|decl_n_acc#0','a:важный','важное','ва́жное','acc','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:важный|decl_n_inst#0','a:важный','важным','ва́жным','inst','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:важный|decl_n_prep#0','a:важный','важном','ва́жном','prep','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:важный|decl_pl_nom#0','a:важный','важные','ва́жные','nom','pl',NULL,NULL,NULL,NULL,NULL);
@@ -2252,8 +2233,7 @@ INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,pe
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:сильный|decl_n_nom#0','a:сильный','сильное','си́льное','nom','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:сильный|decl_n_gen#0','a:сильный','сильного','си́льного','gen','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:сильный|decl_n_dat#0','a:сильный','сильному','си́льному','dat','sg','n',NULL,NULL,NULL,NULL);
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:сильный|decl_n_acc|inan#0','a:сильный','сильное','си́льное','acc','sg','n',NULL,NULL,NULL,'inan');
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:сильный|decl_n_acc|anim#0','a:сильный','сильного','си́льного','acc','sg','n',NULL,NULL,NULL,'anim');
+INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:сильный|decl_n_acc#0','a:сильный','сильное','си́льное','acc','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:сильный|decl_n_inst#0','a:сильный','сильным','си́льным','inst','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:сильный|decl_n_prep#0','a:сильный','сильном','си́льном','prep','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:сильный|decl_pl_nom#0','a:сильный','сильные','си́льные','nom','pl',NULL,NULL,NULL,NULL,NULL);
@@ -2330,8 +2310,7 @@ INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,pe
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:старый|decl_n_nom#0','a:старый','старое','ста́рое','nom','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:старый|decl_n_gen#0','a:старый','старого','ста́рого','gen','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:старый|decl_n_dat#0','a:старый','старому','ста́рому','dat','sg','n',NULL,NULL,NULL,NULL);
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:старый|decl_n_acc|inan#0','a:старый','старое','ста́рое','acc','sg','n',NULL,NULL,NULL,'inan');
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:старый|decl_n_acc|anim#0','a:старый','старого','ста́рого','acc','sg','n',NULL,NULL,NULL,'anim');
+INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:старый|decl_n_acc#0','a:старый','старое','ста́рое','acc','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:старый|decl_n_inst#0','a:старый','старым','ста́рым','inst','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:старый|decl_n_prep#0','a:старый','старом','ста́ром','prep','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:старый|decl_pl_nom#0','a:старый','старые','ста́рые','nom','pl',NULL,NULL,NULL,NULL,NULL);
@@ -2405,8 +2384,7 @@ INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,pe
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:полный|decl_n_nom#0','a:полный','полное','по́лное','nom','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:полный|decl_n_gen#0','a:полный','полного','по́лного','gen','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:полный|decl_n_dat#0','a:полный','полному','по́лному','dat','sg','n',NULL,NULL,NULL,NULL);
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:полный|decl_n_acc|inan#0','a:полный','полное','по́лное','acc','sg','n',NULL,NULL,NULL,'inan');
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:полный|decl_n_acc|anim#0','a:полный','полного','по́лного','acc','sg','n',NULL,NULL,NULL,'anim');
+INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:полный|decl_n_acc#0','a:полный','полное','по́лное','acc','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:полный|decl_n_inst#0','a:полный','полным','по́лным','inst','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:полный|decl_n_prep#0','a:полный','полном','по́лном','prep','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:полный|decl_pl_nom#0','a:полный','полные','по́лные','nom','pl',NULL,NULL,NULL,NULL,NULL);
@@ -2518,8 +2496,7 @@ INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,pe
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:быстрый|decl_n_nom#0','a:быстрый','быстрое','бы́строе','nom','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:быстрый|decl_n_gen#0','a:быстрый','быстрого','бы́строго','gen','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:быстрый|decl_n_dat#0','a:быстрый','быстрому','бы́строму','dat','sg','n',NULL,NULL,NULL,NULL);
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:быстрый|decl_n_acc|inan#0','a:быстрый','быстрое','бы́строе','acc','sg','n',NULL,NULL,NULL,'inan');
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:быстрый|decl_n_acc|anim#0','a:быстрый','быстрого','бы́строго','acc','sg','n',NULL,NULL,NULL,'anim');
+INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:быстрый|decl_n_acc#0','a:быстрый','быстрое','бы́строе','acc','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:быстрый|decl_n_inst#0','a:быстрый','быстрым','бы́стрым','inst','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:быстрый|decl_n_prep#0','a:быстрый','быстром','бы́стром','prep','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:быстрый|decl_pl_nom#0','a:быстрый','быстрые','бы́стрые','nom','pl',NULL,NULL,NULL,NULL,NULL);
@@ -2642,8 +2619,7 @@ INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,pe
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:правильный|decl_n_nom#0','a:правильный','правильное','пра́вильное','nom','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:правильный|decl_n_gen#0','a:правильный','правильного','пра́вильного','gen','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:правильный|decl_n_dat#0','a:правильный','правильному','пра́вильному','dat','sg','n',NULL,NULL,NULL,NULL);
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:правильный|decl_n_acc|inan#0','a:правильный','правильное','пра́вильное','acc','sg','n',NULL,NULL,NULL,'inan');
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:правильный|decl_n_acc|anim#0','a:правильный','правильного','пра́вильного','acc','sg','n',NULL,NULL,NULL,'anim');
+INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:правильный|decl_n_acc#0','a:правильный','правильное','пра́вильное','acc','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:правильный|decl_n_inst#0','a:правильный','правильным','пра́вильным','inst','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:правильный|decl_n_prep#0','a:правильный','правильном','пра́вильном','prep','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:правильный|decl_pl_nom#0','a:правильный','правильные','пра́вильные','nom','pl',NULL,NULL,NULL,NULL,NULL);
@@ -2681,8 +2657,7 @@ INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,pe
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:здоровый|decl_n_nom#0','a:здоровый','здоровое','здоро́вое','nom','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:здоровый|decl_n_gen#0','a:здоровый','здорового','здоро́вого','gen','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:здоровый|decl_n_dat#0','a:здоровый','здоровому','здоро́вому','dat','sg','n',NULL,NULL,NULL,NULL);
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:здоровый|decl_n_acc|inan#0','a:здоровый','здоровое','здоро́вое','acc','sg','n',NULL,NULL,NULL,'inan');
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:здоровый|decl_n_acc|anim#0','a:здоровый','здорового','здоро́вого','acc','sg','n',NULL,NULL,NULL,'anim');
+INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:здоровый|decl_n_acc#0','a:здоровый','здоровое','здоро́вое','acc','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:здоровый|decl_n_inst#0','a:здоровый','здоровым','здоро́вым','inst','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:здоровый|decl_n_prep#0','a:здоровый','здоровом','здоро́вом','prep','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:здоровый|decl_pl_nom#0','a:здоровый','здоровые','здоро́вые','nom','pl',NULL,NULL,NULL,NULL,NULL);
@@ -2797,8 +2772,7 @@ INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,pe
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:второй|decl_n_nom#0','a:второй','второе','второ́е','nom','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:второй|decl_n_gen#0','a:второй','второго','второ́го','gen','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:второй|decl_n_dat#0','a:второй','второму','второ́му','dat','sg','n',NULL,NULL,NULL,NULL);
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:второй|decl_n_acc|inan#0','a:второй','второе','второ́е','acc','sg','n',NULL,NULL,NULL,'inan');
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:второй|decl_n_acc|anim#0','a:второй','второго','второ́го','acc','sg','n',NULL,NULL,NULL,'anim');
+INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:второй|decl_n_acc#0','a:второй','второе','второ́е','acc','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:второй|decl_n_inst#0','a:второй','вторым','вторы́м','inst','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:второй|decl_n_prep#0','a:второй','втором','второ́м','prep','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:второй|decl_pl_nom#0','a:второй','вторые','вторы́е','nom','pl',NULL,NULL,NULL,NULL,NULL);
@@ -2836,8 +2810,7 @@ INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,pe
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:красивый|decl_n_nom#0','a:красивый','красивое','краси́вое','nom','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:красивый|decl_n_gen#0','a:красивый','красивого','краси́вого','gen','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:красивый|decl_n_dat#0','a:красивый','красивому','краси́вому','dat','sg','n',NULL,NULL,NULL,NULL);
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:красивый|decl_n_acc|inan#0','a:красивый','красивое','краси́вое','acc','sg','n',NULL,NULL,NULL,'inan');
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:красивый|decl_n_acc|anim#0','a:красивый','красивого','краси́вого','acc','sg','n',NULL,NULL,NULL,'anim');
+INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:красивый|decl_n_acc#0','a:красивый','красивое','краси́вое','acc','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:красивый|decl_n_inst#0','a:красивый','красивым','краси́вым','inst','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:красивый|decl_n_prep#0','a:красивый','красивом','краси́вом','prep','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:красивый|decl_pl_nom#0','a:красивый','красивые','краси́вые','nom','pl',NULL,NULL,NULL,NULL,NULL);
@@ -2862,8 +2835,7 @@ INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,pe
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:интересный|decl_n_nom#0','a:интересный','интересное','интере́сное','nom','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:интересный|decl_n_gen#0','a:интересный','интересного','интере́сного','gen','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:интересный|decl_n_dat#0','a:интересный','интересному','интере́сному','dat','sg','n',NULL,NULL,NULL,NULL);
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:интересный|decl_n_acc|inan#0','a:интересный','интересное','интере́сное','acc','sg','n',NULL,NULL,NULL,'inan');
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:интересный|decl_n_acc|anim#0','a:интересный','интересного','интере́сного','acc','sg','n',NULL,NULL,NULL,'anim');
+INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:интересный|decl_n_acc#0','a:интересный','интересное','интере́сное','acc','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:интересный|decl_n_inst#0','a:интересный','интересным','интере́сным','inst','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:интересный|decl_n_prep#0','a:интересный','интересном','интере́сном','prep','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:интересный|decl_pl_nom#0','a:интересный','интересные','интере́сные','nom','pl',NULL,NULL,NULL,NULL,NULL);
@@ -2928,8 +2900,7 @@ INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,pe
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:больной|decl_n_nom#0','a:больной','больное','больно́е','nom','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:больной|decl_n_gen#0','a:больной','больного','больно́го','gen','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:больной|decl_n_dat#0','a:больной','больному','больно́му','dat','sg','n',NULL,NULL,NULL,NULL);
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:больной|decl_n_acc|inan#0','a:больной','больное','больно́е','acc','sg','n',NULL,NULL,NULL,'inan');
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:больной|decl_n_acc|anim#0','a:больной','больного','больно́го','acc','sg','n',NULL,NULL,NULL,'anim');
+INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:больной|decl_n_acc#0','a:больной','больное','больно́е','acc','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:больной|decl_n_inst#0','a:больной','больным','больны́м','inst','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:больной|decl_n_prep#0','a:больной','больном','больно́м','prep','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:больной|decl_pl_nom#0','a:больной','больные','больны́е','nom','pl',NULL,NULL,NULL,NULL,NULL);
@@ -2954,8 +2925,7 @@ INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,pe
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:главный|decl_n_nom#0','a:главный','главное','гла́вное','nom','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:главный|decl_n_gen#0','a:главный','главного','гла́вного','gen','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:главный|decl_n_dat#0','a:главный','главному','гла́вному','dat','sg','n',NULL,NULL,NULL,NULL);
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:главный|decl_n_acc|inan#0','a:главный','главное','гла́вное','acc','sg','n',NULL,NULL,NULL,'inan');
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:главный|decl_n_acc|anim#0','a:главный','главного','гла́вного','acc','sg','n',NULL,NULL,NULL,'anim');
+INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:главный|decl_n_acc#0','a:главный','главное','гла́вное','acc','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:главный|decl_n_inst#0','a:главный','главным','гла́вным','inst','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:главный|decl_n_prep#0','a:главный','главном','гла́вном','prep','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:главный|decl_pl_nom#0','a:главный','главные','гла́вные','nom','pl',NULL,NULL,NULL,NULL,NULL);
@@ -3190,8 +3160,7 @@ INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,pe
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:лёгкий|decl_n_nom#0','a:лёгкий','лёгкое','лёгкое','nom','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:лёгкий|decl_n_gen#0','a:лёгкий','лёгкого','лёгкого','gen','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:лёгкий|decl_n_dat#0','a:лёгкий','лёгкому','лёгкому','dat','sg','n',NULL,NULL,NULL,NULL);
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:лёгкий|decl_n_acc|inan#0','a:лёгкий','лёгкое','лёгкое','acc','sg','n',NULL,NULL,NULL,'inan');
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:лёгкий|decl_n_acc|anim#0','a:лёгкий','лёгкого','лёгкого','acc','sg','n',NULL,NULL,NULL,'anim');
+INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:лёгкий|decl_n_acc#0','a:лёгкий','лёгкое','лёгкое','acc','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:лёгкий|decl_n_inst#0','a:лёгкий','лёгким','лёгким','inst','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:лёгкий|decl_n_prep#0','a:лёгкий','лёгком','лёгком','prep','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:лёгкий|decl_pl_nom#0','a:лёгкий','лёгкие','лёгкие','nom','pl',NULL,NULL,NULL,NULL,NULL);
@@ -3255,8 +3224,7 @@ INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,pe
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:чёрный|decl_n_nom#0','a:чёрный','чёрное','чёрное','nom','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:чёрный|decl_n_gen#0','a:чёрный','чёрного','чёрного','gen','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:чёрный|decl_n_dat#0','a:чёрный','чёрному','чёрному','dat','sg','n',NULL,NULL,NULL,NULL);
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:чёрный|decl_n_acc|inan#0','a:чёрный','чёрное','чёрное','acc','sg','n',NULL,NULL,NULL,'inan');
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:чёрный|decl_n_acc|anim#0','a:чёрный','чёрного','чёрного','acc','sg','n',NULL,NULL,NULL,'anim');
+INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:чёрный|decl_n_acc#0','a:чёрный','чёрное','чёрное','acc','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:чёрный|decl_n_inst#0','a:чёрный','чёрным','чёрным','inst','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:чёрный|decl_n_prep#0','a:чёрный','чёрном','чёрном','prep','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:чёрный|decl_pl_nom#0','a:чёрный','чёрные','чёрные','nom','pl',NULL,NULL,NULL,NULL,NULL);
@@ -3307,8 +3275,7 @@ INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,pe
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:любимый|decl_n_nom#0','a:любимый','любимое','люби́мое','nom','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:любимый|decl_n_gen#0','a:любимый','любимого','люби́мого','gen','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:любимый|decl_n_dat#0','a:любимый','любимому','люби́мому','dat','sg','n',NULL,NULL,NULL,NULL);
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:любимый|decl_n_acc|inan#0','a:любимый','любимое','люби́мое','acc','sg','n',NULL,NULL,NULL,'inan');
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:любимый|decl_n_acc|anim#0','a:любимый','любимого','люби́мого','acc','sg','n',NULL,NULL,NULL,'anim');
+INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:любимый|decl_n_acc#0','a:любимый','любимое','люби́мое','acc','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:любимый|decl_n_inst#0','a:любимый','любимым','люби́мым','inst','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:любимый|decl_n_prep#0','a:любимый','любимом','люби́мом','prep','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:любимый|decl_pl_nom#0','a:любимый','любимые','люби́мые','nom','pl',NULL,NULL,NULL,NULL,NULL);
@@ -3348,8 +3315,7 @@ INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,pe
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:белый|decl_n_nom#0','a:белый','белое','бе́лое','nom','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:белый|decl_n_gen#0','a:белый','белого','бе́лого','gen','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:белый|decl_n_dat#0','a:белый','белому','бе́лому','dat','sg','n',NULL,NULL,NULL,NULL);
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:белый|decl_n_acc|inan#0','a:белый','белое','бе́лое','acc','sg','n',NULL,NULL,NULL,'inan');
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:белый|decl_n_acc|anim#0','a:белый','белого','бе́лого','acc','sg','n',NULL,NULL,NULL,'anim');
+INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:белый|decl_n_acc#0','a:белый','белое','бе́лое','acc','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:белый|decl_n_inst#0','a:белый','белым','бе́лым','inst','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:белый|decl_n_prep#0','a:белый','белом','бе́лом','prep','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:белый|decl_pl_nom#0','a:белый','белые','бе́лые','nom','pl',NULL,NULL,NULL,NULL,NULL);
@@ -3376,8 +3342,7 @@ INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,pe
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:молодой|decl_n_nom#0','a:молодой','молодое','молодо́е','nom','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:молодой|decl_n_gen#0','a:молодой','молодого','молодо́го','gen','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:молодой|decl_n_dat#0','a:молодой','молодому','молодо́му','dat','sg','n',NULL,NULL,NULL,NULL);
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:молодой|decl_n_acc|inan#0','a:молодой','молодое','молодо́е','acc','sg','n',NULL,NULL,NULL,'inan');
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:молодой|decl_n_acc|anim#0','a:молодой','молодого','молодо́го','acc','sg','n',NULL,NULL,NULL,'anim');
+INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:молодой|decl_n_acc#0','a:молодой','молодое','молодо́е','acc','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:молодой|decl_n_inst#0','a:молодой','молодым','молоды́м','inst','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:молодой|decl_n_prep#0','a:молодой','молодом','молодо́м','prep','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:молодой|decl_pl_nom#0','a:молодой','молодые','молоды́е','nom','pl',NULL,NULL,NULL,NULL,NULL);
@@ -3404,8 +3369,7 @@ INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,pe
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:глупый|decl_n_nom#0','a:глупый','глупое','глу́пое','nom','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:глупый|decl_n_gen#0','a:глупый','глупого','глу́пого','gen','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:глупый|decl_n_dat#0','a:глупый','глупому','глу́пому','dat','sg','n',NULL,NULL,NULL,NULL);
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:глупый|decl_n_acc|inan#0','a:глупый','глупое','глу́пое','acc','sg','n',NULL,NULL,NULL,'inan');
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:глупый|decl_n_acc|anim#0','a:глупый','глупого','глу́пого','acc','sg','n',NULL,NULL,NULL,'anim');
+INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:глупый|decl_n_acc#0','a:глупый','глупое','глу́пое','acc','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:глупый|decl_n_inst#0','a:глупый','глупым','глу́пым','inst','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:глупый|decl_n_prep#0','a:глупый','глупом','глу́пом','prep','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:глупый|decl_pl_nom#0','a:глупый','глупые','глу́пые','nom','pl',NULL,NULL,NULL,NULL,NULL);
@@ -3455,8 +3419,7 @@ INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,pe
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:трудный|decl_n_nom#0','a:трудный','трудное','тру́дное','nom','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:трудный|decl_n_gen#0','a:трудный','трудного','тру́дного','gen','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:трудный|decl_n_dat#0','a:трудный','трудному','тру́дному','dat','sg','n',NULL,NULL,NULL,NULL);
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:трудный|decl_n_acc|inan#0','a:трудный','трудное','тру́дное','acc','sg','n',NULL,NULL,NULL,'inan');
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:трудный|decl_n_acc|anim#0','a:трудный','трудного','тру́дного','acc','sg','n',NULL,NULL,NULL,'anim');
+INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:трудный|decl_n_acc#0','a:трудный','трудное','тру́дное','acc','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:трудный|decl_n_inst#0','a:трудный','трудным','тру́дным','inst','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:трудный|decl_n_prep#0','a:трудный','трудном','тру́дном','prep','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:трудный|decl_pl_nom#0','a:трудный','трудные','тру́дные','nom','pl',NULL,NULL,NULL,NULL,NULL);
@@ -3579,8 +3542,7 @@ INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,pe
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:свободный|decl_n_nom#0','a:свободный','свободное','свобо́дное','nom','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:свободный|decl_n_gen#0','a:свободный','свободного','свобо́дного','gen','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:свободный|decl_n_dat#0','a:свободный','свободному','свобо́дному','dat','sg','n',NULL,NULL,NULL,NULL);
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:свободный|decl_n_acc|inan#0','a:свободный','свободное','свобо́дное','acc','sg','n',NULL,NULL,NULL,'inan');
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:свободный|decl_n_acc|anim#0','a:свободный','свободного','свобо́дного','acc','sg','n',NULL,NULL,NULL,'anim');
+INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:свободный|decl_n_acc#0','a:свободный','свободное','свобо́дное','acc','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:свободный|decl_n_inst#0','a:свободный','свободным','свобо́дным','inst','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:свободный|decl_n_prep#0','a:свободный','свободном','свобо́дном','prep','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:свободный|decl_pl_nom#0','a:свободный','свободные','свобо́дные','nom','pl',NULL,NULL,NULL,NULL,NULL);
@@ -3666,8 +3628,7 @@ INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,pe
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:чистый|decl_n_nom#0','a:чистый','чистое','чи́стое','nom','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:чистый|decl_n_gen#0','a:чистый','чистого','чи́стого','gen','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:чистый|decl_n_dat#0','a:чистый','чистому','чи́стому','dat','sg','n',NULL,NULL,NULL,NULL);
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:чистый|decl_n_acc|inan#0','a:чистый','чистое','чи́стое','acc','sg','n',NULL,NULL,NULL,'inan');
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:чистый|decl_n_acc|anim#0','a:чистый','чистого','чи́стого','acc','sg','n',NULL,NULL,NULL,'anim');
+INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:чистый|decl_n_acc#0','a:чистый','чистое','чи́стое','acc','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:чистый|decl_n_inst#0','a:чистый','чистым','чи́стым','inst','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:чистый|decl_n_prep#0','a:чистый','чистом','чи́стом','prep','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:чистый|decl_pl_nom#0','a:чистый','чистые','чи́стые','nom','pl',NULL,NULL,NULL,NULL,NULL);
@@ -3765,8 +3726,7 @@ INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,pe
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:занятый|decl_n_nom#0','a:занятый','занятое','за́нятое','nom','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:занятый|decl_n_gen#0','a:занятый','занятого','за́нятого','gen','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:занятый|decl_n_dat#0','a:занятый','занятому','за́нятому','dat','sg','n',NULL,NULL,NULL,NULL);
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:занятый|decl_n_acc|inan#0','a:занятый','занятое','за́нятое','acc','sg','n',NULL,NULL,NULL,'inan');
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:занятый|decl_n_acc|anim#0','a:занятый','занятого','за́нятого','acc','sg','n',NULL,NULL,NULL,'anim');
+INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:занятый|decl_n_acc#0','a:занятый','занятое','за́нятое','acc','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:занятый|decl_n_inst#0','a:занятый','занятым','за́нятым','inst','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:занятый|decl_n_prep#0','a:занятый','занятом','за́нятом','prep','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:занятый|decl_pl_nom#0','a:занятый','занятые','за́нятые','nom','pl',NULL,NULL,NULL,NULL,NULL);
@@ -3927,8 +3887,7 @@ INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,pe
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:красный|decl_n_nom#0','a:красный','красное','кра́сное','nom','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:красный|decl_n_gen#0','a:красный','красного','кра́сного','gen','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:красный|decl_n_dat#0','a:красный','красному','кра́сному','dat','sg','n',NULL,NULL,NULL,NULL);
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:красный|decl_n_acc|inan#0','a:красный','красное','кра́сное','acc','sg','n',NULL,NULL,NULL,'inan');
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:красный|decl_n_acc|anim#0','a:красный','красного','кра́сного','acc','sg','n',NULL,NULL,NULL,'anim');
+INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:красный|decl_n_acc#0','a:красный','красное','кра́сное','acc','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:красный|decl_n_inst#0','a:красный','красным','кра́сным','inst','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:красный|decl_n_prep#0','a:красный','красном','кра́сном','prep','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:красный|decl_pl_nom#0','a:красный','красные','кра́сные','nom','pl',NULL,NULL,NULL,NULL,NULL);
@@ -3966,8 +3925,7 @@ INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,pe
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:умный|decl_n_nom#0','a:умный','умное','у́мное','nom','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:умный|decl_n_gen#0','a:умный','умного','у́много','gen','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:умный|decl_n_dat#0','a:умный','умному','у́мному','dat','sg','n',NULL,NULL,NULL,NULL);
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:умный|decl_n_acc|inan#0','a:умный','умное','у́мное','acc','sg','n',NULL,NULL,NULL,'inan');
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:умный|decl_n_acc|anim#0','a:умный','умного','у́много','acc','sg','n',NULL,NULL,NULL,'anim');
+INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:умный|decl_n_acc#0','a:умный','умное','у́мное','acc','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:умный|decl_n_inst#0','a:умный','умным','у́мным','inst','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:умный|decl_n_prep#0','a:умный','умном','у́мном','prep','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:умный|decl_pl_nom#0','a:умный','умные','у́мные','nom','pl',NULL,NULL,NULL,NULL,NULL);
@@ -3992,8 +3950,7 @@ INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,pe
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:тихий|decl_n_nom#0','a:тихий','тихое','ти́хое','nom','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:тихий|decl_n_gen#0','a:тихий','тихого','ти́хого','gen','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:тихий|decl_n_dat#0','a:тихий','тихому','ти́хому','dat','sg','n',NULL,NULL,NULL,NULL);
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:тихий|decl_n_acc|inan#0','a:тихий','тихое','ти́хое','acc','sg','n',NULL,NULL,NULL,'inan');
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:тихий|decl_n_acc|anim#0','a:тихий','тихого','ти́хого','acc','sg','n',NULL,NULL,NULL,'anim');
+INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:тихий|decl_n_acc#0','a:тихий','тихое','ти́хое','acc','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:тихий|decl_n_inst#0','a:тихий','тихим','ти́хим','inst','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:тихий|decl_n_prep#0','a:тихий','тихом','ти́хом','prep','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:тихий|decl_pl_nom#0','a:тихий','тихие','ти́хие','nom','pl',NULL,NULL,NULL,NULL,NULL);
@@ -4018,8 +3975,7 @@ INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,pe
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:весёлый|decl_n_nom#0','a:весёлый','весёлое','весёлое','nom','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:весёлый|decl_n_gen#0','a:весёлый','весёлого','весёлого','gen','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:весёлый|decl_n_dat#0','a:весёлый','весёлому','весёлому','dat','sg','n',NULL,NULL,NULL,NULL);
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:весёлый|decl_n_acc|inan#0','a:весёлый','весёлое','весёлое','acc','sg','n',NULL,NULL,NULL,'inan');
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:весёлый|decl_n_acc|anim#0','a:весёлый','весёлого','весёлого','acc','sg','n',NULL,NULL,NULL,'anim');
+INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:весёлый|decl_n_acc#0','a:весёлый','весёлое','весёлое','acc','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:весёлый|decl_n_inst#0','a:весёлый','весёлым','весёлым','inst','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:весёлый|decl_n_prep#0','a:весёлый','весёлом','весёлом','prep','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:весёлый|decl_pl_nom#0','a:весёлый','весёлые','весёлые','nom','pl',NULL,NULL,NULL,NULL,NULL);
@@ -4239,8 +4195,7 @@ INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,pe
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:высокий|decl_n_nom#0','a:высокий','высокое','высо́кое','nom','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:высокий|decl_n_gen#0','a:высокий','высокого','высо́кого','gen','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:высокий|decl_n_dat#0','a:высокий','высокому','высо́кому','dat','sg','n',NULL,NULL,NULL,NULL);
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:высокий|decl_n_acc|inan#0','a:высокий','высокое','высо́кое','acc','sg','n',NULL,NULL,NULL,'inan');
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:высокий|decl_n_acc|anim#0','a:высокий','высокого','высо́кого','acc','sg','n',NULL,NULL,NULL,'anim');
+INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:высокий|decl_n_acc#0','a:высокий','высокое','высо́кое','acc','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:высокий|decl_n_inst#0','a:высокий','высоким','высо́ким','inst','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:высокий|decl_n_prep#0','a:высокий','высоком','высо́ком','prep','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:высокий|decl_pl_nom#0','a:высокий','высокие','высо́кие','nom','pl',NULL,NULL,NULL,NULL,NULL);
@@ -4465,8 +4420,7 @@ INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,pe
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:холодный|decl_n_nom#0','a:холодный','холодное','холо́дное','nom','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:холодный|decl_n_gen#0','a:холодный','холодного','холо́дного','gen','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:холодный|decl_n_dat#0','a:холодный','холодному','холо́дному','dat','sg','n',NULL,NULL,NULL,NULL);
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:холодный|decl_n_acc|inan#0','a:холодный','холодное','холо́дное','acc','sg','n',NULL,NULL,NULL,'inan');
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:холодный|decl_n_acc|anim#0','a:холодный','холодного','холо́дного','acc','sg','n',NULL,NULL,NULL,'anim');
+INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:холодный|decl_n_acc#0','a:холодный','холодное','холо́дное','acc','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:холодный|decl_n_inst#0','a:холодный','холодным','холо́дным','inst','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:холодный|decl_n_prep#0','a:холодный','холодном','холо́дном','prep','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:холодный|decl_pl_nom#0','a:холодный','холодные','холо́дные','nom','pl',NULL,NULL,NULL,NULL,NULL);
@@ -4515,8 +4469,7 @@ INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,pe
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:бедный|decl_n_nom#0','a:бедный','бедное','бе́дное','nom','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:бедный|decl_n_gen#0','a:бедный','бедного','бе́дного','gen','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:бедный|decl_n_dat#0','a:бедный','бедному','бе́дному','dat','sg','n',NULL,NULL,NULL,NULL);
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:бедный|decl_n_acc|inan#0','a:бедный','бедное','бе́дное','acc','sg','n',NULL,NULL,NULL,'inan');
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:бедный|decl_n_acc|anim#0','a:бедный','бедного','бе́дного','acc','sg','n',NULL,NULL,NULL,'anim');
+INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:бедный|decl_n_acc#0','a:бедный','бедное','бе́дное','acc','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:бедный|decl_n_inst#0','a:бедный','бедным','бе́дным','inst','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:бедный|decl_n_prep#0','a:бедный','бедном','бе́дном','prep','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:бедный|decl_pl_nom#0','a:бедный','бедные','бе́дные','nom','pl',NULL,NULL,NULL,NULL,NULL);
@@ -4555,8 +4508,7 @@ INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,pe
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:горячий|decl_n_nom#0','a:горячий','горячее','горя́чее','nom','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:горячий|decl_n_gen#0','a:горячий','горячего','горя́чего','gen','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:горячий|decl_n_dat#0','a:горячий','горячему','горя́чему','dat','sg','n',NULL,NULL,NULL,NULL);
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:горячий|decl_n_acc|inan#0','a:горячий','горячее','горя́чее','acc','sg','n',NULL,NULL,NULL,'inan');
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:горячий|decl_n_acc|anim#0','a:горячий','горячего','горя́чего','acc','sg','n',NULL,NULL,NULL,'anim');
+INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:горячий|decl_n_acc#0','a:горячий','горячее','горя́чее','acc','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:горячий|decl_n_inst#0','a:горячий','горячим','горя́чим','inst','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:горячий|decl_n_prep#0','a:горячий','горячем','горя́чем','prep','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:горячий|decl_pl_nom#0','a:горячий','горячие','горя́чие','nom','pl',NULL,NULL,NULL,NULL,NULL);
@@ -4583,8 +4535,7 @@ INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,pe
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:пустой|decl_n_nom#0','a:пустой','пустое','пусто́е','nom','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:пустой|decl_n_gen#0','a:пустой','пустого','пусто́го','gen','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:пустой|decl_n_dat#0','a:пустой','пустому','пусто́му','dat','sg','n',NULL,NULL,NULL,NULL);
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:пустой|decl_n_acc|inan#0','a:пустой','пустое','пусто́е','acc','sg','n',NULL,NULL,NULL,'inan');
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:пустой|decl_n_acc|anim#0','a:пустой','пустого','пусто́го','acc','sg','n',NULL,NULL,NULL,'anim');
+INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:пустой|decl_n_acc#0','a:пустой','пустое','пусто́е','acc','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:пустой|decl_n_inst#0','a:пустой','пустым','пусты́м','inst','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:пустой|decl_n_prep#0','a:пустой','пустом','пусто́м','prep','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:пустой|decl_pl_nom#0','a:пустой','пустые','пусты́е','nom','pl',NULL,NULL,NULL,NULL,NULL);
@@ -4754,8 +4705,7 @@ INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,pe
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:тёмный|decl_n_nom#0','a:тёмный','тёмное','тёмное','nom','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:тёмный|decl_n_gen#0','a:тёмный','тёмного','тёмного','gen','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:тёмный|decl_n_dat#0','a:тёмный','тёмному','тёмному','dat','sg','n',NULL,NULL,NULL,NULL);
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:тёмный|decl_n_acc|inan#0','a:тёмный','тёмное','тёмное','acc','sg','n',NULL,NULL,NULL,'inan');
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:тёмный|decl_n_acc|anim#0','a:тёмный','тёмного','тёмного','acc','sg','n',NULL,NULL,NULL,'anim');
+INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:тёмный|decl_n_acc#0','a:тёмный','тёмное','тёмное','acc','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:тёмный|decl_n_inst#0','a:тёмный','тёмным','тёмным','inst','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:тёмный|decl_n_prep#0','a:тёмный','тёмном','тёмном','prep','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:тёмный|decl_pl_nom#0','a:тёмный','тёмные','тёмные','nom','pl',NULL,NULL,NULL,NULL,NULL);
@@ -4893,8 +4843,7 @@ INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,pe
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:богатый|decl_n_nom#0','a:богатый','богатое','бога́тое','nom','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:богатый|decl_n_gen#0','a:богатый','богатого','бога́того','gen','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:богатый|decl_n_dat#0','a:богатый','богатому','бога́тому','dat','sg','n',NULL,NULL,NULL,NULL);
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:богатый|decl_n_acc|inan#0','a:богатый','богатое','бога́тое','acc','sg','n',NULL,NULL,NULL,'inan');
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:богатый|decl_n_acc|anim#0','a:богатый','богатого','бога́того','acc','sg','n',NULL,NULL,NULL,'anim');
+INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:богатый|decl_n_acc#0','a:богатый','богатое','бога́тое','acc','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:богатый|decl_n_inst#0','a:богатый','богатым','бога́тым','inst','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:богатый|decl_n_prep#0','a:богатый','богатом','бога́том','prep','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:богатый|decl_pl_nom#0','a:богатый','богатые','бога́тые','nom','pl',NULL,NULL,NULL,NULL,NULL);
@@ -4959,8 +4908,7 @@ INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,pe
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:вкусный|decl_n_nom#0','a:вкусный','вкусное','вку́сное','nom','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:вкусный|decl_n_gen#0','a:вкусный','вкусного','вку́сного','gen','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:вкусный|decl_n_dat#0','a:вкусный','вкусному','вку́сному','dat','sg','n',NULL,NULL,NULL,NULL);
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:вкусный|decl_n_acc|inan#0','a:вкусный','вкусное','вку́сное','acc','sg','n',NULL,NULL,NULL,'inan');
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:вкусный|decl_n_acc|anim#0','a:вкусный','вкусного','вку́сного','acc','sg','n',NULL,NULL,NULL,'anim');
+INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:вкусный|decl_n_acc#0','a:вкусный','вкусное','вку́сное','acc','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:вкусный|decl_n_inst#0','a:вкусный','вкусным','вку́сным','inst','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:вкусный|decl_n_prep#0','a:вкусный','вкусном','вку́сном','prep','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:вкусный|decl_pl_nom#0','a:вкусный','вкусные','вку́сные','nom','pl',NULL,NULL,NULL,NULL,NULL);
@@ -4987,8 +4935,7 @@ INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,pe
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:русский|decl_n_nom#0','a:русский','русское','ру́сское','nom','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:русский|decl_n_gen#0','a:русский','русского','ру́сского','gen','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:русский|decl_n_dat#0','a:русский','русскому','ру́сскому','dat','sg','n',NULL,NULL,NULL,NULL);
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:русский|decl_n_acc|inan#0','a:русский','русское','ру́сское','acc','sg','n',NULL,NULL,NULL,'inan');
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:русский|decl_n_acc|anim#0','a:русский','русского','ру́сского','acc','sg','n',NULL,NULL,NULL,'anim');
+INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:русский|decl_n_acc#0','a:русский','русское','ру́сское','acc','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:русский|decl_n_inst#0','a:русский','русским','ру́сским','inst','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:русский|decl_n_prep#0','a:русский','русском','ру́сском','prep','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:русский|decl_pl_nom#0','a:русский','русские','ру́сские','nom','pl',NULL,NULL,NULL,NULL,NULL);
@@ -5050,8 +4997,7 @@ INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,pe
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:слабый|decl_n_nom#0','a:слабый','слабое','сла́бое','nom','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:слабый|decl_n_gen#0','a:слабый','слабого','сла́бого','gen','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:слабый|decl_n_dat#0','a:слабый','слабому','сла́бому','dat','sg','n',NULL,NULL,NULL,NULL);
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:слабый|decl_n_acc|inan#0','a:слабый','слабое','сла́бое','acc','sg','n',NULL,NULL,NULL,'inan');
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:слабый|decl_n_acc|anim#0','a:слабый','слабого','сла́бого','acc','sg','n',NULL,NULL,NULL,'anim');
+INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:слабый|decl_n_acc#0','a:слабый','слабое','сла́бое','acc','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:слабый|decl_n_inst#0','a:слабый','слабым','сла́бым','inst','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:слабый|decl_n_prep#0','a:слабый','слабом','сла́бом','prep','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:слабый|decl_pl_nom#0','a:слабый','слабые','сла́бые','nom','pl',NULL,NULL,NULL,NULL,NULL);
@@ -5100,8 +5046,7 @@ INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,pe
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:длинный|decl_n_nom#0','a:длинный','длинное','дли́нное','nom','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:длинный|decl_n_gen#0','a:длинный','длинного','дли́нного','gen','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:длинный|decl_n_dat#0','a:длинный','длинному','дли́нному','dat','sg','n',NULL,NULL,NULL,NULL);
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:длинный|decl_n_acc|inan#0','a:длинный','длинное','дли́нное','acc','sg','n',NULL,NULL,NULL,'inan');
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:длинный|decl_n_acc|anim#0','a:длинный','длинного','дли́нного','acc','sg','n',NULL,NULL,NULL,'anim');
+INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:длинный|decl_n_acc#0','a:длинный','длинное','дли́нное','acc','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:длинный|decl_n_inst#0','a:длинный','длинным','дли́нным','inst','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:длинный|decl_n_prep#0','a:длинный','длинном','дли́нном','prep','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:длинный|decl_pl_nom#0','a:длинный','длинные','дли́нные','nom','pl',NULL,NULL,NULL,NULL,NULL);
@@ -5169,8 +5114,7 @@ INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,pe
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:свежий|decl_n_nom#0','a:свежий','свежее','све́жее','nom','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:свежий|decl_n_gen#0','a:свежий','свежего','све́жего','gen','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:свежий|decl_n_dat#0','a:свежий','свежему','све́жему','dat','sg','n',NULL,NULL,NULL,NULL);
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:свежий|decl_n_acc|inan#0','a:свежий','свежее','све́жее','acc','sg','n',NULL,NULL,NULL,'inan');
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:свежий|decl_n_acc|anim#0','a:свежий','свежего','све́жего','acc','sg','n',NULL,NULL,NULL,'anim');
+INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:свежий|decl_n_acc#0','a:свежий','свежее','све́жее','acc','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:свежий|decl_n_inst#0','a:свежий','свежим','све́жим','inst','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:свежий|decl_n_prep#0','a:свежий','свежем','све́жем','prep','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:свежий|decl_pl_nom#0','a:свежий','свежие','све́жие','nom','pl',NULL,NULL,NULL,NULL,NULL);
@@ -5207,8 +5151,7 @@ INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,pe
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:английский|decl_n_nom#0','a:английский','английское','англи́йское','nom','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:английский|decl_n_gen#0','a:английский','английского','англи́йского','gen','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:английский|decl_n_dat#0','a:английский','английскому','англи́йскому','dat','sg','n',NULL,NULL,NULL,NULL);
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:английский|decl_n_acc|inan#0','a:английский','английское','англи́йское','acc','sg','n',NULL,NULL,NULL,'inan');
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:английский|decl_n_acc|anim#0','a:английский','английского','англи́йского','acc','sg','n',NULL,NULL,NULL,'anim');
+INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:английский|decl_n_acc#0','a:английский','английское','англи́йское','acc','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:английский|decl_n_inst#0','a:английский','английским','англи́йским','inst','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:английский|decl_n_prep#0','a:английский','английском','англи́йском','prep','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:английский|decl_pl_nom#0','a:английский','английские','англи́йские','nom','pl',NULL,NULL,NULL,NULL,NULL);
@@ -5245,8 +5188,7 @@ INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,pe
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:грустный|decl_n_nom#0','a:грустный','грустное','гру́стное','nom','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:грустный|decl_n_gen#0','a:грустный','грустного','гру́стного','gen','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:грустный|decl_n_dat#0','a:грустный','грустному','гру́стному','dat','sg','n',NULL,NULL,NULL,NULL);
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:грустный|decl_n_acc|inan#0','a:грустный','грустное','гру́стное','acc','sg','n',NULL,NULL,NULL,'inan');
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:грустный|decl_n_acc|anim#0','a:грустный','грустного','гру́стного','acc','sg','n',NULL,NULL,NULL,'anim');
+INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:грустный|decl_n_acc#0','a:грустный','грустное','гру́стное','acc','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:грустный|decl_n_inst#0','a:грустный','грустным','гру́стным','inst','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:грустный|decl_n_prep#0','a:грустный','грустном','гру́стном','prep','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:грустный|decl_pl_nom#0','a:грустный','грустные','гру́стные','nom','pl',NULL,NULL,NULL,NULL,NULL);
@@ -5271,8 +5213,7 @@ INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,pe
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:медленный|decl_n_nom#0','a:медленный','медленное','ме́дленное','nom','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:медленный|decl_n_gen#0','a:медленный','медленного','ме́дленного','gen','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:медленный|decl_n_dat#0','a:медленный','медленному','ме́дленному','dat','sg','n',NULL,NULL,NULL,NULL);
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:медленный|decl_n_acc|inan#0','a:медленный','медленное','ме́дленное','acc','sg','n',NULL,NULL,NULL,'inan');
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:медленный|decl_n_acc|anim#0','a:медленный','медленного','ме́дленного','acc','sg','n',NULL,NULL,NULL,'anim');
+INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:медленный|decl_n_acc#0','a:медленный','медленное','ме́дленное','acc','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:медленный|decl_n_inst#0','a:медленный','медленным','ме́дленным','inst','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:медленный|decl_n_prep#0','a:медленный','медленном','ме́дленном','prep','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:медленный|decl_pl_nom#0','a:медленный','медленные','ме́дленные','nom','pl',NULL,NULL,NULL,NULL,NULL);
@@ -5297,8 +5238,7 @@ INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,pe
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:короткий|decl_n_nom#0','a:короткий','короткое','коро́ткое','nom','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:короткий|decl_n_gen#0','a:короткий','короткого','коро́ткого','gen','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:короткий|decl_n_dat#0','a:короткий','короткому','коро́ткому','dat','sg','n',NULL,NULL,NULL,NULL);
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:короткий|decl_n_acc|inan#0','a:короткий','короткое','коро́ткое','acc','sg','n',NULL,NULL,NULL,'inan');
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:короткий|decl_n_acc|anim#0','a:короткий','короткого','коро́ткого','acc','sg','n',NULL,NULL,NULL,'anim');
+INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:короткий|decl_n_acc#0','a:короткий','короткое','коро́ткое','acc','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:короткий|decl_n_inst#0','a:короткий','коротким','коро́тким','inst','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:короткий|decl_n_prep#0','a:короткий','коротком','коро́тком','prep','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:короткий|decl_pl_nom#0','a:короткий','короткие','коро́ткие','nom','pl',NULL,NULL,NULL,NULL,NULL);
@@ -5356,8 +5296,7 @@ INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,pe
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:тёплый|decl_n_nom#0','a:тёплый','тёплое','тёплое','nom','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:тёплый|decl_n_gen#0','a:тёплый','тёплого','тёплого','gen','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:тёплый|decl_n_dat#0','a:тёплый','тёплому','тёплому','dat','sg','n',NULL,NULL,NULL,NULL);
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:тёплый|decl_n_acc|inan#0','a:тёплый','тёплое','тёплое','acc','sg','n',NULL,NULL,NULL,'inan');
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:тёплый|decl_n_acc|anim#0','a:тёплый','тёплого','тёплого','acc','sg','n',NULL,NULL,NULL,'anim');
+INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:тёплый|decl_n_acc#0','a:тёплый','тёплое','тёплое','acc','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:тёплый|decl_n_inst#0','a:тёплый','тёплым','тёплым','inst','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:тёплый|decl_n_prep#0','a:тёплый','тёплом','тёплом','prep','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:тёплый|decl_pl_nom#0','a:тёплый','тёплые','тёплые','nom','pl',NULL,NULL,NULL,NULL,NULL);
@@ -5446,8 +5385,7 @@ INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,pe
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:синий|decl_n_nom#0','a:синий','синее','си́нее','nom','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:синий|decl_n_gen#0','a:синий','синего','си́него','gen','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:синий|decl_n_dat#0','a:синий','синему','си́нему','dat','sg','n',NULL,NULL,NULL,NULL);
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:синий|decl_n_acc|inan#0','a:синий','синее','си́нее','acc','sg','n',NULL,NULL,NULL,'inan');
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:синий|decl_n_acc|anim#0','a:синий','синего','си́него','acc','sg','n',NULL,NULL,NULL,'anim');
+INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:синий|decl_n_acc#0','a:синий','синее','си́нее','acc','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:синий|decl_n_inst#0','a:синий','синим','си́ним','inst','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:синий|decl_n_prep#0','a:синий','синем','си́нем','prep','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:синий|decl_pl_nom#0','a:синий','синие','си́ние','nom','pl',NULL,NULL,NULL,NULL,NULL);
@@ -5581,8 +5519,7 @@ INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,pe
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:громкий|decl_n_nom#0','a:громкий','громкое','гро́мкое','nom','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:громкий|decl_n_gen#0','a:громкий','громкого','гро́мкого','gen','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:громкий|decl_n_dat#0','a:громкий','громкому','гро́мкому','dat','sg','n',NULL,NULL,NULL,NULL);
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:громкий|decl_n_acc|inan#0','a:громкий','громкое','гро́мкое','acc','sg','n',NULL,NULL,NULL,'inan');
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:громкий|decl_n_acc|anim#0','a:громкий','громкого','гро́мкого','acc','sg','n',NULL,NULL,NULL,'anim');
+INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:громкий|decl_n_acc#0','a:громкий','громкое','гро́мкое','acc','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:громкий|decl_n_inst#0','a:громкий','громким','гро́мким','inst','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:громкий|decl_n_prep#0','a:громкий','громком','гро́мком','prep','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:громкий|decl_pl_nom#0','a:громкий','громкие','гро́мкие','nom','pl',NULL,NULL,NULL,NULL,NULL);
@@ -5619,8 +5556,7 @@ INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,pe
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:низкий|decl_n_nom#0','a:низкий','низкое','ни́зкое','nom','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:низкий|decl_n_gen#0','a:низкий','низкого','ни́зкого','gen','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:низкий|decl_n_dat#0','a:низкий','низкому','ни́зкому','dat','sg','n',NULL,NULL,NULL,NULL);
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:низкий|decl_n_acc|inan#0','a:низкий','низкое','ни́зкое','acc','sg','n',NULL,NULL,NULL,'inan');
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:низкий|decl_n_acc|anim#0','a:низкий','низкого','ни́зкого','acc','sg','n',NULL,NULL,NULL,'anim');
+INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:низкий|decl_n_acc#0','a:низкий','низкое','ни́зкое','acc','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:низкий|decl_n_inst#0','a:низкий','низким','ни́зким','inst','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:низкий|decl_n_prep#0','a:низкий','низком','ни́зком','prep','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:низкий|decl_pl_nom#0','a:низкий','низкие','ни́зкие','nom','pl',NULL,NULL,NULL,NULL,NULL);
@@ -5781,8 +5717,7 @@ INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,pe
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:дешёвый|decl_n_nom#0','a:дешёвый','дешёвое','дешёвое','nom','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:дешёвый|decl_n_gen#0','a:дешёвый','дешёвого','дешёвого','gen','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:дешёвый|decl_n_dat#0','a:дешёвый','дешёвому','дешёвому','dat','sg','n',NULL,NULL,NULL,NULL);
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:дешёвый|decl_n_acc|inan#0','a:дешёвый','дешёвое','дешёвое','acc','sg','n',NULL,NULL,NULL,'inan');
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:дешёвый|decl_n_acc|anim#0','a:дешёвый','дешёвого','дешёвого','acc','sg','n',NULL,NULL,NULL,'anim');
+INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:дешёвый|decl_n_acc#0','a:дешёвый','дешёвое','дешёвое','acc','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:дешёвый|decl_n_inst#0','a:дешёвый','дешёвым','дешёвым','inst','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:дешёвый|decl_n_prep#0','a:дешёвый','дешёвом','дешёвом','prep','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:дешёвый|decl_pl_nom#0','a:дешёвый','дешёвые','дешёвые','nom','pl',NULL,NULL,NULL,NULL,NULL);
@@ -5864,8 +5799,7 @@ INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,pe
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:жёлтый|decl_n_nom#0','a:жёлтый','жёлтое','жёлтое','nom','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:жёлтый|decl_n_gen#0','a:жёлтый','жёлтого','жёлтого','gen','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:жёлтый|decl_n_dat#0','a:жёлтый','жёлтому','жёлтому','dat','sg','n',NULL,NULL,NULL,NULL);
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:жёлтый|decl_n_acc|inan#0','a:жёлтый','жёлтое','жёлтое','acc','sg','n',NULL,NULL,NULL,'inan');
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:жёлтый|decl_n_acc|anim#0','a:жёлтый','жёлтого','жёлтого','acc','sg','n',NULL,NULL,NULL,'anim');
+INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:жёлтый|decl_n_acc#0','a:жёлтый','жёлтое','жёлтое','acc','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:жёлтый|decl_n_inst#0','a:жёлтый','жёлтым','жёлтым','inst','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:жёлтый|decl_n_prep#0','a:жёлтый','жёлтом','жёлтом','prep','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:жёлтый|decl_pl_nom#0','a:жёлтый','жёлтые','жёлтые','nom','pl',NULL,NULL,NULL,NULL,NULL);
@@ -5938,8 +5872,7 @@ INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,pe
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:светлый|decl_n_nom#0','a:светлый','светлое','све́тлое','nom','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:светлый|decl_n_gen#0','a:светлый','светлого','све́тлого','gen','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:светлый|decl_n_dat#0','a:светлый','светлому','све́тлому','dat','sg','n',NULL,NULL,NULL,NULL);
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:светлый|decl_n_acc|inan#0','a:светлый','светлое','све́тлое','acc','sg','n',NULL,NULL,NULL,'inan');
-INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:светлый|decl_n_acc|anim#0','a:светлый','светлого','све́тлого','acc','sg','n',NULL,NULL,NULL,'anim');
+INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:светлый|decl_n_acc#0','a:светлый','светлое','све́тлое','acc','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:светлый|decl_n_inst#0','a:светлый','светлым','све́тлым','inst','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:светлый|decl_n_prep#0','a:светлый','светлом','све́тлом','prep','sg','n',NULL,NULL,NULL,NULL);
 INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES('a:светлый|decl_pl_nom#0','a:светлый','светлые','све́тлые','nom','pl',NULL,NULL,NULL,NULL,NULL);

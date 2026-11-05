@@ -125,7 +125,7 @@ const VOICED_TRIGGER = new Set('бгджз'.split(''));
 export function phonetic(word: string): string {
   const stressed = stressIndex(word);
   let chars = [...stripStress(word).toLowerCase()];
-  if (/(ого|его)$/.test(chars.join('')) && chars.length > 3) chars[chars.length - 3] = 'в';
+  if (/(ого|его)$/.test(chars.join('')) && chars.length > 3) chars[chars.length - 2] = 'в';
   // vozeamento, da direita para a esquerda
   let next: 'end' | 'voiced' | 'voiceless' | 'neutral' = 'end';
   for (let i = chars.length - 1; i >= 0; i--) {
