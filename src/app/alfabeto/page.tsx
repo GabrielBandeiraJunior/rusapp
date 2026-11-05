@@ -1,11 +1,12 @@
 'use client';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { phonetic, stripStress, transliterate } from '../../../shared/russian';
 import { Practice } from '@/components/Practice';
 import { useApp } from '@/components/Providers';
 import { Ru } from '@/components/Ru';
 import { Card, Page, Tabs } from '@/components/ui';
 import { LETTERS, RULES, splitRich } from '@/lib/alphabet';
+import { continueParam } from '@/lib/resume';
 
 type Tab = 'letras' | 'regras' | 'praticar';
 
@@ -64,6 +65,9 @@ function Letters() {
 
 export default function AlphabetPage() {
   const [tab, setTab] = useState<Tab>('letras');
+  useEffect(() => {
+    if (continueParam() === 'read') setTab('praticar');
+  }, []);
   return (
     <Page title="Alfabeto e leitura">
       <Tabs value={tab} onChange={setTab} items={[{ id: 'letras', label: 'Letras' }, { id: 'regras', label: 'Regras' }, { id: 'praticar', label: 'Praticar' }]} />
@@ -80,10 +84,6 @@ export default function AlphabetPage() {
       )}
       {tab === 'praticar' && (
         <>
-          <p className="mb-3 text-sm text-muted">
-            Palavras que você ainda não decorou: leia e escolha ou digite a transliteração, ou digite em cirílico a partir da transliteração.
-            O esquema de transliteração está nas Letras.
-          </p>
           <Practice kind="read" />
         </>
       )}

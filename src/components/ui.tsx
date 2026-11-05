@@ -19,8 +19,8 @@ export function Btn({
   );
 }
 
-export function Card({ children, className = '' }: { children: ReactNode; className?: string }) {
-  return <div className={`rounded-3xl border border-line/70 bg-surface p-4 shadow-[0_1px_2px_rgb(0_0_0/0.04),0_8px_24px_-12px_rgb(0_0_0/0.12)] ${className}`}>{children}</div>;
+export function Card({ children, className = '', ...rest }: { children: ReactNode; className?: string; 'data-testid'?: string }) {
+  return <div {...rest} className={`rounded-3xl border border-line/70 bg-surface p-4 shadow-[0_1px_2px_rgb(0_0_0/0.04),0_8px_24px_-12px_rgb(0_0_0/0.12)] ${className}`}>{children}</div>;
 }
 
 export function Bar({ value, max, tone = 'brand' }: { value: number; max: number; tone?: 'brand' | 'good' | 'bad' }) {

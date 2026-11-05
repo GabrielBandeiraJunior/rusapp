@@ -1,12 +1,17 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Practice } from '@/components/Practice';
 import { Page, Tabs } from '@/components/ui';
+import { continueParam } from '@/lib/resume';
 
 type Mode = 'vprod' | 'vrec' | 'stress';
 
 export default function VocabPage() {
   const [mode, setMode] = useState<Mode>('vprod');
+  useEffect(() => {
+    const k = continueParam();
+    if (k === 'vrec' || k === 'stress') setMode(k);
+  }, []);
   return (
     <Page title="Vocabulário">
       <Tabs
@@ -18,11 +23,6 @@ export default function VocabPage() {
           { id: 'stress', label: 'Acento' },
         ]}
       />
-      <p className="mb-3 text-sm text-muted">
-        {mode === 'vprod' && 'Você vê a tradução e DIGITA a palavra em russo. Produção fixa muito mais que reconhecimento.'}
-        {mode === 'vrec' && 'Você vê a palavra em russo, lembra o significado e se avalia. Libera depois que você digitou a palavra.'}
-        {mode === 'stress' && 'Toque na vogal tônica. Libera depois que você digitou a palavra.'}
-      </p>
       <Practice
         key={mode}
         kind={mode}

@@ -18,10 +18,6 @@ export default function GramPage() {
           { id: 'gen', label: 'Gen.' },
         ]}
       />
-      <p className="mb-3 text-sm text-muted">
-        Dado o lema, o caso e o número, <b>digite a forma</b>. O feedback explica a regra e mostra a forma correta com acento.
-        Substantivos primeiro (nom. pl. → acus. sg. → gen. sg. → gen. pl. → acus. pl.), depois adjetivos.
-      </p>
       <Practice key={focus} kind="gram" focus={focus} />
     </Page>
   );

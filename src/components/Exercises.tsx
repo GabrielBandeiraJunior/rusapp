@@ -87,6 +87,7 @@ export function VocabProdEx({ item, onDone }: ExProps) {
     <div>
       {item.isNew && <p className="mb-2 inline-block rounded-full bg-brand/15 px-3 py-1 text-xs font-bold text-brand">NOVA PALAVRA</p>}
       <Card>
+        <p className="mb-1 text-base font-bold text-brand">{item.isNew ? 'Copie a palavra em russo' : 'Digite a palavra em russo'}</p>
         <p className="text-sm text-muted">{POS_PT[l.pos]}{l.g ? ` · ${GENDER_LABEL[l.g]}` : ''}{l.asp ? ` · ${l.asp === 'pf' ? 'perfectivo' : 'imperfectivo'}` : ''}</p>
         <p className="mt-1 text-3xl font-bold" data-testid="prompt">{l.pt}</p>
         {item.isNew && (
@@ -144,6 +145,7 @@ export function VocabRecEx({ item, onDone }: ExProps) {
   return (
     <div>
       <Card className="text-center">
+        <p className="mb-1 text-base font-bold text-brand">O que significa?</p>
         <p className="py-3 text-5xl">
           <Ru data-testid="prompt">{l.s}</Ru>
         </p>
@@ -180,7 +182,7 @@ export function StressEx({ item, onDone }: ExProps) {
   const [pick, setPick] = useState<number | null>(null);
   return (
     <div>
-      <p className="mb-2 text-sm text-muted">Onde cai o acento? Toque na vogal tônica.</p>
+      <p className="mb-2 text-base font-bold text-brand">Toque na vogal tônica</p>
       <Card>
         <p className="text-lg font-semibold">{l.pt}</p>
         <div className="mt-3 flex flex-wrap items-end gap-x-0.5 gap-y-2" data-testid="letters">
@@ -231,7 +233,7 @@ export function GramEx({ item, onDone }: ExProps) {
     <div>
       {item.isNew && <p className="mb-2 inline-block rounded-full bg-brand/15 px-3 py-1 text-xs font-bold text-brand">NOVO</p>}
       <Card>
-        <p className="text-sm text-muted">{adj ? 'Escreva a forma do adjetivo' : 'Escreva a forma do substantivo'}</p>
+        <p className="mb-1 text-base font-bold text-brand">{adj ? 'Digite a forma do adjetivo' : 'Digite a forma do substantivo'}</p>
         <p className="mt-1 text-4xl">
           <Ru data-testid="prompt">{lemma.s}</Ru>
         </p>
@@ -316,10 +318,10 @@ export function ReadEx({ item, onDone }: ExProps) {
     if (!val.trim()) return;
     finish(mode === 'type-tr' ? normalizeTranslit(val) === normalizeTranslit(tr) : normalizeAnswer(val) === normalizeAnswer(l.t), val);
   };
-  const title = { choose: 'Como se lê? Escolha a transliteração.', 'type-tr': 'Leia a palavra e digite a transliteração.', 'type-ru': 'Digite em russo a palavra transliterada.' }[mode];
+  const title = { choose: 'Escolha como se lê', 'type-tr': 'Digite a transliteração', 'type-ru': 'Digite em russo' }[mode];
   return (
     <div>
-      <p className="mb-2 text-sm text-muted" data-testid="mode">{title}</p>
+      <p className="mb-2 text-base font-bold text-brand" data-testid="mode">{title}</p>
       <Card className="text-center">
         {mode === 'type-ru' ? (
           <p className="py-3 text-4xl font-bold" data-testid="prompt">{tr}</p>

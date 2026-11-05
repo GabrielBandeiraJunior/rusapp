@@ -1,11 +1,12 @@
 'use client';
 import Link from 'next/link';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { addDays, dayKey } from '../../shared/days';
 import { useApp } from '@/components/Providers';
 import { Bar, Card, Page } from '@/components/ui';
-import { buildQueue } from '@/lib/queue';
-import type { CardKind } from '@/lib/srs';
+import { buildQueue, knownLemmas } from '@/lib/queue';
+import { continueHref, KIND_LABEL, loadSession, type SavedSession } from '@/lib/resume';
+import { isLearned, type CardKind } from '@/lib/srs';
 import { dueNow, errorsByCase, matureCount, retention, reviewsOnDay, streakFor } from '@/lib/stats';
 
 const PLAN: { kind: CardKind; label: string; href: string }[] = [
@@ -15,6 +16,47 @@ const PLAN: { kind: CardKind; label: string; href: string }[] = [
   { kind: 'gram', label: 'Casos (gramática)', href: '/gramatica/' },
   { kind: 'read', label: 'Leitura de palavras', href: '/alfabeto/' },
 ];
+
+
+const WD = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'];
+const weekday = (key: string) => WD[new Date(`${key}T12:00:00Z`).getUTCDay()];
+
+interface Step { id: string; title: string; hint: string; href: string; have: number; goal: number }
+
+function Path({ steps }: { steps: Step[] }) {
+  const current = steps.findIndex((s) => s.have < s.goal);
+  return (
+    <ol data-testid="path" className="relative">
+      {steps.map((s, i) => {
+        const done = s.have >= s.goal;
+        const isCur = i === current;
+        return (
+          <li key={s.id} className="relative flex gap-3 pb-3 last:pb-0">
+            {i < steps.length - 1 && <span aria-hidden className={`absolute left-[19px] top-10 h-[calc(100%-2.5rem)] w-0.5 ${done ? 'bg-good/60' : 'bg-line'}`} />}
+            <span
+              aria-hidden
+              className={`z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-sm font-bold ${done ? 'bg-good text-white' : isCur ? 'bg-brand text-white ring-4 ring-brand/20' : 'bg-line text-muted'}`}
+            >
+              {done ? '✓' : i + 1}
+            </span>
+            <Link
+              href={s.href}
+              data-testid={isCur ? 'path-current' : undefined}
+              className={`flex min-h-11 flex-1 flex-col justify-center rounded-2xl border px-3 py-2 ${isCur ? 'border-brand/40 bg-brand/10' : 'border-line/70 bg-surface'}`}
+            >
+              <span className="flex items-center justify-between gap-2">
+                <b className={done || isCur ? '' : 'text-muted'}>{s.title}</b>
+                <span className="text-xs text-muted">{Math.min(s.have, s.goal)}/{s.goal}</span>
+              </span>
+              <span className="text-xs text-muted">{s.hint}</span>
+              <Bar value={Math.min(s.have, s.goal)} max={s.goal} tone={done ? 'good' : 'brand'} />
+            </Link>
+          </li>
+        );
+      })}
+    </ol>
+  );
+}
 
 export default function Home() {
   const { ix, cards, reviews, settings, syncStatus, syncMessage } = useApp();
@@ -39,11 +81,60 @@ export default function Home() {
     return { d, n: reviewsOnDay(reviews, d, settings.tz) };
   });
   const maxWeek = Math.max(1, ...week.map((w) => w.n));
+  const [saved, setSaved] = useState<SavedSession | null>(null);
+  useEffect(() => setSaved(loadSession()), []);
+  const learned = (k: CardKind) => cards.filter((c) => c.kind === k && isLearned(c)).length;
+  const steps: Step[] = [
+    { id: 'read', title: 'Alfabeto e leitura', hint: 'Letras, regras e leitura de palavras', href: '/alfabeto/', have: learned('read'), goal: 10 },
+    { id: 'vprod', title: 'Primeiras palavras', hint: 'Digite as palavras em russo', href: '/vocabulario/', have: learned('vprod'), goal: 30 },
+    { id: 'stress', title: 'Acento tônico', hint: 'Onde cai a tônica', href: '/vocabulario/', have: learned('stress'), goal: 20 },
+    { id: 'vrec', title: 'Reconhecer palavras', hint: 'Do russo para o português', href: '/vocabulario/', have: learned('vrec'), goal: 20 },
+    { id: 'gram', title: 'Casos', hint: 'Nominativo, acusativo e genitivo', href: '/gramatica/', have: learned('gram'), goal: 40 },
+    { id: 'texts', title: 'Leitura de textos', hint: 'Textos com as palavras que você já conhece', href: '/leitura/', have: knownLemmas(cards).size, goal: 60 },
+  ];
+  const calendar = Array.from({ length: 7 }, (_, i) => {
+    const d = addDays(today, i - 6);
+    return { d, n: reviewsOnDay(reviews, d, settings.tz) };
+  });
   const first = reviews.length === 0;
   const next = plan.find((p) => p.due + p.fresh > 0);
 
   return (
     <Page title="Hoje" right={<Link href="/config/" aria-label="Configurações" className="flex min-h-11 min-w-11 items-center justify-center text-2xl">⚙️</Link>}>
+      <Card className="mb-3" data-testid="streak-card">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-sm text-muted">Dias seguidos</p>
+            <p className="text-4xl font-extrabold tracking-tight" data-testid="streak-days">🔥 {streak.streak}</p>
+          </div>
+          <p className="text-right text-xs text-muted">recorde {streak.longest}<br />{doneToday}/{settings.dailyGoal} hoje</p>
+        </div>
+        <ul className="mt-3 flex justify-between" aria-label="Últimos 7 dias">
+          {calendar.map((c, i) => (
+            <li key={c.d} className="flex flex-col items-center gap-1">
+              <span
+                className={`flex h-9 w-9 items-center justify-center rounded-full text-sm font-bold ${c.n ? 'bg-good text-white' : i === 6 ? 'border-2 border-dashed border-brand text-brand' : 'bg-line text-muted'}`}
+              >
+                {c.n ? '✓' : ''}
+              </span>
+              <span className={`text-[11px] ${i === 6 ? 'font-bold text-brand' : 'text-muted'}`}>{weekday(c.d)}</span>
+            </li>
+          ))}
+        </ul>
+      </Card>
+      {saved && (
+        <Link
+          href={continueHref(saved.kind)}
+          data-testid="continue-card"
+          className="mb-3 flex min-h-14 items-center justify-between gap-3 rounded-3xl bg-brand px-4 py-3 text-white shadow-sm"
+        >
+          <span>
+            <span className="block text-xs opacity-80">Continuar de onde parou</span>
+            <b>{KIND_LABEL[saved.kind]}</b>
+          </span>
+          <span className="rounded-full bg-white/20 px-3 py-1 text-sm font-bold">{saved.idx}/{saved.queue.length} ▶</span>
+        </Link>
+      )}
       {streak.atRisk && (
         <div role="alert" data-testid="streak-banner" className="mb-3 rounded-2xl bg-warn/20 p-3 text-warn">
           <b>Ofensiva em risco!</b> Você tem {streak.streak} {streak.streak === 1 ? 'dia' : 'dias'} seguidos — estude hoje para mantê-la.
@@ -62,7 +153,10 @@ export default function Home() {
           <Link href="/alfabeto/" className="mt-3 flex min-h-12 items-center justify-center rounded-xl bg-brand px-3 font-semibold text-white">Começar pelo alfabeto</Link>
         </Card>
       )}
-      <div className="grid grid-cols-2 gap-3">
+      <h2 className="mb-2 mt-4 text-lg font-bold">Seu caminho</h2>
+      <Path steps={steps} />
+
+      <div className="mt-4 grid grid-cols-2 gap-3">
         <Card>
           <p className="text-sm text-muted">Ofensiva</p>
           <p className="text-3xl font-bold" data-testid="streak">🔥 {streak.streak}</p>

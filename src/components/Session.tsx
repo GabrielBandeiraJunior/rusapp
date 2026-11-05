@@ -1,19 +1,26 @@
 'use client';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { QItem } from '@/lib/queue';
+import { clearSession, saveSession, type SavedSession } from '@/lib/resume';
 import { useApp } from './Providers';
 import { Exercise, type Outcome } from './Exercises';
 import { Bar, Btn, Card } from './ui';
 
 /** Sessão: percorre a fila; erros voltam ao fim (1 vez) para praticar de novo. */
-export function Session({ items, onExit }: { items: QItem[]; onExit: () => void }) {
+export function Session({ items, onExit, initial }: { items: QItem[]; onExit: () => void; initial?: SavedSession }) {
   const { review } = useApp();
-  const [queue, setQueue] = useState<(QItem & { retry?: boolean })[]>(items);
-  const [idx, setIdx] = useState(0);
-  const [stats, setStats] = useState({ ok: 0, bad: 0 });
+  const [queue, setQueue] = useState<(QItem & { retry?: boolean })[]>(initial?.queue ?? items);
+  const [idx, setIdx] = useState(initial?.idx ?? 0);
+  const [stats, setStats] = useState(initial?.stats ?? { ok: 0, bad: 0 });
   const busy = useRef(false);
   const total = queue.length;
   const done = idx >= total;
+  const kind = queue[0]?.kind;
+  // guarda o ponto de retomada a cada avanço; ao concluir, limpa
+  useEffect(() => {
+    if (done) clearSession();
+    else if (idx > 0 && kind) saveSession({ kind, queue, idx, stats, ts: Date.now() });
+  }, [done, idx, kind, queue, stats]);
 
   if (done)
     return (

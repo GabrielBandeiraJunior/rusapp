@@ -354,3 +354,32 @@ test('SYNC ponta a ponta: dois aparelhos (contextos) contra o Worker + D1 emulad
     await mf.dispose();
   }
 });
+
+test('continuar de onde parou: sai no meio da sessão e retoma pela tela inicial', async () => {
+  const ctx = await newPhone(browser);
+  const page = await ctx.newPage();
+  await page.goto(url + '/vocabulario/');
+  await ready(page);
+  await page.getByTestId('start').click();
+  for (let i = 0; i < 2; i++) {
+    const word = strip(await page.getByTestId('newword').innerText());
+    await page.getByLabel('Resposta em russo').fill(word);
+    await page.getByTestId('check').click();
+    await next(page);
+  }
+  assert.match(await page.getByTestId('progress').innerText(), /^3\//);
+  await page.getByLabel('Sair da sessão').click(); // abandona no meio
+  await page.goto(url + '/');
+  await ready(page);
+  const card = page.getByTestId('continue-card');
+  await card.waitFor();
+  assert.match(await card.innerText(), /2\/\d+/);
+  assert.ok((await page.getByTestId('path').count()) === 1, 'caminho de aprendizado visível');
+  assert.match(await page.getByTestId('streak-days').innerText(), /\d/);
+  await page.screenshot({ path: path.join(SHOTS, '00-inicio.png'), fullPage: false });
+  await card.click();
+  await ready(page);
+  await page.getByTestId('progress').waitFor();
+  assert.match(await page.getByTestId('progress').innerText(), /^3\//, 'retoma na questão 3');
+  await ctx.close();
+});
