@@ -3,12 +3,12 @@
 @tailwind utilities;
 
 :root {
-  --bg: 248 246 242;
+  --bg: 246 247 251;
   --surface: 255 255 255;
   --ink: 28 28 36;
   --muted: 106 106 120;
-  --line: 224 220 212;
-  --brand: 37 78 168;
+  --line: 226 229 238;
+  --brand: 63 81 224;
   --good: 22 130 74;
   --bad: 200 45 45;
   --warn: 196 120 10;
@@ -16,26 +16,31 @@
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: 16 17 22;
-    --surface: 28 30 38;
+    --bg: 13 14 20;
+    --surface: 24 26 36;
     --ink: 238 238 244;
     --muted: 150 152 166;
     --line: 52 55 68;
-    --brand: 120 160 240;
+    --brand: 138 160 255;
     --good: 80 200 130;
     --bad: 240 110 110;
     --warn: 240 170 60;
   }
 }
 
-html, body { background: rgb(var(--bg)); color: rgb(var(--ink)); }
+html, body { background: rgb(var(--bg)); color: rgb(var(--ink)); transition: background-color .15s; }
+html[data-result='bad'], html[data-result='bad'] body { background: color-mix(in srgb, rgb(var(--bad)) 20%, rgb(var(--bg))); }
+html[data-result='ok'], html[data-result='ok'] body { background: color-mix(in srgb, rgb(var(--good)) 20%, rgb(var(--bg))); }
 body {
-  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-family: var(--font-sans), system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-feature-settings: 'cv11', 'ss03';
+  letter-spacing: -0.011em;
+  -webkit-font-smoothing: antialiased;
   -webkit-tap-highlight-color: transparent;
   overscroll-behavior-y: none;
 }
 button, a { touch-action: manipulation; }
-.ru { font-feature-settings: 'locl'; letter-spacing: 0.01em; }
+.ru { font-family: var(--font-ru), 'Segoe UI', sans-serif; font-feature-settings: 'locl', 'mark', 'mkmk'; letter-spacing: 0; font-kerning: normal; }
 .safe-top { padding-top: env(safe-area-inset-top); }
 .safe-bottom { padding-bottom: env(safe-area-inset-bottom); }
 input, select, textarea { font-size: 16px; } /* evita zoom automático no iOS */

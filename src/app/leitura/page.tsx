@@ -31,7 +31,7 @@ function Reader({ text, onBack }: { text: TextDoc; onBack: () => void }) {
         <span className="text-muted">({cov.known}/{cov.words} palavras) · {b.label}</span>
       </p>
       <Card>
-        <div className="space-y-4 text-2xl leading-loose">
+        <div className="space-y-3 text-2xl leading-loose">
           {text.sentences.map((id) => {
             const s = ix.sentence.get(id)!;
             return (
@@ -103,7 +103,7 @@ export default function ReadingPage() {
               const b = BAND[band(cov.pct)];
               return (
                 <li key={t.id}>
-                  <button onClick={() => setOpen(t)} data-testid="text-item" className="flex min-h-16 w-full items-center justify-between rounded-2xl border border-line bg-surface p-4 text-left">
+                  <button onClick={() => setOpen(t)} data-testid="text-item" className="flex min-h-16 w-full items-center justify-between rounded-2xl border border-line bg-surface p-3 text-left">
                     <span>
                       <span className="block font-semibold">{t.title}</span>
                       <span className="text-sm text-muted">{t.sentences.length} frases · {cov.words} palavras</span>

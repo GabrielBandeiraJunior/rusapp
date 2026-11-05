@@ -41,14 +41,14 @@ function Letters() {
             key={l.c}
             onClick={() => setSel(l.c)}
             aria-pressed={sel === l.c}
-            className={`min-h-14 rounded-xl border text-center ${sel === l.c ? 'border-brand bg-brand/15' : 'border-line bg-surface'}`}
+            className={`min-h-12 rounded-xl border text-center ${sel === l.c ? 'border-brand bg-brand/15' : 'border-line bg-surface'}`}
           >
             <Ru className="block text-xl font-semibold leading-tight">{l.c.toUpperCase()} {l.c}</Ru>
             <span className="block text-[11px] text-muted">{l.c === 'е' ? 'ye/e' : transliterate(l.c) || '—'}</span>
           </button>
         ))}
       </div>
-      <Card className="mt-4" >
+      <Card className="mt-3" >
         <p className="text-5xl"><Ru>{sel.toUpperCase()} {sel}</Ru></p>
         <p className="mt-1 text-lg" data-testid="letter-sound">{info.sound}</p>
         <p className="mt-1 text-sm text-muted">transliteração: <b>{sel === 'е' ? 'ye (início/após vogal) · e' : transliterate(sel) || '(sinal)'}</b></p>

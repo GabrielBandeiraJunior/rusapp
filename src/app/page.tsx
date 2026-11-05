@@ -45,21 +45,21 @@ export default function Home() {
   return (
     <Page title="Hoje" right={<Link href="/config/" aria-label="Configurações" className="flex min-h-11 min-w-11 items-center justify-center text-2xl">⚙️</Link>}>
       {streak.atRisk && (
-        <div role="alert" data-testid="streak-banner" className="mb-3 rounded-2xl bg-warn/20 p-4 text-warn">
+        <div role="alert" data-testid="streak-banner" className="mb-3 rounded-2xl bg-warn/20 p-3 text-warn">
           <b>Ofensiva em risco!</b> Você tem {streak.streak} {streak.streak === 1 ? 'dia' : 'dias'} seguidos — estude hoje para mantê-la.
         </div>
       )}
       {due.length > 0 && (
-        <div data-testid="due-banner" className="mb-3 rounded-2xl bg-brand/15 p-4">
+        <div data-testid="due-banner" className="mb-3 rounded-2xl bg-brand/15 p-3">
           <b>{due.length} {due.length === 1 ? 'cartão devido' : 'cartões devidos'}</b> agora.
-          {next && <Link href={next.href} className="mt-2 flex min-h-12 items-center justify-center rounded-xl bg-brand px-4 font-semibold text-white">Revisar agora</Link>}
+          {next && <Link href={next.href} className="mt-2 flex min-h-12 items-center justify-center rounded-xl bg-brand px-3 font-semibold text-white">Revisar agora</Link>}
         </div>
       )}
       {first && (
         <Card className="mb-3">
           <p className="font-bold">Bem-vindo!</p>
           <p className="mt-1 text-sm text-muted">Comece pelo alfabeto e pelas regras de leitura; depois aprenda palavras (digitando) e treine os casos. Tudo funciona offline.</p>
-          <Link href="/alfabeto/" className="mt-3 flex min-h-12 items-center justify-center rounded-xl bg-brand px-4 font-semibold text-white">Começar pelo alfabeto</Link>
+          <Link href="/alfabeto/" className="mt-3 flex min-h-12 items-center justify-center rounded-xl bg-brand px-3 font-semibold text-white">Começar pelo alfabeto</Link>
         </Card>
       )}
       <div className="grid grid-cols-2 gap-3">
@@ -89,7 +89,7 @@ export default function Home() {
       <ul className="space-y-2">
         {plan.map((p) => (
           <li key={p.kind}>
-            <Link href={p.href} className="flex min-h-14 items-center justify-between rounded-2xl border border-line bg-surface px-4">
+            <Link href={p.href} className="flex min-h-12 items-center justify-between rounded-2xl border border-line bg-surface px-3">
               <span>{p.label}</span>
               <span className="text-sm text-muted">{p.due} rev. · {p.fresh} novos</span>
             </Link>
@@ -125,7 +125,7 @@ export default function Home() {
         )}
       </Card>
       {syncStatus !== 'off' && (
-        <p className="mt-4 text-center text-xs text-muted" data-testid="sync-status">
+        <p className="mt-3 text-center text-xs text-muted" data-testid="sync-status">
           Sync: {syncStatus === 'ok' ? 'em dia' : syncStatus === 'syncing' ? 'sincronizando…' : syncStatus === 'error' ? 'pendente' : 'ativo'} {syncMessage}
         </p>
       )}

@@ -16,7 +16,7 @@ export const TypeInput = forwardRef<HTMLInputElement, InputHTMLAttributes<HTMLIn
         spellCheck={false}
         enterKeyHint="done"
         {...p}
-        className={`min-h-14 w-full rounded-xl border-2 border-line bg-surface px-4 text-xl outline-none focus:border-brand ${className}`}
+        className={`min-h-12 w-full rounded-xl border-2 border-line bg-surface px-3 text-xl outline-none focus:border-brand ${className}`}
       />
     );
   },

@@ -48,7 +48,7 @@ export function Practice({ kind, focus = 'all', empty }: { kind: CardKind; focus
       {queue.length === 0 ? (
         <p className="mt-3 text-muted">{empty ?? 'Nada pendente agora. Volte mais tarde — ou aumente os novos por dia em Configurações.'}</p>
       ) : (
-        <Btn className="mt-4 w-full" data-testid="start" onClick={() => setSession(queue.slice(0, ROUND))}>
+        <Btn className="mt-3 w-full" data-testid="start" onClick={() => setSession(queue.slice(0, ROUND))}>
           Começar ({Math.min(queue.length, ROUND)})
         </Btn>
       )}

@@ -10,7 +10,7 @@ const ix = indexContent(content);
 
 // ---- parser INDEPENDENTE do snapshot de origem (não reutiliza o código do pipeline)
 function tsv(path: string) {
-  const [head, ...lines] = readFileSync(path, 'utf8').split('\n').filter(Boolean);
+  const [head, ...lines] = readFileSync(path, 'utf8').split(/\r?\n/).filter(Boolean);
   const cols = head.split('\t');
   return lines.map((l) => Object.fromEntries(l.split('\t').map((c, i) => [cols[i], c])));
 }

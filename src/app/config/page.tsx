@@ -6,7 +6,7 @@ import { Btn, Card, Page } from '@/components/ui';
 
 function Row({ label, hint, children }: { label: string; hint?: string; children: ReactNode }) {
   return (
-    <label className="flex min-h-14 items-center justify-between gap-3 py-2">
+    <label className="flex min-h-12 items-center justify-between gap-3 py-2">
       <span>
         <span className="block font-medium">{label}</span>
         {hint && <span className="block text-xs text-muted">{hint}</span>}
@@ -37,7 +37,7 @@ export default function ConfigPage() {
   };
 
   return (
-    <Page title="Configurações" right={<Link href="/sobre/" className="flex min-h-11 items-center text-brand">Sobre</Link>}>
+    <Page title="Configurações" right={<Link href="/sobre/" className="flex min-h-11 min-w-11 items-center justify-center text-brand">Sobre</Link>}>
       <Card>
         <Row label="Meta diária" hint="revisões por dia">
           <input aria-label="Meta diária" type="number" inputMode="numeric" min={1} max={500} className={numCls} value={settings.dailyGoal}
@@ -90,7 +90,7 @@ export default function ConfigPage() {
           {syncStatus === 'off' ? 'Desligada.' : syncStatus === 'ok' ? `Em dia ${syncMessage}` : syncStatus === 'error' ? `Erro: ${syncMessage}` : syncStatus === 'syncing' ? 'Sincronizando…' : 'Ativa.'}
         </p>
       </Card>
-      <p className="mt-6 text-center text-xs text-muted">Conteúdo v{ix.content.v} · {ix.content.lemmas.length} palavras · {ix.content.sentences.length} frases</p>
+      <p className="mt-4 text-center text-xs text-muted">Conteúdo v{ix.content.v} · {ix.content.lemmas.length} palavras · {ix.content.sentences.length} frases</p>
     </Page>
   );
 }

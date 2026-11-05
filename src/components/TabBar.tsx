@@ -25,7 +25,7 @@ export function TabBar() {
               <Link
                 href={t.href}
                 aria-current={active ? 'page' : undefined}
-                className={`flex min-h-14 flex-col items-center justify-center gap-0.5 text-xs font-medium ${active ? 'text-brand' : 'text-muted'}`}
+                className={`flex min-h-12 flex-col items-center justify-center gap-0.5 text-xs font-medium ${active ? 'text-brand' : 'text-muted'}`}
               >
                 <span aria-hidden className="text-lg leading-none">{t.icon}</span>
                 {t.label}

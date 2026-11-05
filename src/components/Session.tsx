@@ -22,7 +22,7 @@ export function Session({ items, onExit }: { items: QItem[]; onExit: () => void 
         <p className="mt-2 text-lg">
           <span className="text-good">{stats.ok} acertos</span> · <span className="text-bad">{stats.bad} erros</span>
         </p>
-        <Btn className="mt-4 w-full" onClick={onExit} data-testid="exit">
+        <Btn className="mt-3 w-full" onClick={onExit} data-testid="exit">
           Voltar
         </Btn>
       </Card>

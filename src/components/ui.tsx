@@ -14,13 +14,13 @@ export function Btn({
   return (
     <button
       {...p}
-      className={`min-h-12 min-w-12 rounded-xl px-4 text-base font-semibold active:opacity-80 disabled:opacity-40 ${v} ${className}`}
+      className={`min-h-12 min-w-12 rounded-2xl px-4 text-base font-semibold tracking-tight shadow-sm transition active:scale-[0.98] active:opacity-90 disabled:opacity-40 disabled:shadow-none ${v} ${className}`}
     />
   );
 }
 
 export function Card({ children, className = '' }: { children: ReactNode; className?: string }) {
-  return <div className={`rounded-2xl border border-line bg-surface p-4 ${className}`}>{children}</div>;
+  return <div className={`rounded-3xl border border-line/70 bg-surface p-4 shadow-[0_1px_2px_rgb(0_0_0/0.04),0_8px_24px_-12px_rgb(0_0_0/0.12)] ${className}`}>{children}</div>;
 }
 
 export function Bar({ value, max, tone = 'brand' }: { value: number; max: number; tone?: 'brand' | 'good' | 'bad' }) {
@@ -34,9 +34,9 @@ export function Bar({ value, max, tone = 'brand' }: { value: number; max: number
 
 export function Page({ title, children, right }: { title: string; children: ReactNode; right?: ReactNode }) {
   return (
-    <main className="mx-auto w-full max-w-md px-4 pb-32 safe-top">
-      <header className="flex min-h-14 items-center justify-between py-2">
-        <h1 className="text-2xl font-bold">{title}</h1>
+    <main className="mx-auto w-full max-w-md px-3 pb-24 safe-top">
+      <header className="flex min-h-12 items-center justify-between py-1">
+        <h1 className="text-[26px] font-extrabold tracking-tight">{title}</h1>
         {right}
       </header>
       {children}
@@ -48,14 +48,14 @@ export function Tabs<T extends string>({
   value, onChange, items,
 }: { value: T; onChange: (v: T) => void; items: { id: T; label: string }[] }) {
   return (
-    <div role="tablist" className="mb-4 flex gap-1 rounded-xl bg-line/60 p-1">
+    <div role="tablist" className="mb-3 flex gap-1 rounded-2xl bg-line/50 p-1">
       {items.map((it) => (
         <button
           key={it.id}
           role="tab"
           aria-selected={value === it.id}
           onClick={() => onChange(it.id)}
-          className={`min-h-11 flex-1 rounded-lg px-2 text-sm font-semibold ${value === it.id ? 'bg-surface shadow' : 'text-muted'}`}
+          className={`min-h-11 flex-1 rounded-xl px-2 text-sm font-semibold transition ${value === it.id ? 'bg-surface text-ink shadow-sm' : 'text-muted'}`}
         >
           {it.label}
         </button>

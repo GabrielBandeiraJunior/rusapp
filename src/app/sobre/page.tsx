@@ -32,7 +32,7 @@ export default function AboutPage() {
           nas frases são validadas contra a tabela de flexão (OpenRussian). Revise e corrija o que encontrar.
         </p>
       </Card>
-      <p className="mt-6 text-center text-xs text-muted">Conteúdo v{ix.content.v}</p>
+      <p className="mt-4 text-center text-xs text-muted">Conteúdo v{ix.content.v}</p>
     </Page>
   );
 }

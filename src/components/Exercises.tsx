@@ -24,11 +24,19 @@ const POS_PT = { noun: 'substantivo', adj: 'adjetivo', verb: 'verbo', other: 'pa
 const GENDER_LABEL = { m: 'masc.', f: 'fem.', n: 'neutro' } as const;
 
 function ResultBar({ ok, easyAllowed, onNext, children }: { ok: boolean; easyAllowed?: boolean; onNext: (easy: boolean) => void; children?: ReactNode }) {
+  const box = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    box.current?.scrollIntoView({ block: 'nearest' });
+    document.documentElement.dataset.result = ok ? 'ok' : 'bad'; // tinge o fundo da página inteira
+    return () => {
+      delete document.documentElement.dataset.result;
+    };
+  }, [ok]);
   return (
-    <div data-testid="result" className={`mt-4 rounded-2xl border-2 p-4 ${ok ? 'border-good' : 'border-bad'}`}>
-      <p className={`mb-2 text-lg font-bold ${ok ? 'text-good' : 'text-bad'}`}>{ok ? 'Correto!' : 'Ainda não.'}</p>
-      <div className="space-y-2 text-base">{children}</div>
-      <div className="mt-4 flex gap-2">
+    <div ref={box} data-testid="result" className={`mt-3 rounded-2xl border-2 p-3 ${ok ? 'border-good' : 'border-bad'}`}>
+      <p className={`mb-1 text-lg font-bold ${ok ? 'text-good' : 'text-bad'}`}>{ok ? 'Correto!' : 'Ainda não.'}</p>
+      <div className="space-y-1 text-base">{children}</div>
+      <div className="mt-3 flex gap-2">
         {ok && easyAllowed && (
           <Btn variant="ghost" className="flex-1" onClick={() => onNext(true)}>
             Fácil
@@ -98,7 +106,7 @@ export function VocabProdEx({ item, onDone }: ExProps) {
           value={val}
           disabled={res !== null}
           onChange={(e) => setVal(e.target.value)}
-          onKeyDown={(e) => e.key === 'Enter' && res === null && submit()}
+          onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); if (res === null) submit(); } }}
           placeholder={item.isNew ? 'digite a palavra para fixar' : 'digite em russo'}
           aria-label="Resposta em russo"
         />
@@ -136,7 +144,7 @@ export function VocabRecEx({ item, onDone }: ExProps) {
   return (
     <div>
       <Card className="text-center">
-        <p className="py-4 text-5xl">
+        <p className="py-3 text-5xl">
           <Ru data-testid="prompt">{l.s}</Ru>
         </p>
         {show && (
@@ -148,11 +156,11 @@ export function VocabRecEx({ item, onDone }: ExProps) {
         )}
       </Card>
       {!show ? (
-        <Btn className="mt-4 w-full" onClick={() => setShow(true)} data-testid="show">
+        <Btn className="mt-3 w-full" onClick={() => setShow(true)} data-testid="show">
           Mostrar resposta
         </Btn>
       ) : (
-        <div className="mt-4 grid grid-cols-2 gap-2" data-testid="rate">
+        <div className="mt-3 grid grid-cols-2 gap-2" data-testid="rate">
           <Btn variant="bad" onClick={() => rate(1)}>Errei</Btn>
           <Btn variant="warn" onClick={() => rate(2)}>Difícil</Btn>
           <Btn variant="good" onClick={() => rate(3)}>Acertei</Btn>
@@ -236,7 +244,7 @@ export function GramEx({ item, onDone }: ExProps) {
           value={val}
           disabled={res !== null}
           onChange={(e) => setVal(e.target.value)}
-          onKeyDown={(e) => e.key === 'Enter' && res === null && submit()}
+          onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); if (res === null) submit(); } }}
           placeholder="digite a forma"
           aria-label="Forma em russo"
         />
@@ -347,7 +355,7 @@ export function ReadEx({ item, onDone }: ExProps) {
               value={val}
               disabled={res !== null}
               onChange={(e) => setVal(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && res === null && submit()}
+              onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); if (res === null) submit(); } }}
               placeholder={mode === 'type-tr' ? 'ex.: moloko' : 'digite em cirílico'}
             />
           </div>
