@@ -300,7 +300,7 @@ test('SYNC ponta a ponta: dois aparelhos (contextos) contra o Worker + D1 emulad
   await build({ entryPoints: [path.resolve(__dirname, '../worker/src/index.ts')], bundle: true, format: 'esm', platform: 'neutral', target: 'es2022', outfile: path.resolve(__dirname, '../worker/dist/index.js'), logLevel: 'silent' });
   const mf = new Miniflare({
     modules: true, scriptPath: path.resolve(__dirname, '../worker/dist/index.js'), compatibilityDate: '2025-01-01',
-    d1Databases: { DB: 'e2e-db' }, bindings: { APP_TOKEN: 'e2e-token' }, port: 0, host: '127.0.0.1',
+    d1Databases: { DB: 'e2e-db' }, bindings: { APP_TOKEN: 'e2e-token', ALLOWED_ORIGIN: url }, port: 0, host: '127.0.0.1',
   });
   try {
     const workerUrl = (await mf.ready).toString().replace(/\/$/, '');

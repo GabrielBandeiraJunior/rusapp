@@ -37,6 +37,8 @@ describe('Worker + D1 emulado (Miniflare)', () => {
     const r = await w.mf.dispatchFetch(`${w.base}/api/sync`, { method: 'OPTIONS' });
     expect(r.status).toBe(204);
     expect(r.headers.get('access-control-allow-headers')).toContain('authorization');
+    // sem ALLOWED_ORIGIN configurado: nenhuma origem liberada (nunca '*')
+    expect(r.headers.get('access-control-allow-origin')).toBeNull();
   });
 
   it('é idempotente por id de revisão e valida entradas', async () => {
