@@ -48,14 +48,14 @@ export function Tabs<T extends string>({
   value, onChange, items,
 }: { value: T; onChange: (v: T) => void; items: { id: T; label: string }[] }) {
   return (
-    <div role="tablist" className="mb-3 flex gap-1 rounded-2xl bg-line/50 p-1">
+    <div role="tablist" className="mb-3 flex gap-1 overflow-x-auto rounded-2xl bg-line/50 p-1">
       {items.map((it) => (
         <button
           key={it.id}
           role="tab"
           aria-selected={value === it.id}
           onClick={() => onChange(it.id)}
-          className={`min-h-11 flex-1 rounded-xl px-2 text-sm font-semibold transition ${value === it.id ? 'bg-surface text-ink shadow-sm' : 'text-muted'}`}
+          className={`min-h-11 min-w-fit flex-1 whitespace-nowrap rounded-xl px-2.5 text-sm font-semibold transition ${value === it.id ? 'bg-surface text-ink shadow-sm' : 'text-muted'}`}
         >
           {it.label}
         </button>

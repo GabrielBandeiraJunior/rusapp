@@ -24,9 +24,14 @@ interface SyncBody {
 const PULL_LIMIT = 500;
 const MAX_ITEMS = 1000;
 
+/** Limite do corpo de /api/sync (bytes): 1000 itens × ~2 KB já cabem com folga. */
+const MAX_BODY_BYTES = 1_000_000;
+
 function cors(env: Env): Record<string, string> {
+  // Sem ALLOWED_ORIGIN configurado, nenhuma origem de navegador é liberada (nega por padrão).
+  const origin: Record<string, string> = env.ALLOWED_ORIGIN ? { 'access-control-allow-origin': env.ALLOWED_ORIGIN } : {};
   return {
-    'access-control-allow-origin': env.ALLOWED_ORIGIN || '*',
+    ...origin,
     'access-control-allow-headers': 'authorization, content-type',
     'access-control-allow-methods': 'GET, POST, OPTIONS',
     'access-control-max-age': '86400',
@@ -62,9 +67,10 @@ async function runBatch(db: D1Database, stmts: D1PreparedStatement[]) {
 }
 
 export async function handleSync(env: Env, body: SyncBody): Promise<Response> {
-  const reviews = (body.reviews ?? []).slice(0, MAX_ITEMS);
-  const cards = (body.cards ?? []).slice(0, MAX_ITEMS);
-  const settings = (body.settings ?? []).slice(0, 100);
+  const list = <T>(v: unknown, max: number): T[] => (Array.isArray(v) ? (v.slice(0, max).filter((x) => x && typeof x === 'object') as T[]) : []);
+  const reviews = list<InReview>(body.reviews, MAX_ITEMS);
+  const cards = list<InCard>(body.cards, MAX_ITEMS);
+  const settings = list<InSetting>(body.settings, 100);
   const stmts: D1PreparedStatement[] = [];
   const db = env.DB;
   for (const r of reviews) {
@@ -156,9 +162,15 @@ const worker = {
       if (req.method !== 'POST') return json(env, { error: 'method not allowed' }, 405);
       if (!env.APP_TOKEN) return json(env, { error: 'server not configured' }, 500);
       if (!authorized(req, env)) return json(env, { error: 'unauthorized' }, 401);
+      const declared = Number(req.headers.get('content-length') ?? 0);
+      if (declared > MAX_BODY_BYTES) return json(env, { error: 'payload too large' }, 413);
       let body: SyncBody;
       try {
-        body = (await req.json()) as SyncBody;
+        const text = await req.text();
+        if (text.length > MAX_BODY_BYTES) return json(env, { error: 'payload too large' }, 413);
+        const parsed: unknown = JSON.parse(text);
+        if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) throw new Error('not an object');
+        body = parsed as SyncBody;
       } catch {
         return json(env, { error: 'invalid json' }, 400);
       }

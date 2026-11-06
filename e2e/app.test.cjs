@@ -300,7 +300,7 @@ test('SYNC ponta a ponta: dois aparelhos (contextos) contra o Worker + D1 emulad
   await build({ entryPoints: [path.resolve(__dirname, '../worker/src/index.ts')], bundle: true, format: 'esm', platform: 'neutral', target: 'es2022', outfile: path.resolve(__dirname, '../worker/dist/index.js'), logLevel: 'silent' });
   const mf = new Miniflare({
     modules: true, scriptPath: path.resolve(__dirname, '../worker/dist/index.js'), compatibilityDate: '2025-01-01',
-    d1Databases: { DB: 'e2e-db' }, bindings: { APP_TOKEN: 'e2e-token' }, port: 0, host: '127.0.0.1',
+    d1Databases: { DB: 'e2e-db' }, bindings: { APP_TOKEN: 'e2e-token', ALLOWED_ORIGIN: url }, port: 0, host: '127.0.0.1',
   });
   try {
     const workerUrl = (await mf.ready).toString().replace(/\/$/, '');
@@ -382,4 +382,50 @@ test('continuar de onde parou: sai no meio da sessão e retoma pela tela inicial
   await page.getByTestId('progress').waitFor();
   assert.match(await page.getByTestId('progress').innerText(), /^3\//, 'retoma na questão 3');
   await ctx.close();
+});
+
+test('casos novos (dativo) com guia de preposições, e backup exportar/importar', async () => {
+  const ctx = await newPhone(browser, { acceptDownloads: true });
+  const page = await ctx.newPage();
+  await page.goto(url + '/gramatica/');
+  await ready(page);
+  await page.getByRole('tab', { name: 'Dat.' }).click();
+  await page.getByTestId('case-guide').locator('summary').click();
+  await audit(page, 'gramatica-guia');
+  await page.getByTestId('start').click();
+  await page.getByTestId('target').waitFor();
+  assert.match(await page.locator('main').innerText(), /dativo/i, 'a pergunta pede o dativo');
+  await page.getByLabel('Forma em russo').fill('ъъъ');
+  await page.getByTestId('check').click();
+  await page.getByTestId('result').waitFor();
+  await audit(page, 'gramatica-dativo-feedback');
+  await next(page); // grava a revisão
+
+  // exporta
+  await page.goto(url + '/config/');
+  await ready(page);
+  const [dl] = await Promise.all([page.waitForEvent('download'), page.getByRole('button', { name: 'Exportar' }).click()]);
+  const file = path.join(require('node:os').tmpdir(), `rusapp-e2e-${Date.now()}.json`);
+  await dl.saveAs(file);
+  const data = JSON.parse(fs.readFileSync(file, 'utf8'));
+  assert.equal(data.format, 'rusapp-backup');
+  assert.ok(data.reviews.length >= 1, 'a revisão feita está no backup');
+
+  // importa em um aparelho novo (contexto limpo): a revisão aparece
+  const ctx2 = await newPhone(browser);
+  const p2 = await ctx2.newPage();
+  await p2.goto(url + '/config/');
+  await ready(p2);
+  await p2.getByTestId('import-file').setInputFiles(file);
+  await p2.getByTestId('backup-state').getByText(/Importado: \d+ revisões novas/).waitFor();
+  await p2.getByTestId('import-file').setInputFiles(file); // idempotente
+  await p2.getByTestId('backup-state').getByText(/Nada novo/).waitFor();
+  const bad = file + '.bad.json'; // arquivo inválido
+  fs.writeFileSync(bad, '{"x":1}');
+  await p2.getByTestId('import-file').setInputFiles(bad);
+  await p2.getByTestId('backup-state').getByText(/Erro: Este arquivo não é um backup/).waitFor();
+  fs.rmSync(file, { force: true });
+  fs.rmSync(bad, { force: true });
+  await ctx.close();
+  await ctx2.close();
 });

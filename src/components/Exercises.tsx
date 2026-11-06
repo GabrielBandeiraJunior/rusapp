@@ -7,6 +7,7 @@ import type { QItem } from '@/lib/queue';
 import { parseCardId } from '@/lib/srs';
 import { useApp } from './Providers';
 import { Ru } from './Ru';
+import { Speak } from './Speak';
 import { TypeInput } from './TypeInput';
 import { Btn, Card } from './ui';
 
@@ -56,7 +57,7 @@ function ExampleLine({ lemmaId }: { lemmaId: string }) {
   if (!s) return null;
   return (
     <p className="text-sm text-muted">
-      <Ru className="text-base text-ink">{s.ru}</Ru>
+      <Ru className="text-base text-ink">{s.ru}</Ru> <Speak text={s.ru} className="!min-h-9 !min-w-9 !text-sm" />
       <br />
       {s.pt}
     </p>
@@ -126,7 +127,7 @@ export function VocabProdEx({ item, onDone }: ExProps) {
       ) : (
         <ResultBar ok={res} easyAllowed={!hint && !item.isNew} onNext={(easy) => onDone({ rating: !res ? 1 : hint ? 2 : easy ? 4 : 3, correct: res, resp: val })}>
           <p className="text-3xl">
-            <Ru data-testid="answer">{l.s}</Ru>
+            <Ru data-testid="answer">{l.s}</Ru> <Speak text={l.s} />
           </p>
           <p className="text-sm text-muted">leitura: {phonetic(l.s)} · {transliterate(l.t)}</p>
           <ExampleLine lemmaId={l.id} />
@@ -149,6 +150,7 @@ export function VocabRecEx({ item, onDone }: ExProps) {
         <p className="py-3 text-5xl">
           <Ru data-testid="prompt">{l.s}</Ru>
         </p>
+        <div className="pb-2"><Speak text={l.s} /></div>
         {show && (
           <div className="space-y-1 border-t border-line pt-3">
             <p className="text-2xl font-bold" data-testid="answer">{l.pt}</p>

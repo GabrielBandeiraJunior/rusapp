@@ -39,6 +39,18 @@ describe('Worker + D1 emulado (Miniflare)', () => {
     expect(r.headers.get('access-control-allow-headers')).toContain('authorization');
   });
 
+  it('endurecimento: corpo grande → 413, JSON não-objeto → 400, itens nulos ignorados, CORS fixo', async () => {
+    const big = await post({ reviews: [], pad: 'x'.repeat(1_100_000) });
+    expect(big.status).toBe(413);
+    const arr = await w.mf.dispatchFetch(`${w.base}/api/sync`, {
+      method: 'POST', headers: { authorization: 'Bearer secret-token' }, body: '[1,2]',
+    });
+    expect(arr.status).toBe(400);
+    expect((await post({ reviews: [null, 5, 'x'], cards: 'não-lista', settings: [null] })).status).toBe(200);
+    const pre = await w.mf.dispatchFetch(`${w.base}/api/sync`, { method: 'OPTIONS' });
+    expect(pre.headers.get('access-control-allow-origin')).not.toBe('*');
+  });
+
   it('é idempotente por id de revisão e valida entradas', async () => {
     const rev = { id: 'x:1:0', card: 'vprod|n:дом', rating: 3, ts: 1000, resp: 'дом', correct: 1, dev: 'x' };
     await post({ reviews: [rev, rev, { ...rev, id: 'bad', rating: 9 }] });

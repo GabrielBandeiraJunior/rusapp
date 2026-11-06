@@ -1,8 +1,10 @@
 'use client';
 import Link from 'next/link';
-import { useState, type ReactNode } from 'react';
+import { useRef, useState, type ReactNode } from 'react';
 import { useApp } from '@/components/Providers';
 import { Btn, Card, Page } from '@/components/ui';
+import { exportBackup, importBackup } from '@/lib/backup';
+import { dayKey } from '../../../shared/days';
 
 function Row({ label, hint, children }: { label: string; hint?: string; children: ReactNode }) {
   return (
@@ -19,12 +21,46 @@ function Row({ label, hint, children }: { label: string; hint?: string; children
 const numCls = 'min-h-11 w-24 rounded-lg border border-line bg-bg px-3 text-right';
 
 export default function ConfigPage() {
-  const { settings, update, getSyncConfig, setSyncConfig, syncNow, syncStatus, syncMessage, ix } = useApp();
+  const { settings, update, getSyncConfig, setSyncConfig, syncNow, syncStatus, syncMessage, ix, store, refresh } = useApp();
   const saved = getSyncConfig();
   const [url, setUrl] = useState(saved?.url ?? '');
   const [token, setToken] = useState(saved?.token ?? '');
   const [tz, setTz] = useState(settings.tz);
   const [tzErr, setTzErr] = useState('');
+
+  const fileRef = useRef<HTMLInputElement>(null);
+  const [backupMsg, setBackupMsg] = useState('');
+
+  const doExport = async () => {
+    try {
+      const b = await exportBackup(store);
+      const blob = new Blob([JSON.stringify(b)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `russo-backup-${dayKey(Date.now(), settings.tz)}.json`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(a.href), 10_000);
+      setBackupMsg(`Exportado: ${b.reviews.length} revisões.`);
+    } catch (e) {
+      setBackupMsg(`Erro: ${(e as Error).message}`);
+    }
+  };
+
+  const doImport = async (file?: File) => {
+    if (!file) return;
+    try {
+      const n = await importBackup(store, await file.text());
+      await refresh();
+      void syncNow();
+      setBackupMsg(n ? `Importado: ${n} revisões novas.` : 'Nada novo para importar (já estava tudo aqui).');
+    } catch (e) {
+      setBackupMsg(`Erro: ${(e as Error).message}`);
+    } finally {
+      if (fileRef.current) fileRef.current.value = '';
+    }
+  };
 
   const saveTz = () => {
     try {
@@ -89,6 +125,19 @@ export default function ConfigPage() {
         <p className="mt-2 text-sm text-muted" data-testid="sync-state">
           {syncStatus === 'off' ? 'Desligada.' : syncStatus === 'ok' ? `Em dia ${syncMessage}` : syncStatus === 'error' ? `Erro: ${syncMessage}` : syncStatus === 'syncing' ? 'Sincronizando…' : 'Ativa.'}
         </p>
+      </Card>
+      <h2 className="mb-2 mt-5 text-lg font-bold">Backup do progresso</h2>
+      <Card>
+        <p className="mb-3 text-sm text-muted">
+          Salva suas revisões e configurações num arquivo. Use antes de trocar de aparelho ou limpar os dados do navegador; importar não apaga nada (só soma o que falta).
+        </p>
+        <div className="flex gap-2">
+          <Btn className="flex-1" onClick={() => void doExport()}>Exportar</Btn>
+          <Btn variant="ghost" className="flex-1" onClick={() => fileRef.current?.click()}>Importar</Btn>
+          <input ref={fileRef} data-testid="import-file" aria-label="Arquivo de backup" type="file" accept="application/json,.json" className="hidden"
+            onChange={(e) => void doImport(e.target.files?.[0])} />
+        </div>
+        {backupMsg && <p className={`mt-2 text-sm ${backupMsg.startsWith('Erro') ? 'text-bad' : 'text-muted'}`} data-testid="backup-state">{backupMsg}</p>}
       </Card>
       <p className="mt-4 text-center text-xs text-muted">Conteúdo v{ix.content.v} · {ix.content.lemmas.length} palavras · {ix.content.sentences.length} frases</p>
     </Page>

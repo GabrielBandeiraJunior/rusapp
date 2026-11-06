@@ -28,6 +28,8 @@ npm run lint && npm run typecheck
 npm test              # vitest: dados, gramática, FSRS, Worker/D1 (Miniflare), sync, lembretes
 npm run build && npm run test:e2e   # Playwright (iPhone 390x844): telas, acentos, toque, OFFLINE, sync de 2 aparelhos
 ```
+O e2e precisa do pacote `playwright` (não é dependência do projeto): `npm install --no-save playwright && npx playwright install chromium`.
+O CI (`.github/workflows/ci.yml`) roda lint, typecheck, testes, build e e2e a cada push/PR.
 Capturas das telas: `docs/screens/`.
 
 ## Estrutura

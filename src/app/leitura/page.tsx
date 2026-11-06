@@ -4,6 +4,7 @@ import { phonetic } from '../../../shared/russian';
 import type { TextDoc } from '../../../shared/types';
 import { useApp } from '@/components/Providers';
 import { Ru } from '@/components/Ru';
+import { Speak } from '@/components/Speak';
 import { Btn, Card, Page } from '@/components/ui';
 import { knownLemmas } from '@/lib/queue';
 import { band, rankTexts, textCoverage } from '@/lib/reading';
@@ -62,6 +63,9 @@ function Reader({ text, onBack }: { text: TextDoc; onBack: () => void }) {
       <Btn variant="ghost" className="mt-3 w-full" onClick={() => setShowPt((v) => !v)}>
         {showPt ? 'Ocultar tradução das frases' : 'Mostrar tradução das frases'}
       </Btn>
+      <div className="mt-2 flex items-center justify-center gap-2 text-sm text-muted">
+        <Speak text={text.sentences.map((id) => ix.sentence.get(id)!.ru).join(' ')} /> ouvir o texto inteiro
+      </div>
       {lemma && (
         <div
           role="dialog"
@@ -71,7 +75,7 @@ function Reader({ text, onBack }: { text: TextDoc; onBack: () => void }) {
         >
           <div className="mx-auto flex max-w-md items-start justify-between gap-3">
             <div>
-              <p className="text-3xl"><Ru>{lemma.s}</Ru></p>
+              <p className="text-3xl"><Ru>{lemma.s}</Ru> <Speak text={lemma.s} /></p>
               <p className="text-xl font-semibold">{lemma.pt}</p>
               <p className="text-sm text-muted">leitura: {phonetic(lemma.s)} · {known.has(lemma.id) ? 'já estudada' : 'nova'}</p>
             </div>

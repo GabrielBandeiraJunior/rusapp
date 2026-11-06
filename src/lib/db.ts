@@ -109,6 +109,26 @@ export class Store {
     return added;
   }
 
+  /** Importa um backup: revisões novas entram como não sincronizadas (serão enviadas ao Worker). Retorna quantas entraram. */
+  async importBackup(
+    reviews: Omit<ReviewRec, 'synced'>[], settings: { key: string; value: string; updatedAt: number }[],
+  ): Promise<number> {
+    const touched = new Set<string>();
+    let added = 0;
+    for (const r of reviews) {
+      if (await this.hasReview(r.id)) continue;
+      await this.db.put('reviews', { ...r, synced: 0 });
+      touched.add(r.card);
+      added++;
+    }
+    for (const c of touched) await this.rebuildCard(c);
+    for (const s of settings) {
+      const cur = await this.db.get('settings', s.key);
+      if (!cur || s.updatedAt > cur.updatedAt) await this.db.put('settings', { ...s, dirty: 1 });
+    }
+    return added;
+  }
+
   async markSynced(ids: string[]) {
     const tx = this.db.transaction('reviews', 'readwrite');
     for (const id of ids) {

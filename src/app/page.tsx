@@ -89,7 +89,7 @@ export default function Home() {
     { id: 'vprod', title: 'Primeiras palavras', hint: 'Digite as palavras em russo', href: '/vocabulario/', have: learned('vprod'), goal: 30 },
     { id: 'stress', title: 'Acento tônico', hint: 'Onde cai a tônica', href: '/vocabulario/', have: learned('stress'), goal: 20 },
     { id: 'vrec', title: 'Reconhecer palavras', hint: 'Do russo para o português', href: '/vocabulario/', have: learned('vrec'), goal: 20 },
-    { id: 'gram', title: 'Casos', hint: 'Nominativo, acusativo e genitivo', href: '/gramatica/', have: learned('gram'), goal: 40 },
+    { id: 'gram', title: 'Casos', hint: 'Os seis casos', href: '/gramatica/', have: learned('gram'), goal: 40 },
     { id: 'texts', title: 'Leitura de textos', hint: 'Textos com as palavras que você já conhece', href: '/leitura/', have: knownLemmas(cards).size, goal: 60 },
   ];
   const calendar = Array.from({ length: 7 }, (_, i) => {

@@ -6,4 +6,6 @@
 - [x] PWA: manifest, ícones, service worker com pré-cache; teste OFFLINE
 - [x] Testes: vitest (38) + e2e Playwright (4) · lint · typecheck · build
 - [x] Docs: README, DEPLOY, DECISIONS, LICENSES, ROADMAP, PLAN
-- [ ] Pendente (usuário): login Cloudflare, segredos, deploy, Telegram
+- [x] Casos dativo/instrumental/preposicional (+ guia de preposições), backup exportar/importar, voz do navegador, aviso de nova versão, retry de sync
+- [x] Worker endurecido (CORS por padrão negado, limite de corpo), teste da regra do acento, CI (GitHub Actions)
+- [ ] Pendente (usuário): login Cloudflare, segredos, deploy, Telegram; revisar glosas pt; rodar o Tatoeba com rede

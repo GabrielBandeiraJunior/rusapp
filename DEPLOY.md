@@ -21,7 +21,7 @@ npx wrangler secret put TELEGRAM_BOT_TOKEN --config worker/wrangler.toml # do @B
 npx wrangler secret put TELEGRAM_CHAT_ID --config worker/wrangler.toml   # seu chat id (mande /start ao bot e use getUpdates)
 ```
 ## 3. Publicar o Worker
-Em `worker/wrangler.toml`, troque `ALLOWED_ORIGIN` pela URL do Pages. Então:
+Em `worker/wrangler.toml`, troque `ALLOWED_ORIGIN` pela URL do Pages (obrigatório: sem ele o Worker **não libera nenhuma origem de navegador** — o app não consegue sincronizar). O corpo de `/api/sync` é limitado a 1 MB. Então:
 ```bash
 npx wrangler deploy --config worker/wrangler.toml
 ```

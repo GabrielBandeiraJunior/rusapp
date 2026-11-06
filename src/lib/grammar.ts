@@ -37,12 +37,19 @@ export function stageOf(l: Lemma, k: GramKey): number {
     if (k.c === 'acc' && k.n === 'sg') return 2;
     if (k.c === 'gen' && k.n === 'sg') return 3;
     if (k.c === 'gen' && k.n === 'pl') return 4;
+    if (k.c === 'prep' || k.c === 'dat' || k.c === 'inst') {
+      // novos casos: singular (prep → dat → inst) e só depois o plural
+      if (k.n === 'pl') return 5.4;
+      return k.c === 'prep' ? 5.1 : k.c === 'dat' ? 5.2 : 5.3;
+    }
     return 5;
   }
-  return k.c === 'nom' ? 6 : k.c === 'acc' ? 7 : 8;
+  return k.c === 'nom' ? 6 : k.c === 'acc' ? 7 : k.c === 'gen' ? 8 : 9;
 }
 
-export type GramFocus = 'all' | 'nom' | 'acc' | 'gen';
+export type GramFocus = 'all' | Case;
+
+const CASES_ORDER: Case[] = ['nom', 'acc', 'gen', 'dat', 'inst', 'prep'];
 
 /** Todas as perguntas possíveis, em ordem de currículo e frequência. */
 export function gramKeys(ix: ContentIndex, focus: GramFocus = 'all'): GramKey[] {
@@ -51,18 +58,20 @@ export function gramKeys(ix: ContentIndex, focus: GramFocus = 'all'): GramKey[] 
     if (!l.gram) continue;
     const push = (k: GramKey) => {
       if (focus !== 'all' && k.c !== focus) return;
+      // casos novos: só entram se os dados trazem a forma (nunca inventamos uma resposta)
+      if ((k.c === 'dat' || k.c === 'inst' || k.c === 'prep') && !findForm(ix, k)) return;
       out.push({ k, stage: stageOf(l, k), rank: l.r });
     };
     if (l.pos === 'noun') {
       const nums: Num[] = l.plo ? ['pl'] : l.sgo ? ['sg'] : ['sg', 'pl'];
       for (const n of nums)
-        for (const c of ['nom', 'acc', 'gen'] as Case[]) {
+        for (const c of CASES_ORDER) {
           if (c === 'nom' && (n === 'sg' || l.plo)) continue; // nominativo singular = forma do dicionário
           if (c === 'nom' && l.sgo) continue;
           push({ lemma: l.id, c, n });
         }
     } else if (l.pos === 'adj') {
-      for (const c of ['nom', 'acc', 'gen'] as Case[]) {
+      for (const c of CASES_ORDER) {
         for (const g of ['m', 'f', 'n'] as Gender[]) {
           if (c === 'nom' && g === 'm') continue; // acusativo neutro: sem distinção de animacidade (forma(s) do dicionário)
           if (c === 'acc' && g === 'm') {
@@ -176,6 +185,131 @@ const NOUN_RULES: Partial<Record<Cls, Record<string, string>>> = {
   },
 };
 
+// ---- dativo / instrumental / preposicional: regra + terminações esperadas (e→ё normalizado, sem acento).
+// Se a forma dos DADOS não termina como a regra diz, a explicação cai para "exceção — memorize" (nunca afirmamos algo falso).
+interface EndRule { text: string; end: string[] }
+type NewKey = 'dat.sg' | 'prep.sg' | 'inst.sg' | 'dat.pl' | 'inst.pl' | 'prep.pl';
+
+const SIB = 'ж, ш, ч, щ, ц';
+const NEW_SG: Partial<Record<Cls, Record<'dat.sg' | 'prep.sg' | 'inst.sg', EndRule>>> = {
+  'm-hard': {
+    'dat.sg': { text: 'Masculino em consoante: dativo singular = + у.', end: ['у'] },
+    'prep.sg': { text: 'Masculino em consoante: preposicional singular = + е. Alguns têm um “locativo” em -у́ depois de в/на — esses você memoriza.', end: ['е', 'у'] },
+    'inst.sg': { text: `Masculino em consoante: instrumental singular = + ом (+ ем quando termina em ${SIB} e a sílaba final é átona).`, end: ['ом', 'ем'] },
+  },
+  'm-j': {
+    'dat.sg': { text: 'Masculino em -й: -й → -ю.', end: ['ю'] },
+    'prep.sg': { text: 'Masculino em -й: -й → -е (-ий → -ии).', end: ['е', 'и'] },
+    'inst.sg': { text: 'Masculino em -й: -й → -ем (-ём sob acento).', end: ['ем'] },
+  },
+  'm-soft': {
+    'dat.sg': { text: 'Masculino em -ь: -ь → -ю.', end: ['ю'] },
+    'prep.sg': { text: 'Masculino em -ь: -ь → -е. Alguns têm locativo em -и́ depois de в/на.', end: ['е', 'и'] },
+    'inst.sg': { text: 'Masculino em -ь: -ь → -ем (-ём sob acento).', end: ['ем'] },
+  },
+  'm-a': {
+    'dat.sg': { text: 'Masculino em -а/-я declina como feminino: -а/-я → -е.', end: ['е', 'и'] },
+    'prep.sg': { text: 'Masculino em -а/-я declina como feminino: -а/-я → -е.', end: ['е'] },
+    'inst.sg': { text: 'Masculino em -а/-я declina como feminino: -а → -ой; -я → -ей (-ёй sob acento).', end: ['ой', 'ей', 'ою', 'ею'] },
+  },
+  'f-a': {
+    'dat.sg': { text: 'Feminino em -а: -а → -е.', end: ['е'] },
+    'prep.sg': { text: 'Feminino em -а: -а → -е.', end: ['е'] },
+    'inst.sg': { text: `Feminino em -а: -а → -ой (-ей depois de ${SIB} quando átono).`, end: ['ой', 'ей', 'ою', 'ею'] },
+  },
+  'f-ya': {
+    'dat.sg': { text: 'Feminino em -я: -я → -е.', end: ['е'] },
+    'prep.sg': { text: 'Feminino em -я: -я → -е.', end: ['е'] },
+    'inst.sg': { text: 'Feminino em -я: -я → -ей (-ёй sob acento).', end: ['ей', 'ею'] },
+  },
+  'f-iya': {
+    'dat.sg': { text: 'Feminino em -ия: -ия → -ии.', end: ['ии'] },
+    'prep.sg': { text: 'Feminino em -ия: -ия → -ии.', end: ['ии'] },
+    'inst.sg': { text: 'Feminino em -ия: -ия → -ией.', end: ['ией'] },
+  },
+  'f-soft': {
+    'dat.sg': { text: 'Feminino em -ь: -ь → -и.', end: ['и'] },
+    'prep.sg': { text: 'Feminino em -ь: -ь → -и.', end: ['и'] },
+    'inst.sg': { text: 'Feminino em -ь: -ь → -ью.', end: ['ью'] },
+  },
+  'n-o': {
+    'dat.sg': { text: 'Neutro em -о: -о → -у.', end: ['у'] },
+    'prep.sg': { text: 'Neutro em -о: -о → -е.', end: ['е'] },
+    'inst.sg': { text: `Neutro em -о: -о → -ом (-ем depois de ${SIB} quando átono).`, end: ['ом', 'ем'] },
+  },
+  'n-e': {
+    'dat.sg': { text: 'Neutro em -е: -е → -ю.', end: ['ю'] },
+    'prep.sg': { text: 'Neutro em -е: preposicional singular = a mesma forma do nominativo (-е).', end: ['е'] },
+    'inst.sg': { text: 'Neutro em -е: -е → -ем (-ём sob acento).', end: ['ем'] },
+  },
+  'n-ie': {
+    'dat.sg': { text: 'Neutro em -ие: -ие → -ию.', end: ['ию'] },
+    'prep.sg': { text: 'Neutro em -ие: -ие → -ии.', end: ['ии'] },
+    'inst.sg': { text: 'Neutro em -ие: -ие → -ием.', end: ['ием'] },
+  },
+  'n-mya': {
+    'dat.sg': { text: 'Neutros em -мя: -мя → -мени.', end: ['мени'] },
+    'prep.sg': { text: 'Neutros em -мя: -мя → -мени.', end: ['мени'] },
+    'inst.sg': { text: 'Neutros em -мя: -мя → -менем.', end: ['менем'] },
+  },
+};
+
+/** Plural: dativo -ам/-ям, instrumental -ами/-ями, preposicional -ах/-ях (duro/mole conforme a terminação do lema). */
+function pluralRule(l: Lemma, cls: Cls, key: 'dat.pl' | 'inst.pl' | 'prep.pl'): EndRule | undefined {
+  if (cls === 'x') return undefined;
+  if (cls === 'n-mya')
+    return {
+      text: 'Neutros em -мя: plural com -мена́ → dativo -мена́м, instrumental -мена́ми, preposicional -мена́х.',
+      end: key === 'dat.pl' ? ['енам'] : key === 'inst.pl' ? ['енами'] : ['енах'],
+    };
+  const hard = cls === 'm-hard' || cls === 'f-a' || cls === 'n-o' || (cls === 'm-a' && l.t.endsWith('а'));
+  const e = key === 'dat.pl' ? (hard ? 'ам' : 'ям') : key === 'inst.pl' ? (hard ? 'ами' : 'ями') : hard ? 'ах' : 'ях';
+  const name = key === 'dat.pl' ? 'dativo' : key === 'inst.pl' ? 'instrumental' : 'preposicional';
+  const alt = hard ? 'a, o ou consoante final' : 'я, е, й ou ь final';
+  const extra = key === 'inst.pl' && cls === 'f-soft' ? ' Algumas palavras em -ь aceitam também -ьми́.' : '';
+  return {
+    text: `Plural (lema com ${alt}): ${name} = -${e} — a terminação se junta ao radical do plural.${extra}`,
+    end: key === 'inst.pl' && cls === 'f-soft' ? [e, 'ьми'] : [e],
+  };
+}
+
+const ADJ_NEW: Record<'dat' | 'inst' | 'prep', Record<string, EndRule>> = {
+  dat: {
+    'm.sg': { text: 'Dativo masc./neutro sg.: -ому (-ему depois de sibilantes ou radical mole).', end: ['ому', 'ему'] },
+    'n.sg': { text: 'Dativo masc./neutro sg.: -ому (-ему depois de sibilantes ou radical mole).', end: ['ому', 'ему'] },
+    'f.sg': { text: 'Dativo fem. sg.: -ой (-ей).', end: ['ой', 'ей'] },
+    pl: { text: 'Dativo plural: -ым (-им depois de г, к, х, ж, ш, ч, щ e radical mole).', end: ['ым', 'им'] },
+  },
+  inst: {
+    'm.sg': { text: 'Instrumental masc./neutro sg.: -ым (-им depois de г, к, х, ж, ш, ч, щ e radical mole).', end: ['ым', 'им'] },
+    'n.sg': { text: 'Instrumental masc./neutro sg.: -ым (-им depois de г, к, х, ж, ш, ч, щ e radical mole).', end: ['ым', 'им'] },
+    'f.sg': { text: 'Instrumental fem. sg.: -ой (-ей); a variante longa -ою/-ею existe mas é rara.', end: ['ой', 'ей', 'ою', 'ею'] },
+    pl: { text: 'Instrumental plural: -ыми (-ими depois de г, к, х, ж, ш, ч, щ e radical mole).', end: ['ыми', 'ими'] },
+  },
+  prep: {
+    'm.sg': { text: 'Preposicional masc./neutro sg.: -ом (-ем depois de sibilantes ou radical mole).', end: ['ом', 'ем'] },
+    'n.sg': { text: 'Preposicional masc./neutro sg.: -ом (-ем depois de sibilantes ou radical mole).', end: ['ом', 'ем'] },
+    'f.sg': { text: 'Preposicional fem. sg.: -ой (-ей).', end: ['ой', 'ей'] },
+    pl: { text: 'Preposicional plural: -ых (-их depois de г, к, х, ж, ш, ч, щ e radical mole).', end: ['ых', 'их'] },
+  },
+};
+
+const plainEnd = (s: string) => stripStress(s).toLowerCase().replace(/ё/g, 'е');
+
+/** Regra do caso novo, ou a mensagem de exceção quando a forma dos dados não segue a terminação esperada. */
+function newCaseRule(l: Lemma, cls: Cls, k: GramKey, variants: string[]): string {
+  let rule: EndRule | undefined;
+  if (l.pos === 'noun') {
+    const key = `${k.c}.${k.n}` as NewKey;
+    rule = k.n === 'sg' ? NEW_SG[cls]?.[key as 'dat.sg' | 'prep.sg' | 'inst.sg'] : pluralRule(l, cls, key as 'dat.pl' | 'inst.pl' | 'prep.pl');
+  } else {
+    rule = ADJ_NEW[k.c as 'dat' | 'inst' | 'prep'][k.n === 'pl' ? 'pl' : `${k.g}.sg`];
+  }
+  if (!rule) return 'Declinação irregular ou rara: memorize esta forma.';
+  const ok = variants.some((v) => rule!.end.some((e) => plainEnd(v).endsWith(e)));
+  return ok ? rule.text : 'Exceção à regra geral (forma irregular): memorize esta forma.';
+}
+
 const ADJ_NOM: Record<string, string> = {
   'm.sg': 'Masc. sg.: -ый / -ий / -ой (forma do dicionário).', 'f.sg': 'Fem. sg. nominativo: -ый → -ая (-ий → -яя).',
   'n.sg': 'Neutro sg. nominativo: -ый → -ое (-ий → -ее).', 'pl': 'Plural nominativo: -ый → -ые (-ий/-ой → -ие/-ые).',
@@ -211,7 +345,10 @@ export function explain(ix: ContentIndex, k: GramKey, variants: string[], input 
   const l = ix.lemma.get(k.lemma)!;
   const lines: string[] = [];
   const correct = variants[0];
-  if (l.pos === 'noun') {
+  if (k.c === 'dat' || k.c === 'inst' || k.c === 'prep') {
+    lines.push(newCaseRule(l, l.pos === 'noun' ? nounClass(l) : 'x', k, variants));
+    if (l.pos === 'adj') lines.push('O adjetivo concorda com o substantivo em gênero, número e caso.');
+  } else if (l.pos === 'noun') {
     const cls = nounClass(l);
     const key = `${k.c}.${k.n}`;
     let rule = NOUN_RULES[cls]?.[key];

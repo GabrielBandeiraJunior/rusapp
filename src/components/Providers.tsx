@@ -19,6 +19,8 @@ interface Ctx {
   review: (cardId: string, rating: 1 | 2 | 3 | 4, correct: boolean, resp?: string) => Promise<void>;
   update: <K extends keyof Settings>(k: K, v: Settings[K]) => Promise<void>;
   syncNow: () => Promise<void>;
+  /** Recarrega cartões/revisões/configurações do IndexedDB (ex.: após importar um backup). */
+  refresh: () => Promise<void>;
   getSyncConfig: () => SyncConfig | null;
   setSyncConfig: (c: SyncConfig | null) => void;
 }
@@ -51,6 +53,9 @@ export function Providers({ children }: { children: ReactNode }) {
   const [syncMessage, setSyncMessage] = useState('');
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const busy = useRef(false);
+  const failures = useRef(0);
+  const retry = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const syncRef = useRef<() => Promise<void>>(async () => undefined);
 
   const reload = useCallback(async (store: Store) => {
     const [c, r, s] = await Promise.all([store.allCards(), store.allReviews(), loadSettings(store)]);
@@ -68,6 +73,8 @@ export function Providers({ children }: { children: ReactNode }) {
         await reload(store);
         setBoot({ store, ix });
         if (readSync()) setSyncStatus('idle');
+        // pede armazenamento persistente: reduz o risco de o navegador (iOS/Safari) apagar o progresso
+        void navigator.storage?.persist?.().catch(() => undefined);
       } catch (e) {
         setErr(String((e as Error).message ?? e));
       }
@@ -85,15 +92,32 @@ export function Providers({ children }: { children: ReactNode }) {
     try {
       const r = await syncOnce(boot.store, cfg);
       await reload(boot.store);
+      failures.current = 0;
       setSyncStatus('ok');
       setSyncMessage(`↑${r.pushed} ↓${r.pulled}`);
     } catch (e) {
       setSyncStatus('error');
       setSyncMessage(navigator.onLine ? String((e as Error).message) : 'offline — será reenviado depois');
+      // nova tentativa com espera crescente (30 s, 1 min, 2 min … máx. 15 min)
+      failures.current += 1;
+      if (retry.current) clearTimeout(retry.current);
+      const wait = Math.min(15 * 60_000, 30_000 * 2 ** (failures.current - 1));
+      retry.current = setTimeout(() => void syncRef.current(), wait);
     } finally {
       busy.current = false;
     }
   }, [boot, reload]);
+
+  useEffect(() => {
+    syncRef.current = syncNow;
+  }, [syncNow]);
+  useEffect(
+    () => () => {
+      if (retry.current) clearTimeout(retry.current);
+      if (timer.current) clearTimeout(timer.current);
+    },
+    [],
+  );
 
   const scheduleSync = useCallback(() => {
     if (!readSync()) return;
@@ -124,6 +148,7 @@ export function Providers({ children }: { children: ReactNode }) {
         scheduleSync();
       },
       syncNow,
+      refresh: () => reload(boot.store),
       getSyncConfig: readSync,
       setSyncConfig: (c) => {
         try {
