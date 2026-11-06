@@ -42,8 +42,10 @@ function noteFail(ip: string, now: number) {
 }
 
 function cors(env: Env): Record<string, string> {
+  // Sem ALLOWED_ORIGIN configurado, nenhuma origem de navegador é liberada (nega por padrão).
+  const origin: Record<string, string> = env.ALLOWED_ORIGIN ? { 'access-control-allow-origin': env.ALLOWED_ORIGIN } : {};
   return {
-    'access-control-allow-origin': env.ALLOWED_ORIGIN || '*',
+    ...origin,
     'access-control-allow-headers': 'authorization, content-type',
     'access-control-allow-methods': 'GET, POST, OPTIONS',
     'access-control-max-age': '86400',
