@@ -19,6 +19,8 @@ interface Ctx {
   review: (cardId: string, rating: 1 | 2 | 3 | 4, correct: boolean, resp?: string) => Promise<void>;
   update: <K extends keyof Settings>(k: K, v: Settings[K]) => Promise<void>;
   syncNow: () => Promise<void>;
+  /** Guarda (ou limpa, com '') a sessão interrompida; sincroniza entre aparelhos. */
+  setResume: (raw: string) => Promise<void>;
   getSyncConfig: () => SyncConfig | null;
   setSyncConfig: (c: SyncConfig | null) => void;
 }
@@ -109,6 +111,12 @@ export function Providers({ children }: { children: ReactNode }) {
     return () => window.removeEventListener('online', on);
   }, [boot, syncNow]);
 
+  useEffect(() => {
+    const t = settings?.theme ?? 'auto';
+    if (t === 'auto') delete document.documentElement.dataset.theme;
+    else document.documentElement.dataset.theme = t;
+  }, [settings?.theme]);
+
   const value = useMemo<Ctx | null>(() => {
     if (!boot || !settings) return null;
     return {
@@ -124,6 +132,11 @@ export function Providers({ children }: { children: ReactNode }) {
         scheduleSync();
       },
       syncNow,
+      setResume: async (raw) => {
+        await boot.store.setSetting('resume', raw);
+        setSettings((s) => (s ? { ...s, resume: raw } : s));
+        scheduleSync();
+      },
       getSyncConfig: readSync,
       setSyncConfig: (c) => {
         try {

@@ -1,14 +1,14 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
 import type { QItem } from '@/lib/queue';
-import { clearSession, saveSession, type SavedSession } from '@/lib/resume';
+import { encodeSession, type SavedSession } from '@/lib/resume';
 import { useApp } from './Providers';
 import { Exercise, type Outcome } from './Exercises';
 import { Bar, Btn, Card } from './ui';
 
 /** Sessão: percorre a fila; erros voltam ao fim (1 vez) para praticar de novo. */
-export function Session({ items, onExit, initial }: { items: QItem[]; onExit: () => void; initial?: SavedSession }) {
-  const { review } = useApp();
+export function Session({ items, onExit, initial, mode }: { items: QItem[]; onExit: () => void; initial?: SavedSession; mode?: 'errors' }) {
+  const { review, setResume } = useApp();
   const [queue, setQueue] = useState<(QItem & { retry?: boolean })[]>(initial?.queue ?? items);
   const [idx, setIdx] = useState(initial?.idx ?? 0);
   const [stats, setStats] = useState(initial?.stats ?? { ok: 0, bad: 0 });
@@ -18,8 +18,9 @@ export function Session({ items, onExit, initial }: { items: QItem[]; onExit: ()
   const kind = queue[0]?.kind;
   // guarda o ponto de retomada a cada avanço; ao concluir, limpa
   useEffect(() => {
-    if (done) clearSession();
-    else if (idx > 0 && kind) saveSession({ kind, queue, idx, stats, ts: Date.now() });
+    if (done) void setResume('');
+    else if (idx > 0 && kind) void setResume(encodeSession({ kind, mode: mode ?? initial?.mode, queue, idx, stats, ts: Date.now() }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [done, idx, kind, queue, stats]);
 
   if (done)

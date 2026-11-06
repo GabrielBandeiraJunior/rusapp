@@ -10,6 +10,10 @@ export interface Settings {
   remindEnabled: boolean;
   remindTime: string; // HH:MM
   streakAlertHours: number;
+  /** Sessão interrompida (JSON compacto; vazio = nenhuma). Sincroniza entre aparelhos. */
+  resume: string;
+  theme: 'auto' | 'light' | 'dark';
+  sessionSize: number;
 }
 
 export function defaultTz(): string {
@@ -20,7 +24,7 @@ export function defaultTz(): string {
   }
 }
 
-export const SETTING_KEYS = ['dailyGoal', 'newPerDay', 'tz', 'freeze', 'remindEnabled', 'remindTime', 'streakAlertHours'] as const;
+export const SETTING_KEYS = ['dailyGoal', 'newPerDay', 'tz', 'freeze', 'remindEnabled', 'remindTime', 'streakAlertHours', 'resume', 'theme', 'sessionSize'] as const;
 
 export async function loadSettings(store: Store): Promise<Settings> {
   const g = async (k: string) => store.getSetting(k);
@@ -33,6 +37,9 @@ export async function loadSettings(store: Store): Promise<Settings> {
     remindEnabled: (await g('remindEnabled')) === '1',
     remindTime: (await g('remindTime')) || '19:00',
     streakAlertHours: num(await g('streakAlertHours'), 3),
+    resume: (await g('resume')) || '',
+    theme: ((await g('theme')) as Settings['theme']) || 'auto',
+    sessionSize: num(await g('sessionSize'), 15),
   };
 }
 

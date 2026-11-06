@@ -383,3 +383,131 @@ test('continuar de onde parou: sai no meio da sessão e retoma pela tela inicial
   assert.match(await page.getByTestId('progress').innerText(), /^3\//, 'retoma na questão 3');
   await ctx.close();
 });
+
+test('novos recursos: casos extras, frases, verbos, erros, backup, tema e teclado', async () => {
+  const ctx = await newPhone(browser, { acceptDownloads: true });
+  const page = await ctx.newPage();
+  const errors = [];
+  page.on('pageerror', (e) => errors.push(String(e)));
+  const now = Date.now();
+  const rev = (card, correct, i) => ({ id: `seed:${i}`, card, rating: correct ? 3 : 1, ts: now - 2 * 86400e3 + i, resp: '', correct: correct ? 1 : 0, dev: 'seed' });
+  const backup = {
+    app: 'russo', v: 1, exportedAt: now, settings: [],
+    reviews: [
+      rev('vprod|v:делать', true, 1), rev('vprod|v:сделать', true, 2), rev('vprod|v:идти', true, 3), rev('vprod|v:ходить', true, 4),
+      rev('gram|n:дом|prep|sg|-|-', false, 5),
+    ],
+  };
+
+  // --- backup: importar
+  await page.goto(url + '/config/');
+  await ready(page);
+  await page.getByTestId('import-file').setInputFiles({ name: 'b.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(backup)) });
+  await page.getByTestId('backup-msg').waitFor();
+  assert.match(await page.getByTestId('backup-msg').innerText(), /Importado: 5/);
+  await page.getByTestId('import-file').setInputFiles({ name: 'x.json', mimeType: 'application/json', buffer: Buffer.from('{"nada":1}') });
+  await page.waitForFunction(() => /não é um backup/.test(document.querySelector('[data-testid=backup-msg]')?.textContent || ''));
+  // --- backup: exportar
+  const [dl] = await Promise.all([page.waitForEvent('download'), page.getByTestId('export').click()]);
+  const exported = JSON.parse(fs.readFileSync(await dl.path(), 'utf8'));
+  assert.equal(exported.app, 'russo');
+  assert.ok(exported.reviews.length >= 5);
+  // --- tema escuro manual
+  await page.getByLabel('Tema').selectOption('dark');
+  await page.waitForFunction(() => document.documentElement.dataset.theme === 'dark');
+  await audit(page, 'config');
+  await page.getByLabel('Tema').selectOption('auto');
+
+  // --- Casos: preposicional (aba, mini-lição, exercício)
+  await page.goto(url + '/gramatica/');
+  await ready(page);
+  await page.getByRole('tab', { name: 'Prep.' }).click();
+  await page.getByTestId('lesson').waitFor();
+  await page.getByTestId('lesson').locator('summary').click();
+  assert.match(await page.getByTestId('lesson').innerText(), /в до́ме/);
+  await audit(page, 'casos-prep');
+  for (const tab of ['Nom.', 'Acus.', 'Gen.', 'Dat.', 'Inst.', 'Prep.']) {
+    await page.getByRole('tab', { name: tab }).click();
+    const d = page.getByTestId('lesson').locator('details');
+    if (!(await d.evaluate((el) => el.open))) await page.getByTestId('lesson').locator('summary').click();
+    await audit(page, 'licao-' + tab);
+  }
+  await page.getByTestId('start').click();
+  const target = await page.getByTestId('target').innerText();
+  assert.match(target, /preposicional/);
+  const lemmaText = strip(await page.getByTestId('prompt').innerText());
+  const lem = content.lemmas.find((l) => l.t === lemmaText && l.pos === 'noun');
+  const f = content.forms.find((x) => x.l === lem.id && x.c === 'prep' && x.n === (/plural/.test(target) ? 'pl' : 'sg'));
+  await page.getByLabel('Forma em russo').fill(strip(f.v[0]));
+  await page.getByTestId('check').click();
+  assert.match(await page.getByTestId('result').innerText(), /Correto/);
+  await page.getByTestId('next').click();
+  await page.getByLabel('Sair da sessão').click();
+
+  // --- teclado russo na tela
+  await page.goto(url + '/gramatica/');
+  await ready(page);
+  await page.getByRole('tab', { name: 'Dat.' }).click();
+  await page.getByTestId('start').click();
+  await page.getByTestId('kb-toggle').click();
+  await page.getByTestId('kb').getByRole('button', { name: 'д', exact: true }).click();
+  assert.equal(await page.getByLabel('Forma em russo').inputValue(), 'д');
+  await page.getByTestId('kb').getByRole('button', { name: 'Apagar' }).click();
+  assert.equal(await page.getByLabel('Forma em russo').inputValue(), '');
+  await audit(page, 'teclado');
+  await page.getByTestId('kb-toggle').click();
+
+  // --- Casos em frases
+  await page.goto(url + '/gramatica/');
+  await ready(page);
+  await page.getByRole('tab', { name: 'Em frases' }).click();
+  await page.getByTestId('start').click();
+  assert.match(await page.getByTestId('prompt').innerText(), /______/);
+  await page.getByLabel('Palavra que falta').fill('zzz');
+  await page.getByTestId('check').click();
+  assert.match(await page.getByTestId('result').innerText(), /Ainda não/);
+  assert.ok((await page.getByTestId('answer').innerText()).length > 1);
+  await audit(page, 'frases');
+  await next(page); // grava o erro
+  await page.getByLabel('Sair da sessão').click();
+
+  // --- Verbos: conjugação, aspecto, movimento
+  await page.goto(url + '/verbos/');
+  await ready(page);
+  await page.getByTestId('start').click();
+  assert.match(await page.getByTestId('target').innerText(), /presente|futuro|passado/);
+  await page.getByLabel('Forma verbal em russo').fill('zzz');
+  await page.getByTestId('check').click();
+  assert.match(await page.getByTestId('result').innerText(), /Ainda não/);
+  await audit(page, 'verbos-conj');
+  await next(page); // grava o erro
+  await page.goto(url + '/verbos/');
+  await ready(page);
+  await page.getByRole('tab', { name: 'Aspecto' }).click();
+  await page.getByTestId('start').click();
+  const from = strip(await page.getByTestId('prompt').innerText());
+  const pairs = JSON.parse(fs.readFileSync(path.join(OUT, 'data', 'verbpairs.json'), 'utf8'));
+  const [, toId] = pairs.find(([a]) => content.lemmas.find((l) => l.id === a).t === from);
+  await page.getByLabel('Par de aspecto em russo').fill(toId.slice(2));
+  await page.getByTestId('check').click();
+  assert.match(await page.getByTestId('result').innerText(), /Correto/);
+  await page.goto(url + '/verbos/');
+  await ready(page);
+  await page.getByRole('tab', { name: 'Movimento' }).click();
+  assert.match(await page.getByTestId('motion-lesson').innerText(), /иду́/);
+  await audit(page, 'verbos-mov');
+
+  // --- Meus erros (inclui o erro semeado e os desta sessão)
+  await page.goto(url + '/');
+  await ready(page);
+  await page.getByTestId('errors-card').waitFor();
+  await page.getByTestId('errors-card').click();
+  await ready(page);
+  { const cnt = await page.getByTestId('error-count').innerText(); assert.ok(Number(cnt) >= 2, 'erros listados: ' + cnt); }
+  await page.getByTestId('start').click();
+  assert.ok(await page.getByTestId('progress').count());
+  await audit(page, 'erros');
+
+  assert.deepEqual(errors, [], 'erros de JS na página');
+  await ctx.close();
+});

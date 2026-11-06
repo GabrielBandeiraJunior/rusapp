@@ -1,8 +1,9 @@
 'use client';
 import Link from 'next/link';
-import { useState, type ReactNode } from 'react';
+import { useRef, useState, type ReactNode } from 'react';
 import { useApp } from '@/components/Providers';
 import { Btn, Card, Page } from '@/components/ui';
+import { applyBackup, makeBackup, parseBackup } from '@/lib/backup';
 
 function Row({ label, hint, children }: { label: string; hint?: string; children: ReactNode }) {
   return (
@@ -17,9 +18,32 @@ function Row({ label, hint, children }: { label: string; hint?: string; children
 }
 
 const numCls = 'min-h-11 w-24 rounded-lg border border-line bg-bg px-3 text-right';
+const selCls = 'min-h-11 rounded-lg border border-line bg-bg px-3';
 
 export default function ConfigPage() {
-  const { settings, update, getSyncConfig, setSyncConfig, syncNow, syncStatus, syncMessage, ix } = useApp();
+  const { settings, update, getSyncConfig, setSyncConfig, syncNow, syncStatus, syncMessage, ix, store, syncNow: resync } = useApp();
+  const fileRef = useRef<HTMLInputElement>(null);
+  const [bk, setBk] = useState('');
+
+  const doExport = async () => {
+    const data = JSON.stringify(await makeBackup(store));
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([data], { type: 'application/json' }));
+    a.download = `russo-backup-${new Date().toISOString().slice(0, 10)}.json`;
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    setBk('Backup exportado.');
+  };
+  const doImport = async (file: File | undefined) => {
+    if (!file) return;
+    try {
+      const r = await applyBackup(store, parseBackup(await file.text()));
+      setBk(`Importado: ${r.reviews} revisões novas. Recarregue a página para ver tudo.`);
+      void resync();
+    } catch (e) {
+      setBk((e as Error).message);
+    }
+  };
   const saved = getSyncConfig();
   const [url, setUrl] = useState(saved?.url ?? '');
   const [token, setToken] = useState(saved?.token ?? '');
@@ -46,6 +70,20 @@ export default function ConfigPage() {
         <Row label="Novos por dia" hint="por tipo de exercício">
           <input aria-label="Novos por dia" type="number" inputMode="numeric" min={0} max={100} className={numCls} value={settings.newPerDay}
             onChange={(e) => void update('newPerDay', Math.max(0, Number(e.target.value) || 0))} />
+        </Row>
+        <Row label="Tamanho da sessão" hint="perguntas por rodada">
+          <select aria-label="Tamanho da sessão" className={selCls} value={settings.sessionSize} onChange={(e) => void update('sessionSize', Number(e.target.value))}>
+            <option value={8}>Curta (8)</option>
+            <option value={15}>Normal (15)</option>
+            <option value={30}>Longa (30)</option>
+          </select>
+        </Row>
+        <Row label="Tema">
+          <select aria-label="Tema" className={selCls} value={settings.theme} onChange={(e) => void update('theme', e.target.value as 'auto' | 'light' | 'dark')}>
+            <option value="auto">Automático</option>
+            <option value="light">Claro</option>
+            <option value="dark">Escuro</option>
+          </select>
         </Row>
         <Row label="Fuso horário" hint="define a virada do dia">
           <input aria-label="Fuso horário" className="min-h-11 w-44 rounded-lg border border-line bg-bg px-3" value={tz} autoCapitalize="off" autoCorrect="off" spellCheck={false}
@@ -89,6 +127,16 @@ export default function ConfigPage() {
         <p className="mt-2 text-sm text-muted" data-testid="sync-state">
           {syncStatus === 'off' ? 'Desligada.' : syncStatus === 'ok' ? `Em dia ${syncMessage}` : syncStatus === 'error' ? `Erro: ${syncMessage}` : syncStatus === 'syncing' ? 'Sincronizando…' : 'Ativa.'}
         </p>
+      </Card>
+      <h2 className="mb-2 mt-5 text-lg font-bold">Backup</h2>
+      <Card>
+        <p className="mb-2 text-sm text-muted">Salve seu progresso em um arquivo ou restaure em outro aparelho. O app não depende de servidor.</p>
+        <div className="flex gap-2">
+          <Btn className="flex-1" onClick={() => void doExport()} data-testid="export">Exportar</Btn>
+          <Btn variant="ghost" className="flex-1" onClick={() => fileRef.current?.click()}>Importar</Btn>
+          <input ref={fileRef} type="file" accept="application/json,.json" className="hidden" data-testid="import-file" onChange={(e) => void doImport(e.target.files?.[0])} />
+        </div>
+        {bk && <p className="mt-2 text-sm text-muted" data-testid="backup-msg">{bk}</p>}
       </Card>
       <p className="mt-4 text-center text-xs text-muted">Conteúdo v{ix.content.v} · {ix.content.lemmas.length} palavras · {ix.content.sentences.length} frases</p>
     </Page>

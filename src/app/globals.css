@@ -14,8 +14,10 @@
   --warn: 196 120 10;
   color-scheme: light dark;
 }
+:root[data-theme='light'] { color-scheme: light; }
+:root[data-theme='dark'] { color-scheme: dark; }
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme='light']) {
     --bg: 13 14 20;
     --surface: 24 26 36;
     --ink: 238 238 244;
@@ -26,6 +28,17 @@
     --bad: 240 110 110;
     --warn: 240 170 60;
   }
+}
+:root[data-theme='dark'] {
+  --bg: 13 14 20;
+  --surface: 24 26 36;
+  --ink: 238 238 244;
+  --muted: 150 152 166;
+  --line: 52 55 68;
+  --brand: 138 160 255;
+  --good: 80 200 130;
+  --bad: 240 110 110;
+  --warn: 240 170 60;
 }
 
 html, body { background: rgb(var(--bg)); color: rgb(var(--ink)); transition: background-color .15s; }
@@ -44,3 +57,12 @@ button, a { touch-action: manipulation; }
 .safe-top { padding-top: env(safe-area-inset-top); }
 .safe-bottom { padding-bottom: env(safe-area-inset-bottom); }
 input, select, textarea { font-size: 16px; } /* evita zoom automático no iOS */
+@keyframes party-pop { 0% { transform: scale(0.8); opacity: 0; } 60% { transform: scale(1.04); opacity: 1; } 100% { transform: scale(1); } }
+@keyframes shake { 0%, 100% { transform: translateX(0); } 20% { transform: translateX(-6px); } 40% { transform: translateX(6px); } 60% { transform: translateX(-4px); } 80% { transform: translateX(3px); } }
+@keyframes pop { 0% { transform: scale(0.96); } 50% { transform: scale(1.03); } 100% { transform: scale(1); } }
+.party-pop { animation: party-pop .45s ease-out; }
+.result-bad { animation: shake .4s ease-in-out; }
+.result-ok { animation: pop .3s ease-out; }
+@media (prefers-reduced-motion: reduce) {
+  .party-pop, .result-bad, .result-ok { animation: none; }
+}

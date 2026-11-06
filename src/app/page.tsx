@@ -4,8 +4,9 @@ import { useEffect, useMemo, useState } from 'react';
 import { addDays, dayKey } from '../../shared/days';
 import { useApp } from '@/components/Providers';
 import { Bar, Card, Page } from '@/components/ui';
+import { errorItems } from '@/lib/errors';
 import { buildQueue, knownLemmas } from '@/lib/queue';
-import { continueHref, KIND_LABEL, loadSession, type SavedSession } from '@/lib/resume';
+import { continueHref, decodeSession, sessionLabel } from '@/lib/resume';
 import { isLearned, type CardKind } from '@/lib/srs';
 import { dueNow, errorsByCase, matureCount, retention, reviewsOnDay, streakFor } from '@/lib/stats';
 
@@ -15,6 +16,9 @@ const PLAN: { kind: CardKind; label: string; href: string }[] = [
   { kind: 'stress', label: 'Acento', href: '/vocabulario/' },
   { kind: 'gram', label: 'Casos (gramática)', href: '/gramatica/' },
   { kind: 'read', label: 'Leitura de palavras', href: '/alfabeto/' },
+  { kind: 'cloze', label: 'Casos em frases', href: '/gramatica/' },
+  { kind: 'conj', label: 'Verbos (conjugação)', href: '/verbos/' },
+  { kind: 'aspect', label: 'Verbos (aspecto)', href: '/verbos/' },
 ];
 
 
@@ -81,15 +85,16 @@ export default function Home() {
     return { d, n: reviewsOnDay(reviews, d, settings.tz) };
   });
   const maxWeek = Math.max(1, ...week.map((w) => w.n));
-  const [saved, setSaved] = useState<SavedSession | null>(null);
-  useEffect(() => setSaved(loadSession()), []);
+  const saved = useMemo(() => decodeSession(settings.resume), [settings.resume]);
   const learned = (k: CardKind) => cards.filter((c) => c.kind === k && isLearned(c)).length;
   const steps: Step[] = [
     { id: 'read', title: 'Alfabeto e leitura', hint: 'Letras, regras e leitura de palavras', href: '/alfabeto/', have: learned('read'), goal: 10 },
     { id: 'vprod', title: 'Primeiras palavras', hint: 'Digite as palavras em russo', href: '/vocabulario/', have: learned('vprod'), goal: 30 },
     { id: 'stress', title: 'Acento tônico', hint: 'Onde cai a tônica', href: '/vocabulario/', have: learned('stress'), goal: 20 },
     { id: 'vrec', title: 'Reconhecer palavras', hint: 'Do russo para o português', href: '/vocabulario/', have: learned('vrec'), goal: 20 },
-    { id: 'gram', title: 'Casos', hint: 'Nominativo, acusativo e genitivo', href: '/gramatica/', have: learned('gram'), goal: 40 },
+    { id: 'gram', title: 'Casos', hint: 'Os seis casos, um por vez', href: '/gramatica/', have: learned('gram'), goal: 60 },
+    { id: 'cloze', title: 'Casos em frases', hint: 'Complete frases com a forma certa', href: '/gramatica/', have: learned('cloze'), goal: 15 },
+    { id: 'verbs', title: 'Verbos', hint: 'Conjugação, aspecto e movimento', href: '/verbos/', have: learned('conj') + learned('aspect'), goal: 30 },
     { id: 'texts', title: 'Leitura de textos', hint: 'Textos com as palavras que você já conhece', href: '/leitura/', have: knownLemmas(cards).size, goal: 60 },
   ];
   const calendar = Array.from({ length: 7 }, (_, i) => {
@@ -97,6 +102,32 @@ export default function Home() {
     return { d, n: reviewsOnDay(reviews, d, settings.tz) };
   });
   const first = reviews.length === 0;
+  const errCount = useMemo(() => errorItems(reviews).length, [reviews]);
+
+  // comemoração ao concluir uma etapa do caminho ou a meta do dia (cada marco só uma vez)
+  const [party, setParty] = useState<string | null>(null);
+  useEffect(() => {
+    try {
+      const seen = new Set<string>(JSON.parse(localStorage.getItem('russo.celebrated') || '[]'));
+      const fresh: string[] = [];
+      for (const st of steps) if (st.have >= st.goal && !seen.has(`step:${st.id}`)) fresh.push(`step:${st.id}`);
+      if (doneToday >= settings.dailyGoal && !seen.has(`goal:${today}`)) fresh.push(`goal:${today}`);
+      if (!fresh.length) return;
+      // primeira abertura com progresso antigo: marca sem festejar
+      const old = seen.size === 0 && reviews.length > settings.dailyGoal * 2;
+      localStorage.setItem('russo.celebrated', JSON.stringify([...seen, ...fresh].slice(-200)));
+      if (!old) {
+        const f = fresh[0];
+        setParty(f.startsWith('goal:') ? 'Meta do dia batida!' : `Etapa concluída: ${steps.find((x) => `step:${x.id}` === f)?.title}`);
+        if ('vibrate' in navigator) navigator.vibrate?.([40, 60, 40]);
+        const t = setTimeout(() => setParty(null), 4500);
+        return () => clearTimeout(t);
+      }
+    } catch {
+      /* sem armazenamento: não festeja */
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [doneToday, cards.length]);
   const next = plan.find((p) => p.due + p.fresh > 0);
 
   return (
@@ -122,15 +153,27 @@ export default function Home() {
           ))}
         </ul>
       </Card>
+      {party && (
+        <div role="status" data-testid="party" className="party-pop mb-3 rounded-3xl bg-good p-4 text-center font-bold text-white">
+          <span aria-hidden className="block text-3xl">🎉</span>
+          {party}
+        </div>
+      )}
+      {errCount > 0 && (
+        <Link href="/erros/" data-testid="errors-card" className="mb-3 flex min-h-12 items-center justify-between rounded-2xl border border-bad/40 bg-bad/10 px-4 py-2">
+          <span><b>Meus erros</b> <span className="text-sm text-muted">· treine o que você errou por último</span></span>
+          <span className="rounded-full bg-bad px-3 py-1 text-sm font-bold text-white">{errCount}</span>
+        </Link>
+      )}
       {saved && (
         <Link
-          href={continueHref(saved.kind)}
+          href={continueHref(saved)}
           data-testid="continue-card"
           className="mb-3 flex min-h-14 items-center justify-between gap-3 rounded-3xl bg-brand px-4 py-3 text-white shadow-sm"
         >
           <span>
             <span className="block text-xs opacity-80">Continuar de onde parou</span>
-            <b>{KIND_LABEL[saved.kind]}</b>
+            <b>{sessionLabel(saved)}</b>
           </span>
           <span className="rounded-full bg-white/20 px-3 py-1 text-sm font-bold">{saved.idx}/{saved.queue.length} ▶</span>
         </Link>

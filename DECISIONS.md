@@ -15,3 +15,14 @@
 13. **Auth**: Bearer único; todas as rotas de sync exigem (leitura inclusive, pois expõe o histórico). Token do Worker fica em `localStorage` do aparelho.
 14. **Seed D1** inclui conteúdo, mas o app é independente dele (usa o JSON estático); serve a consultas/futuras features.
 15. **Next 15.5 / ESLint 8** (eslintrc) por compatibilidade; `next lint` não usado.
+
+16. **Dativo, instrumental e preposicional** entram no exercício de casos. As formas já estavam nos dados (OpenRussian); o app só pergunta quando a forma existe. A explicação mostra a regra regular **somente se a forma real bate com a terminação prevista**; senão avisa «foge da regra: memorize» (nunca inventa regra para forma irregular). Testes comparam toda forma com o snapshot de origem.
+17. **Mini-lições** de caso: o texto explica o uso; os exemplos em russo são montados em tempo de execução com as formas dos dados (acento garantido). Texto em português nunca cita palavra russa com mais de uma sílaba sem acento (o e2e audita).
+18. **Novos tipos de cartão**: `cloze` (frases com lacuna, só palavras com forma confirmada nos dados), `conj` (presente/futuro e passado dos verbos, dos dados) e `aspect` (pares imperfectivo/perfectivo de `data/source/verbs.tsv`, gerados por `scripts/verbpairs.mjs` → `public/data/verbpairs.json`). Só aparecem para verbos já aprendidos em Vocabulário.
+19. **Áudio** pela síntese de voz do navegador (sem custo, sem rede, só após toque do usuário). Sem voz russa instalada o app avisa. Alternativa descartada: clipes Forvo/Tatoeba (licença e peso offline).
+20. **Sessão interrompida** vira o ajuste `resume` (IndexedDB + sync LWW do Worker), em vez de `localStorage`: continua de onde parou ao trocar de aparelho. Worker aceita até 4000 caracteres nesse ajuste (500 nos demais).
+21. **Backup JSON** guarda só as revisões e os ajustes (o estado dos cartões é recalculado); importação é idempotente por id e deixa as revisões pendentes para o sync.
+22. **Worker**: limite de corpo (1 MB), freio de tentativas inválidas por IP (20 em 15 min → 429) e cabeçalhos `nosniff`/`no-store`. O token nunca vai embutido no app: o usuário o digita em Configurações. Recomenda-se definir `ALLOWED_ORIGIN` (sem ele o CORS fica `*`, protegido só pelo token).
+23. **Tatoeba ativado** (acessível agora; precisa de `bzip2`): até 300 frases curtas que resolvem 100% nos dados. Como o Tatoeba mistura pt-PT e pt-BR, `brazilianFriendly()` descarta frases com «ты» no russo, formas de «tu», progressivo «a + infinitivo» e vocabulário típico de Portugal. O arquivo de links é lido em blocos (a leitura inteira estourava a memória).
+24. **Fontes**: Inter para o português; **Noto Sans só no russo** (Inter posiciona mal o acento combinante U+0301 em cirílico).
+25. **Tema** manual (auto/claro/escuro) e tamanho de sessão (8/15/30) nas Configurações; teclado russo opcional na tela; vibração e animação de resultado respeitam `prefers-reduced-motion`.

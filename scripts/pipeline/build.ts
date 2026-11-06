@@ -111,6 +111,20 @@ function buildIndex(raws: Map<string, RawLemma>): Map<string, Cand[]> {
 
 const WORD = /^([«"“(]*)([Ѐ-ӿ'’]+(?:-[Ѐ-ӿ'’]+)*)(=[a-z]:[Ѐ-ӿ]+)?([.,!?;:»"”)…]*)$/;
 
+/**
+ * Tatoeba mistura português do Brasil e de Portugal. O app é pt-BR: descarta frases cuja tradução tende a ser europeia
+ * (russo com «ты» → «tu/estás/fazes»; progressivo «a + infinitivo»; vocabulário típico de Portugal).
+ */
+export function brazilianFriendly(ru: string, pt: string): boolean {
+  const r = ru.toLowerCase();
+  if (/(^|[^а-яё])(ты|тебе|тебя|тобой|твой|твоя|твоё|твои|твоего|твоей|твоих)([^а-яё]|$)/.test(r)) return false;
+  const t = ` ${pt.toLowerCase().replace(/[.,!?;:"«»]/g, ' ')} `;
+  if (/ (tu|te|ti|teu|tua|teus|tuas|contigo|vós|estás|és|tens|fazes|queres|podes|sabes|vais|vens|estavas|eras) /.test(t)) return false;
+  if (/ (estou|estás|está|estamos|estão|estava|estavam|estive) a [a-zçãõáéíóúâêô]+r /.test(t)) return false;
+  if (/(autocarro|comboio|casa de banho|rapariga|miúdo|pequeno-almoço|telemóvel|frigorífico|ecrã|facto |passeio de|fixe|bué| pá )/.test(t)) return false;
+  return true;
+}
+
 export interface ResolveResult { tokens?: Token[]; ru?: string; error?: string }
 
 /** Resolve uma frase autoral em tokens acentuados USANDO SÓ o índice de formas dos dados. */
@@ -247,6 +261,7 @@ export function build(): BuildReport {
   for (const p of loadTatoeba()) {
     if (tato >= 300) break;
     if (p.ru.split(/\s+/).length > 9) continue;
+    if (!brazilianFriendly(p.ru, p.pt)) continue;
     const res = resolveSentence(p.ru.replace(/ё/g, 'е'), idx, rank);
     if (!res.tokens) continue;
     sentences.push({ id: `s${String(sentences.length + 1).padStart(4, '0')}`, ru: res.ru!, pt: p.pt, src: `tatoeba:${p.id}`, tk: res.tokens });

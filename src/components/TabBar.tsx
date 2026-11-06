@@ -7,6 +7,7 @@ const TABS = [
   { href: '/alfabeto/', label: 'Alfabeto', icon: 'Аб' },
   { href: '/vocabulario/', label: 'Vocab.', icon: '📚' },
   { href: '/gramatica/', label: 'Casos', icon: '✏️' },
+  { href: '/verbos/', label: 'Verbos', icon: '🏃' },
   { href: '/leitura/', label: 'Leitura', icon: '📖' },
 ];
 

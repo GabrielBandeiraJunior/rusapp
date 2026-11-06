@@ -174,3 +174,40 @@ describe('regras de lembrete (puras)', () => {
     expect(dayKey(now, TZ)).toBe('2025-08-10');
   });
 });
+
+describe('Worker: defesas', () => {
+  let w: Awaited<ReturnType<typeof makeWorker>>;
+  beforeAll(async () => {
+    w = await makeWorker({ telegram: false });
+  });
+  afterAll(async () => {
+    await w.mf.dispose();
+  });
+  const send = (body: string, token: string, ip: string) =>
+    w.mf.dispatchFetch(`${w.base}/api/sync`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', authorization: `Bearer ${token}`, 'cf-connecting-ip': ip },
+      body,
+    });
+
+  it('corpo acima de 1 MB → 413', async () => {
+    const big = JSON.stringify({ reviews: [], pad: 'x'.repeat(1_100_000) });
+    expect((await send(big, 'secret-token', '198.51.100.1')).status).toBe(413);
+  });
+
+  it('muitas tentativas inválidas travam o IP (429) sem afetar outros IPs', async () => {
+    for (let i = 0; i < 20; i++) expect((await send('{}', 'errado', '203.0.113.7')).status).toBe(401);
+    expect((await send('{}', 'errado', '203.0.113.7')).status).toBe(429);
+    expect((await send('{}', 'secret-token', '203.0.113.7')).status).toBe(429); // mesmo IP segue travado
+    expect((await send('{}', 'secret-token', '203.0.113.8')).status).toBe(200); // outro IP funciona
+  });
+
+  it('a sessão interrompida (ajuste "resume") aceita até 4000 caracteres; os demais ajustes, 500', async () => {
+    const big = 'a'.repeat(3000);
+    await send(JSON.stringify({ settings: [{ key: 'resume', value: big, updated_at: 5 }, { key: 'dailyGoal', value: big, updated_at: 5 }] }), 'secret-token', '198.51.100.2');
+    const r = await w.db.prepare("SELECT value FROM setting WHERE key='resume'").first<{ value: string }>();
+    const g = await w.db.prepare("SELECT value FROM setting WHERE key='dailyGoal'").first<{ value: string }>();
+    expect(r?.value.length).toBe(3000);
+    expect(g?.value.length).toBe(500);
+  });
+});

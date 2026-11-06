@@ -6,9 +6,11 @@ export interface ContentIndex {
   formsOf: Map<string, Form[]>;
   sentencesOf: Map<string, Sentence[]>;
   sentence: Map<string, Sentence>;
+  /** pares de aspecto [de, para] (public/data/verbpairs.json) */
+  pairs: [string, string][];
 }
 
-export function indexContent(content: Content): ContentIndex {
+export function indexContent(content: Content, pairs: [string, string][] = []): ContentIndex {
   const lemma = new Map(content.lemmas.map((l) => [l.id, l]));
   const formsOf = new Map<string, Form[]>();
   for (const f of content.forms) {
@@ -27,7 +29,7 @@ export function indexContent(content: Content): ContentIndex {
       else sentencesOf.set(l, [s]);
     }
   }
-  return { content, lemma, formsOf, sentencesOf, sentence: new Map(content.sentences.map((s) => [s.id, s])) };
+  return { content, lemma, formsOf, sentencesOf, sentence: new Map(content.sentences.map((s) => [s.id, s])), pairs };
 }
 
 let cached: Promise<ContentIndex> | null = null;
@@ -39,7 +41,10 @@ export function loadContent(): Promise<ContentIndex> {
         if (!r.ok) throw new Error(`content HTTP ${r.status}`);
         return r.json() as Promise<Content>;
       })
-      .then(indexContent)
+      .then(async (c) => {
+        const pairs = await fetch('/data/verbpairs.json').then((r) => (r.ok ? (r.json() as Promise<[string, string][]>) : [])).catch(() => []);
+        return indexContent(c, pairs);
+      })
       .catch((e) => {
         cached = null;
         throw e;

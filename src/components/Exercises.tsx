@@ -7,6 +7,8 @@ import type { QItem } from '@/lib/queue';
 import { parseCardId } from '@/lib/srs';
 import { useApp } from './Providers';
 import { Ru } from './Ru';
+import { Speak } from './Speak';
+import { checkCloze, conjForm, conjLabel, formLabels, parseClozeRef, parsePairRef } from '@/lib/extra';
 import { TypeInput } from './TypeInput';
 import { Btn, Card } from './ui';
 
@@ -28,12 +30,17 @@ function ResultBar({ ok, easyAllowed, onNext, children }: { ok: boolean; easyAll
   useEffect(() => {
     box.current?.scrollIntoView({ block: 'nearest' });
     document.documentElement.dataset.result = ok ? 'ok' : 'bad'; // tinge o fundo da página inteira
+    try {
+      navigator.vibrate?.(ok ? 15 : [60, 40, 60]); // feedback tátil leve (Android)
+    } catch {
+      /* sem vibração */
+    }
     return () => {
       delete document.documentElement.dataset.result;
     };
   }, [ok]);
   return (
-    <div ref={box} data-testid="result" className={`mt-3 rounded-2xl border-2 p-3 ${ok ? 'border-good' : 'border-bad'}`}>
+    <div ref={box} data-testid="result" className={`mt-3 rounded-2xl border-2 p-3 ${ok ? 'border-good result-ok' : 'border-bad result-bad'}`}>
       <p className={`mb-1 text-lg font-bold ${ok ? 'text-good' : 'text-bad'}`}>{ok ? 'Correto!' : 'Ainda não.'}</p>
       <div className="space-y-1 text-base">{children}</div>
       <div className="mt-3 flex gap-2">
@@ -56,7 +63,7 @@ function ExampleLine({ lemmaId }: { lemmaId: string }) {
   if (!s) return null;
   return (
     <p className="text-sm text-muted">
-      <Ru className="text-base text-ink">{s.ru}</Ru>
+      <Ru className="text-base text-ink">{s.ru}</Ru> <Speak text={s.ru} className="align-middle" />
       <br />
       {s.pt}
     </p>
@@ -125,8 +132,9 @@ export function VocabProdEx({ item, onDone }: ExProps) {
         </div>
       ) : (
         <ResultBar ok={res} easyAllowed={!hint && !item.isNew} onNext={(easy) => onDone({ rating: !res ? 1 : hint ? 2 : easy ? 4 : 3, correct: res, resp: val })}>
-          <p className="text-3xl">
+          <p className="flex items-center gap-2 text-3xl">
             <Ru data-testid="answer">{l.s}</Ru>
+            <Speak text={l.s} />
           </p>
           <p className="text-sm text-muted">leitura: {phonetic(l.s)} · {transliterate(l.t)}</p>
           <ExampleLine lemmaId={l.id} />
@@ -146,8 +154,9 @@ export function VocabRecEx({ item, onDone }: ExProps) {
     <div>
       <Card className="text-center">
         <p className="mb-1 text-base font-bold text-brand">O que significa?</p>
-        <p className="py-3 text-5xl">
+        <p className="flex items-center justify-center gap-3 py-3 text-5xl">
           <Ru data-testid="prompt">{l.s}</Ru>
+          <Speak text={l.s} />
         </p>
         {show && (
           <div className="space-y-1 border-t border-line pt-3">
@@ -257,8 +266,9 @@ export function GramEx({ item, onDone }: ExProps) {
         </Btn>
       ) : (
         <ResultBar ok={res} easyAllowed onNext={(easy) => onDone({ rating: !res ? 1 : easy ? 4 : 3, correct: res, resp: val })}>
-          <p className="text-3xl">
+          <p className="flex items-center gap-2 text-3xl">
             <Ru data-testid="answer">{answers[0]}</Ru>
+            <Speak text={answers[0]} />
           </p>
           <ul className="list-disc space-y-1 pl-5 text-sm">
             {explain(ix, key, answers, res ? '' : val).map((t, i) => (
@@ -381,6 +391,157 @@ export function ReadEx({ item, onDone }: ExProps) {
   );
 }
 
+// ---------------- Casos em frases (lacuna) ----------------
+export function ClozeEx({ item, onDone }: ExProps) {
+  const { ix } = useApp();
+  const c = useMemo(() => parseClozeRef(item.ref), [item.ref]);
+  const sent = ix.sentence.get(c.sid)!;
+  const [word, lid] = sent.tk[c.i];
+  const lemma = ix.lemma.get(lid)!;
+  const [val, setVal] = useState('');
+  const [res, setRes] = useState<boolean | null>(null);
+  const ref = useFocus(item.cardId);
+  const submit = () => val.trim() && setRes(checkCloze(val, word));
+  const labels = formLabels(ix, lid, word);
+  return (
+    <div>
+      {item.isNew && <p className="mb-2 inline-block rounded-full bg-brand/15 px-3 py-1 text-xs font-bold text-brand">NOVO</p>}
+      <Card>
+        <p className="mb-1 text-base font-bold text-brand">Complete a frase com a forma certa</p>
+        <p className="mt-1 text-2xl leading-snug" data-testid="prompt">
+          <Ru>
+            {sent.tk.map(([t, , sp], i) => (
+              <span key={i}>{i && sp ? ' ' : ''}{i === c.i ? <b className="rounded bg-brand/15 px-2 text-brand">______</b> : t}</span>
+            ))}
+          </Ru>
+        </p>
+        <p className="mt-2 text-sm text-muted">{sent.pt}</p>
+        <p className="mt-2 text-lg"><Ru className="font-semibold">{lemma.s}</Ru> <span className="text-sm text-muted">· {lemma.pt}</span></p>
+      </Card>
+      <div className="mt-3">
+        <TypeInput
+          ref={ref}
+          value={val}
+          disabled={res !== null}
+          onChange={(e) => setVal(e.target.value)}
+          onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); if (res === null) submit(); } }}
+          placeholder="digite a palavra que falta"
+          aria-label="Palavra que falta"
+        />
+      </div>
+      {res === null ? (
+        <Btn className="mt-3 w-full" onClick={submit} disabled={!val.trim()} data-testid="check">
+          Verificar
+        </Btn>
+      ) : (
+        <ResultBar ok={res} onNext={(easy) => onDone({ rating: !res ? 1 : easy ? 4 : 3, correct: res, resp: val })} easyAllowed>
+          <p className="flex items-center gap-2 text-3xl">
+            <Ru data-testid="answer">{word}</Ru>
+            <Speak text={sent.ru} />
+          </p>
+          {labels.length > 0 && <p className="text-sm">Forma de <Ru>{lemma.s}</Ru>: {labels.join(' ou ')}.</p>}
+          <p className="text-sm text-muted"><Ru>{sent.ru}</Ru></p>
+        </ResultBar>
+      )}
+    </div>
+  );
+}
+
+// ---------------- Verbos: conjugação ----------------
+export function ConjEx({ item, onDone }: ExProps) {
+  const { ix } = useApp();
+  const f = conjForm(ix, item.ref)!;
+  const lemma = ix.lemma.get(f.l)!;
+  const [val, setVal] = useState('');
+  const [res, setRes] = useState<boolean | null>(null);
+  const ref = useFocus(item.cardId);
+  const submit = () => val.trim() && setRes(checkAnswer(val, f.v));
+  return (
+    <div>
+      {item.isNew && <p className="mb-2 inline-block rounded-full bg-brand/15 px-3 py-1 text-xs font-bold text-brand">NOVO</p>}
+      <Card>
+        <p className="mb-1 text-base font-bold text-brand">Digite a forma do verbo</p>
+        <p className="mt-1 text-4xl"><Ru data-testid="prompt">{lemma.s}</Ru></p>
+        <p className="text-lg text-muted">{lemma.pt} · {lemma.asp === 'pf' ? 'perfectivo' : 'imperfectivo'}</p>
+        <p className="mt-3 rounded-lg bg-brand/10 px-3 py-2 text-lg font-bold text-brand" data-testid="target">→ {conjLabel(f, lemma.asp)}</p>
+      </Card>
+      <div className="mt-3">
+        <TypeInput
+          ref={ref}
+          value={val}
+          disabled={res !== null}
+          onChange={(e) => setVal(e.target.value)}
+          onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); if (res === null) submit(); } }}
+          placeholder="digite a forma"
+          aria-label="Forma verbal em russo"
+        />
+      </div>
+      {res === null ? (
+        <Btn className="mt-3 w-full" onClick={submit} disabled={!val.trim()} data-testid="check">
+          Verificar
+        </Btn>
+      ) : (
+        <ResultBar ok={res} easyAllowed onNext={(easy) => onDone({ rating: !res ? 1 : easy ? 4 : 3, correct: res, resp: val })}>
+          <p className="flex items-center gap-2 text-3xl">
+            <Ru data-testid="answer">{f.v[0]}</Ru>
+            <Speak text={f.v[0]} />
+          </p>
+          {f.v.length > 1 && <p className="text-sm text-muted">Variantes aceitas: {f.v.join(', ')}.</p>}
+          {lemma.asp === 'pf' && f.tn !== 'past' && <p className="text-sm text-muted">Verbo perfectivo: a forma conjugada tem sentido de futuro.</p>}
+        </ResultBar>
+      )}
+    </div>
+  );
+}
+
+// ---------------- Verbos: par de aspecto ----------------
+export function AspectEx({ item, onDone }: ExProps) {
+  const { ix } = useApp();
+  const [fromId, toId] = parsePairRef(item.ref);
+  const from = ix.lemma.get(fromId)!;
+  const to = ix.lemma.get(toId)!;
+  const [val, setVal] = useState('');
+  const [res, setRes] = useState<boolean | null>(null);
+  const ref = useFocus(item.cardId);
+  const submit = () => val.trim() && setRes(sameAnswer(val, to.t));
+  const want = to.asp === 'pf' ? 'perfectivo' : 'imperfectivo';
+  return (
+    <div>
+      {item.isNew && <p className="mb-2 inline-block rounded-full bg-brand/15 px-3 py-1 text-xs font-bold text-brand">NOVO</p>}
+      <Card>
+        <p className="mb-1 text-base font-bold text-brand">Digite o par {want}</p>
+        <p className="mt-1 text-4xl"><Ru data-testid="prompt">{from.s}</Ru></p>
+        <p className="text-lg text-muted">{from.pt} · {from.asp === 'pf' ? 'perfectivo' : 'imperfectivo'}</p>
+      </Card>
+      <div className="mt-3">
+        <TypeInput
+          ref={ref}
+          value={val}
+          disabled={res !== null}
+          onChange={(e) => setVal(e.target.value)}
+          onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); if (res === null) submit(); } }}
+          placeholder={`verbo ${want} em russo`}
+          aria-label="Par de aspecto em russo"
+        />
+      </div>
+      {res === null ? (
+        <Btn className="mt-3 w-full" onClick={submit} disabled={!val.trim()} data-testid="check">
+          Verificar
+        </Btn>
+      ) : (
+        <ResultBar ok={res} easyAllowed onNext={(easy) => onDone({ rating: !res ? 1 : easy ? 4 : 3, correct: res, resp: val })}>
+          <p className="flex items-center gap-2 text-3xl">
+            <Ru data-testid="answer">{to.s}</Ru>
+            <Speak text={to.s} />
+          </p>
+          <p className="text-sm text-muted">{to.pt} · {want}</p>
+          <ExampleLine lemmaId={to.id} />
+        </ResultBar>
+      )}
+    </div>
+  );
+}
+
 export function Exercise({ item, onDone }: ExProps) {
   const kind = parseCardId(item.cardId).kind;
   switch (kind) {
@@ -389,5 +550,8 @@ export function Exercise({ item, onDone }: ExProps) {
     case 'stress': return <StressEx item={item} onDone={onDone} />;
     case 'gram': return <GramEx item={item} onDone={onDone} />;
     case 'read': return <ReadEx item={item} onDone={onDone} />;
+    case 'cloze': return <ClozeEx item={item} onDone={onDone} />;
+    case 'conj': return <ConjEx item={item} onDone={onDone} />;
+    case 'aspect': return <AspectEx item={item} onDone={onDone} />;
   }
 }

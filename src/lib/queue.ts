@@ -2,6 +2,7 @@
 import { dayKey } from '../../shared/days';
 import { syllableCount } from '../../shared/russian';
 import type { ContentIndex } from './content';
+import { clozeList, clozeRef, CONJ_COLS, pairRef } from './extra';
 import { gramKeys, keyRef, type GramFocus } from './grammar';
 import { cardId, parseCardId, type CardKind, type CardRec, type ReviewRec } from './srs';
 
@@ -46,6 +47,33 @@ export function newItems(
       if (out.length >= limit) break;
       const ref = keyRef(k);
       if (!has.has(cardId('gram', ref))) push(ref);
+    }
+    return out;
+  }
+  if (kind === 'cloze') {
+    for (const c of clozeList(ix)) {
+      if (out.length >= limit) break;
+      const ref = clozeRef(c);
+      if (!has.has(cardId('cloze', ref))) push(ref);
+    }
+    return out;
+  }
+  if (kind === 'aspect') {
+    for (const [a, b] of ix.pairs) {
+      if (out.length >= limit) break;
+      const ref = pairRef(a, b);
+      if (!has.has(cardId('aspect', ref)) && learnedVprod(a)) push(ref);
+    }
+    return out;
+  }
+  if (kind === 'conj') {
+    for (const l of ix.content.lemmas) {
+      if (l.pos !== 'verb' || !learnedVprod(l.id)) continue;
+      for (const col of CONJ_COLS) {
+        if (out.length >= limit) return out;
+        const ref = `${l.id}|${col}`;
+        if (ix.formsOf.get(l.id)?.some((f) => f.id === ref) && !has.has(cardId('conj', ref))) push(ref);
+      }
     }
     return out;
   }

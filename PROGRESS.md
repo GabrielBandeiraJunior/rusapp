@@ -4,6 +4,8 @@
 - [x] Worker + D1 (migrations, sync, auth, CORS) + lembretes Telegram (regras puras + integração mockada)
 - [x] UI mobile: Hoje (painel), Alfabeto/Regras/Prática, Vocabulário (digitar/reconhecer/acento), Casos, Leitura graduada, Config, Sobre
 - [x] PWA: manifest, ícones, service worker com pré-cache; teste OFFLINE
-- [x] Testes: vitest (38) + e2e Playwright (4) · lint · typecheck · build
+- [x] Testes: vitest (58) + e2e Playwright (6) · lint · typecheck · build · CI (GitHub Actions)
 - [x] Docs: README, DEPLOY, DECISIONS, LICENSES, ROADMAP, PLAN
 - [ ] Pendente (usuário): login Cloudflare, segredos, deploy, Telegram
+- [x] Casos completos (6), mini-lições, frases com lacuna, verbos (conjugação, aspecto, movimento), “Meus erros”
+- [x] Áudio, teclado russo, tema manual, backup JSON, sessão retomável sincronizada, Tatoeba (pt-BR), Worker endurecido

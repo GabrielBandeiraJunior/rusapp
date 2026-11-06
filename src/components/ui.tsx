@@ -55,7 +55,7 @@ export function Tabs<T extends string>({
           role="tab"
           aria-selected={value === it.id}
           onClick={() => onChange(it.id)}
-          className={`min-h-11 flex-1 rounded-xl px-2 text-sm font-semibold transition ${value === it.id ? 'bg-surface text-ink shadow-sm' : 'text-muted'}`}
+          className={`min-h-11 min-w-11 flex-1 rounded-xl px-1 text-sm font-semibold transition ${value === it.id ? 'bg-surface text-ink shadow-sm' : 'text-muted'}`}
         >
           {it.label}
         </button>

@@ -23,6 +23,23 @@ interface SyncBody {
 
 const PULL_LIMIT = 500;
 const MAX_ITEMS = 1000;
+const MAX_BODY = 1_000_000; // bytes
+const RESUME_MAX = 4000; // sessão interrompida (setting 'resume') é maior que um ajuste comum
+
+// Freio de tentativas inválidas por IP (memória do isolate; suficiente para uso pessoal).
+const FAILS = new Map<string, { n: number; until: number }>();
+const MAX_FAILS = 20;
+const LOCK_MS = 15 * 60e3;
+function throttled(ip: string, now: number): boolean {
+  const f = FAILS.get(ip);
+  return !!f && f.n >= MAX_FAILS && now < f.until;
+}
+function noteFail(ip: string, now: number) {
+  const f = FAILS.get(ip);
+  if (!f || now >= f.until) FAILS.set(ip, { n: 1, until: now + LOCK_MS });
+  else f.n++;
+  if (FAILS.size > 500) for (const [k, v] of FAILS) if (now >= v.until) FAILS.delete(k);
+}
 
 function cors(env: Env): Record<string, string> {
   return {
@@ -30,6 +47,8 @@ function cors(env: Env): Record<string, string> {
     'access-control-allow-headers': 'authorization, content-type',
     'access-control-allow-methods': 'GET, POST, OPTIONS',
     'access-control-max-age': '86400',
+    'x-content-type-options': 'nosniff',
+    'cache-control': 'no-store',
     vary: 'origin',
   };
 }
@@ -90,12 +109,13 @@ export async function handleSync(env: Env, body: SyncBody): Promise<Response> {
   }
   for (const s of settings) {
     if (!isStr(s.key, 64) || typeof s.value !== 'string' || !isNum(s.updated_at)) continue;
+    const limit = s.key === 'resume' ? RESUME_MAX : 500;
     stmts.push(
       db.prepare(
         `INSERT INTO setting(key,value,updated_at,seq) VALUES(?1,?2,?3,(SELECT COALESCE(MAX(seq),0)+1 FROM setting))
          ON CONFLICT(key) DO UPDATE SET value=excluded.value, updated_at=excluded.updated_at, seq=excluded.seq
          WHERE excluded.updated_at > setting.updated_at`,
-      ).bind(s.key, s.value.slice(0, 500), s.updated_at),
+      ).bind(s.key, s.value.slice(0, limit), s.updated_at),
     );
   }
   if (stmts.length) await runBatch(db, stmts);
@@ -155,10 +175,19 @@ const worker = {
     if (url.pathname === '/api/sync') {
       if (req.method !== 'POST') return json(env, { error: 'method not allowed' }, 405);
       if (!env.APP_TOKEN) return json(env, { error: 'server not configured' }, 500);
-      if (!authorized(req, env)) return json(env, { error: 'unauthorized' }, 401);
+      const ip = req.headers.get('cf-connecting-ip') ?? 'local';
+      const now = Date.now();
+      if (throttled(ip, now)) return json(env, { error: 'too many attempts' }, 429);
+      if (!authorized(req, env)) {
+        noteFail(ip, now);
+        return json(env, { error: 'unauthorized' }, 401);
+      }
+      if (Number(req.headers.get('content-length') ?? 0) > MAX_BODY) return json(env, { error: 'payload too large' }, 413);
       let body: SyncBody;
       try {
-        body = (await req.json()) as SyncBody;
+        const text = await req.text();
+        if (text.length > MAX_BODY) return json(env, { error: 'payload too large' }, 413);
+        body = JSON.parse(text) as SyncBody;
       } catch {
         return json(env, { error: 'invalid json' }, 400);
       }

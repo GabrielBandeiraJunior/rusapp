@@ -10,6 +10,8 @@ npm install
 npm run data          # pipeline: baixar → normalizar → filtrar → public/data/content.json + worker/seed/content.sql
 npm run dev           # app em http://localhost:3000
 npm run build         # build estático em out/ (+ service worker com pré-cache)
+npx playwright install chromium   # uma vez, para o e2e (npm run test:e2e, exige build antes)
+node scripts/make-icons.mjs     # regenera os PNGs do app a partir de public/icons/icon.svg
 ```
 Pipeline idempotente (`npm run data -- --refresh` rebaixa; `-- --no-fetch` só reconstrói). Fontes/fallbacks: ver `DECISIONS.md`.
 

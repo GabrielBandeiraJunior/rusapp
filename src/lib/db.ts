@@ -95,6 +95,20 @@ export class Store {
     return card;
   }
 
+  /** Importa revisões de um backup (idempotente por id); ficam pendentes para o próximo sync. */
+  async importReviews(reviews: Omit<ReviewRec, 'synced'>[]): Promise<number> {
+    const touched = new Set<string>();
+    let added = 0;
+    for (const r of reviews) {
+      if (await this.hasReview(r.id)) continue;
+      await this.db.put('reviews', { ...r, synced: 0 });
+      touched.add(r.card);
+      added++;
+    }
+    for (const c of touched) await this.rebuildCard(c);
+    return added;
+  }
+
   /** Aplica revisões vindas do servidor (idempotente por id) e reconstrói os cartões afetados. */
   async ingestRemote(reviews: Omit<ReviewRec, 'synced'>[]): Promise<number> {
     const touched = new Set<string>();
