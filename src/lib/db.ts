@@ -16,6 +16,23 @@ interface Schema extends DBSchema {
   meta: { key: string; value: { key: string; value: unknown } };
 }
 
+/** Arquivo de backup (exportar/importar progresso). */
+export interface Backup {
+  app: 'rusapp';
+  version: 1;
+  exportedAt: number;
+  reviews: Omit<ReviewRec, 'synced'>[];
+  settings: { key: string; value: string; updatedAt: number }[];
+}
+
+function newDeviceId(): string {
+  try {
+    return globalThis.crypto.randomUUID().slice(0, 12);
+  } catch {
+    return Math.random().toString(36).slice(2, 14);
+  }
+}
+
 export class Store {
   private constructor(private db: IDBPDatabase<Schema>, readonly deviceId: string) {}
 
@@ -33,7 +50,7 @@ export class Store {
     });
     let dev = (await db.get('meta', 'deviceId'))?.value as string | undefined;
     if (!dev) {
-      dev = Math.random().toString(36).slice(2, 10);
+      dev = newDeviceId();
       await db.put('meta', { key: 'deviceId', value: dev });
     }
     return new Store(db, dev);
@@ -75,16 +92,16 @@ export class Store {
 
   private counter = 0;
 
-  /** Registra uma revisão e recalcula o cartão. */
+  /** Registra uma revisão e recalcula o cartão. Devolve ambos (a UI atualiza o estado sem reler tudo). */
   async recordReview(
     cardIdStr: string, rating: 1 | 2 | 3 | 4, correct: boolean, resp = '', ts = Date.now(),
-  ): Promise<CardRec> {
-    const rec: ReviewRec = {
+  ): Promise<{ card: CardRec; review: ReviewRec }> {
+    const review: ReviewRec = {
       id: `${this.deviceId}:${ts}:${this.counter++}`, card: cardIdStr, rating, ts, resp,
       correct: correct ? 1 : 0, dev: this.deviceId, synced: 0,
     };
-    await this.db.put('reviews', rec);
-    return this.rebuildCard(cardIdStr);
+    await this.db.put('reviews', review);
+    return { card: await this.rebuildCard(cardIdStr), review };
   }
 
   async rebuildCard(cardIdStr: string): Promise<CardRec> {
@@ -95,18 +112,25 @@ export class Store {
     return card;
   }
 
-  /** Aplica revisões vindas do servidor (idempotente por id) e reconstrói os cartões afetados. */
-  async ingestRemote(reviews: Omit<ReviewRec, 'synced'>[]): Promise<number> {
+  /** Grava revisões que ainda não existem (uma única transação) e reconstrói os cartões afetados. */
+  private async addReviews(reviews: Omit<ReviewRec, 'synced'>[], synced: 0 | 1): Promise<number> {
     const touched = new Set<string>();
     let added = 0;
+    const tx = this.db.transaction('reviews', 'readwrite');
     for (const r of reviews) {
-      if (await this.hasReview(r.id)) continue;
-      await this.db.put('reviews', { ...r, synced: 1 });
+      if (await tx.store.get(r.id)) continue;
+      await tx.store.put({ ...r, synced });
       touched.add(r.card);
       added++;
     }
+    await tx.done;
     for (const c of touched) await this.rebuildCard(c);
     return added;
+  }
+
+  /** Aplica revisões vindas do servidor (idempotente por id). */
+  ingestRemote(reviews: Omit<ReviewRec, 'synced'>[]): Promise<number> {
+    return this.addReviews(reviews, 1);
   }
 
   async markSynced(ids: string[]) {
@@ -142,5 +166,33 @@ export class Store {
       const cur = await this.db.get('settings', k);
       if (cur && cur.updatedAt <= upTo[k]) await this.db.put('settings', { ...cur, dirty: 0 });
     }
+  }
+
+  // ----- backup
+  async exportBackup(now = Date.now()): Promise<Backup> {
+    const reviews = (await this.allReviews()).map(({ synced: _s, ...r }) => (void _s, r));
+    const settings = (await this.allSettings()).map((s) => ({ key: s.key, value: s.value, updatedAt: s.updatedAt }));
+    return { app: 'rusapp', version: 1, exportedAt: now, reviews, settings };
+  }
+
+  /** Mescla um backup: revisões novas entram como "não enviadas" (sobem no próximo sync); configurações por LWW. */
+  async importBackup(data: unknown): Promise<{ reviews: number; settings: number }> {
+    const b = data as Partial<Backup> | null;
+    if (!b || b.app !== 'rusapp' || b.version !== 1 || !Array.isArray(b.reviews) || !Array.isArray(b.settings))
+      throw new Error('Arquivo de backup inválido.');
+    const reviews = b.reviews.filter(
+      (r) => r && typeof r.id === 'string' && typeof r.card === 'string' && typeof r.ts === 'number' && [1, 2, 3, 4].includes(r.rating),
+    );
+    const added = await this.addReviews(reviews, 0);
+    let st = 0;
+    for (const s of b.settings) {
+      if (!s || typeof s.key !== 'string' || typeof s.value !== 'string' || typeof s.updatedAt !== 'number') continue;
+      const cur = await this.db.get('settings', s.key);
+      if (!cur || s.updatedAt > cur.updatedAt) {
+        await this.db.put('settings', { key: s.key, value: s.value, updatedAt: s.updatedAt, dirty: 1 });
+        st++;
+      }
+    }
+    return { reviews: added, settings: st };
   }
 }

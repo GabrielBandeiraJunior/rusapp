@@ -7,9 +7,6 @@ export interface Settings {
   newPerDay: number;
   tz: string;
   freeze: boolean;
-  remindEnabled: boolean;
-  remindTime: string; // HH:MM
-  streakAlertHours: number;
 }
 
 export function defaultTz(): string {
@@ -20,7 +17,7 @@ export function defaultTz(): string {
   }
 }
 
-export const SETTING_KEYS = ['dailyGoal', 'newPerDay', 'tz', 'freeze', 'remindEnabled', 'remindTime', 'streakAlertHours'] as const;
+export const SETTING_KEYS = ['dailyGoal', 'newPerDay', 'tz', 'freeze'] as const;
 
 export async function loadSettings(store: Store): Promise<Settings> {
   const g = async (k: string) => store.getSetting(k);
@@ -30,9 +27,6 @@ export async function loadSettings(store: Store): Promise<Settings> {
     newPerDay: num(await g('newPerDay'), 8),
     tz: (await g('tz')) || defaultTz(),
     freeze: (await g('freeze')) === '1',
-    remindEnabled: (await g('remindEnabled')) === '1',
-    remindTime: (await g('remindTime')) || '19:00',
-    streakAlertHours: num(await g('streakAlertHours'), 3),
   };
 }
 

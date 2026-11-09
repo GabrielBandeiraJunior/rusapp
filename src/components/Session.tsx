@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import type { QItem } from '@/lib/queue';
 import { clearSession, saveSession, type SavedSession } from '@/lib/resume';
 import { useApp } from './Providers';
-import { Exercise, type Outcome } from './Exercises';
+import { Exercise, type Outcome } from './exercises';
 import { Bar, Btn, Card } from './ui';
 
 /** Sessão: percorre a fila; erros voltam ao fim (1 vez) para praticar de novo. */
@@ -39,8 +39,11 @@ export function Session({ items, onExit, initial }: { items: QItem[]; onExit: ()
   const handle = async (o: Outcome) => {
     if (busy.current) return; // toque duplo em "Continuar"
     busy.current = true;
-    await review(item.cardId, o.rating, o.correct, o.resp);
-    busy.current = false;
+    try {
+      await review(item.cardId, o.rating, o.correct, o.resp);
+    } finally {
+      busy.current = false; // mesmo com erro de gravação a tela não fica presa
+    }
     setStats((s) => ({ ok: s.ok + (o.correct ? 1 : 0), bad: s.bad + (o.correct ? 0 : 1) }));
     if (!o.correct && !item.retry) setQueue((q) => [...q, { ...item, retry: true, isNew: false }]);
     setIdx((i) => i + 1);

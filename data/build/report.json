@@ -9,12 +9,20 @@
   "forms": 5400,
   "gramNouns": 212,
   "gramAdjs": 63,
-  "sentences": 90,
+  "gramExtNouns": 212,
+  "gramExtAdjs": 25,
+  "sentences": 590,
+  "sentencesBySource": {
+    "autoral": 90,
+    "tatoeba": 500
+  },
   "texts": 14,
   "skippedLemmas": [
     "adj:наш — não encontrado/sem acento",
     "adj:ваш — não encontrado/sem acento"
   ],
+  "duplicateGlosses": [],
+  "unreviewedGlosses": 447,
   "rejectedSentences": [],
   "glossSource": {
     "autor (pt)": 447

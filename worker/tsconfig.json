@@ -4,5 +4,5 @@
     "types": ["@cloudflare/workers-types"], "strict": true, "noEmit": true, "skipLibCheck": true,
     "allowImportingTsExtensions": true, "isolatedModules": true
   },
-  "include": ["src", "../shared/days.ts"]
+  "include": ["src"]
 }

@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
-import { useState, type ReactNode } from 'react';
-import { useApp } from '@/components/Providers';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { useApp, useSync } from '@/components/Providers';
 import { Btn, Card, Page } from '@/components/ui';
 
 function Row({ label, hint, children }: { label: string; hint?: string; children: ReactNode }) {
@@ -18,8 +18,71 @@ function Row({ label, hint, children }: { label: string; hint?: string; children
 
 const numCls = 'min-h-11 w-24 rounded-lg border border-line bg-bg px-3 text-right';
 
+/** Campo numérico: edita como texto (dá para apagar e digitar) e só grava ao sair do campo / Enter. */
+function NumField({ label, value, min, max, onCommit }: { label: string; value: number; min: number; max: number; onCommit: (n: number) => void }) {
+  const [text, setText] = useState(String(value));
+  useEffect(() => setText(String(value)), [value]);
+  const commit = () => {
+    const n = Number(text);
+    if (text.trim() === '' || !Number.isFinite(n)) return setText(String(value));
+    const v = Math.min(max, Math.max(min, Math.round(n)));
+    setText(String(v));
+    if (v !== value) onCommit(v);
+  };
+  return (
+    <input
+      aria-label={label} type="number" inputMode="numeric" min={min} max={max} className={numCls} value={text}
+      onChange={(e) => setText(e.target.value)} onBlur={commit} onKeyDown={(e) => e.key === 'Enter' && e.currentTarget.blur()}
+    />
+  );
+}
+
+function Backup() {
+  const { store, reload } = useApp();
+  const { syncNow } = useSync();
+  const file = useRef<HTMLInputElement>(null);
+  const [msg, setMsg] = useState('');
+  const exportIt = async () => {
+    const data = await store.exportBackup();
+    const url = URL.createObjectURL(new Blob([JSON.stringify(data)], { type: 'application/json' }));
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `russo-progresso-${new Date().toISOString().slice(0, 10)}.json`;
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 5000);
+    setMsg(`Exportado: ${data.reviews.length} revisões.`);
+  };
+  const importIt = async (f: File) => {
+    try {
+      const r = await store.importBackup(JSON.parse(await f.text()));
+      await reload();
+      void syncNow();
+      setMsg(`Importado: ${r.reviews} revisões novas, ${r.settings} configurações.`);
+    } catch (e) {
+      setMsg(String((e as Error).message ?? e));
+    }
+  };
+  return (
+    <Card>
+      <p className="mb-2 text-sm text-muted">
+        Guarde uma cópia do seu progresso (revisões e configurações). Importar mescla com o que já existe — nada é apagado.
+      </p>
+      <div className="flex gap-2">
+        <Btn variant="ghost" className="flex-1" onClick={() => void exportIt()}>Exportar</Btn>
+        <Btn variant="ghost" className="flex-1" onClick={() => file.current?.click()}>Importar</Btn>
+        <input
+          ref={file} type="file" accept="application/json,.json" className="hidden" aria-label="Arquivo de backup"
+          onChange={(e) => { const f = e.target.files?.[0]; if (f) void importIt(f); e.target.value = ''; }}
+        />
+      </div>
+      {msg && <p className="mt-2 text-sm text-muted" data-testid="backup-msg">{msg}</p>}
+    </Card>
+  );
+}
+
 export default function ConfigPage() {
-  const { settings, update, getSyncConfig, setSyncConfig, syncNow, syncStatus, syncMessage, ix } = useApp();
+  const { settings, update, ix } = useApp();
+  const { getSyncConfig, setSyncConfig, syncNow, syncStatus, syncMessage } = useSync();
   const saved = getSyncConfig();
   const [url, setUrl] = useState(saved?.url ?? '');
   const [token, setToken] = useState(saved?.token ?? '');
@@ -30,7 +93,7 @@ export default function ConfigPage() {
     try {
       new Intl.DateTimeFormat('en', { timeZone: tz });
       setTzErr('');
-      void update('tz', tz);
+      if (tz !== settings.tz) void update('tz', tz);
     } catch {
       setTzErr('Fuso inválido (ex.: America/Sao_Paulo)');
     }
@@ -40,12 +103,10 @@ export default function ConfigPage() {
     <Page title="Configurações" right={<Link href="/sobre/" className="flex min-h-11 min-w-11 items-center justify-center text-brand">Sobre</Link>}>
       <Card>
         <Row label="Meta diária" hint="revisões por dia">
-          <input aria-label="Meta diária" type="number" inputMode="numeric" min={1} max={500} className={numCls} value={settings.dailyGoal}
-            onChange={(e) => void update('dailyGoal', Math.max(1, Number(e.target.value) || 1))} />
+          <NumField label="Meta diária" min={1} max={500} value={settings.dailyGoal} onCommit={(n) => void update('dailyGoal', n)} />
         </Row>
         <Row label="Novos por dia" hint="por tipo de exercício">
-          <input aria-label="Novos por dia" type="number" inputMode="numeric" min={0} max={100} className={numCls} value={settings.newPerDay}
-            onChange={(e) => void update('newPerDay', Math.max(0, Number(e.target.value) || 0))} />
+          <NumField label="Novos por dia" min={0} max={100} value={settings.newPerDay} onCommit={(n) => void update('newPerDay', n)} />
         </Row>
         <Row label="Fuso horário" hint="define a virada do dia">
           <input aria-label="Fuso horário" className="min-h-11 w-44 rounded-lg border border-line bg-bg px-3" value={tz} autoCapitalize="off" autoCorrect="off" spellCheck={false}
@@ -54,24 +115,6 @@ export default function ConfigPage() {
         {tzErr && <p className="text-sm text-bad">{tzErr}</p>}
         <Row label="Congelar ofensiva" hint="a cada 7 dias seguidos ganha 1 congelamento (máx. 2) que cobre um dia perdido">
           <input aria-label="Congelar ofensiva" type="checkbox" className="h-7 w-7" checked={settings.freeze} onChange={(e) => void update('freeze', e.target.checked)} />
-        </Row>
-      </Card>
-
-      <h2 className="mb-2 mt-5 text-lg font-bold">Lembretes externos (Telegram)</h2>
-      <Card>
-        <p className="mb-2 text-sm text-muted">
-          Opcional e desligado por padrão. Exige o Worker publicado com TELEGRAM_BOT_TOKEN/TELEGRAM_CHAT_ID (veja DEPLOY.md) e a sincronização ativa.
-          No máximo 2 mensagens por dia; nada é enviado se você já estudou.
-        </p>
-        <Row label="Ativar lembretes">
-          <input aria-label="Ativar lembretes" type="checkbox" className="h-7 w-7" checked={settings.remindEnabled} onChange={(e) => void update('remindEnabled', e.target.checked)} />
-        </Row>
-        <Row label="Horário do lembrete diário">
-          <input aria-label="Horário do lembrete" type="time" className="min-h-11 rounded-lg border border-line bg-bg px-3" value={settings.remindTime} onChange={(e) => void update('remindTime', e.target.value || '19:00')} />
-        </Row>
-        <Row label="Alerta de ofensiva" hint="horas antes do fim do dia">
-          <input aria-label="Horas de alerta" type="number" inputMode="numeric" min={1} max={12} className={numCls} value={settings.streakAlertHours}
-            onChange={(e) => void update('streakAlertHours', Math.min(12, Math.max(1, Number(e.target.value) || 3)))} />
         </Row>
       </Card>
 
@@ -90,6 +133,9 @@ export default function ConfigPage() {
           {syncStatus === 'off' ? 'Desligada.' : syncStatus === 'ok' ? `Em dia ${syncMessage}` : syncStatus === 'error' ? `Erro: ${syncMessage}` : syncStatus === 'syncing' ? 'Sincronizando…' : 'Ativa.'}
         </p>
       </Card>
+
+      <h2 className="mb-2 mt-5 text-lg font-bold">Backup do progresso</h2>
+      <Backup />
       <p className="mt-4 text-center text-xs text-muted">Conteúdo v{ix.content.v} · {ix.content.lemmas.length} palavras · {ix.content.sentences.length} frases</p>
     </Page>
   );

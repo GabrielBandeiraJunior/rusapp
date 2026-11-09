@@ -121,11 +121,24 @@ const UNPAIR: Record<string, string> = { п: 'б', ф: 'в', к: 'г', т: 'д',
 const VOICELESS = new Set('пфктшсхцчщ'.split(''));
 const VOICED_TRIGGER = new Set('бгджз'.split(''));
 
-/** Respelling aproximado para falantes de pt: redução (о→а, е/я→и átonos), vozeamento, г→в em -ого/-его. */
+/** Exceções lexicais comuns de leitura: palavra → [grafia, leitura] (só troca o trecho indicado). */
+const LEXICAL: Record<string, [string, string]> = {
+  что: ['чт', 'шт'], чтобы: ['чт', 'шт'], конечно: ['чн', 'шн'], скучно: ['чн', 'шн'], нарочно: ['чн', 'шн'], сегодня: ['г', 'в'],
+};
+
+/**
+ * Respelling APROXIMADO para falantes de pt: redução (о→а, е/я→и átonos), vozeamento, г→в em -ого/-его,
+ * -тся/-ться → [ца] e algumas exceções lexicais frequentes (что, конечно, сегодня…). Não é transcrição fonética.
+ */
 export function phonetic(word: string): string {
   const stressed = stressIndex(word);
-  const chars = [...stripStress(word).toLowerCase()];
-  if (/(ого|его)$/.test(chars.join('')) && chars.length > 3) chars[chars.length - 2] = 'в';
+  let plain = stripStress(word).toLowerCase();
+  const lex = LEXICAL[plain];
+  if (lex) plain = plain.replace(lex[0], lex[1]);
+  if (/ться$/.test(plain)) plain = plain.slice(0, -4) + 'ца';
+  else if (/тся$/.test(plain)) plain = plain.slice(0, -3) + 'ца';
+  const chars = [...plain];
+  if (/(ого|его)$/.test(plain) && chars.length > 3) chars[chars.length - 2] = 'в';
   // vozeamento, da direita para a esquerda
   let next: 'end' | 'voiced' | 'voiceless' | 'neutral' = 'end';
   for (let i = chars.length - 1; i >= 0; i--) {
@@ -144,20 +157,19 @@ export function phonetic(word: string): string {
   }
   // vogais + transliteração
   let out = '';
-  let vi = -1;
+  const reduce = syllableCount(word) > 1;
   for (let i = 0; i < chars.length; i++) {
     const c = chars[i];
-    if (isVowel(c)) vi++;
     const prev = chars[i - 1];
     const glide = !prev || isVowel(prev) || prev === 'ь' || prev === 'ъ';
-    const tonic = i === stressed || (stressed < 0 && false);
-    if (isVowel(c) && !tonic && syllableCount(word) > 1) {
+    // a tônica foi medida na grafia original; as exceções acima mantêm o comprimento até o trecho trocado
+    const tonic = i === stressed;
+    if (isVowel(c) && !tonic && reduce) {
       if (c === 'о' || c === 'а') { out += 'a'; continue; }
       if (c === 'е' || c === 'я') { out += glide ? 'yi' : 'i'; continue; }
     }
     if (c === 'е') out += glide ? 'ye' : 'e';
     else out += T[c] ?? c;
-    void vi;
   }
   return out.replace(/'/g, '');
 }

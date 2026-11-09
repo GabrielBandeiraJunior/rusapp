@@ -20,6 +20,8 @@ export interface Lemma {
   sgo?: 1;
   plo?: 1;
   asp?: 'impf' | 'pf';
+  /** casos estendidos (dativo, instrumental, preposicional) completos nos dados */
+  gx?: 1;
 }
 
 /** form(id, lemma_id, form_text, form_stress, case, number, gender, tense, person, aspect, animacy) — v = variantes aceitas (1ª canônica) */

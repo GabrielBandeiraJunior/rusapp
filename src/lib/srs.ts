@@ -3,7 +3,7 @@ import { createEmptyCard, fsrs, generatorParameters, Rating, State, type Card, t
 
 export { Rating, State };
 
-export type CardKind = 'vprod' | 'vrec' | 'stress' | 'gram' | 'read';
+export type CardKind = 'vprod' | 'vrec' | 'stress' | 'gram' | 'read' | 'verb';
 
 /** Estado FSRS serializável (JSON). */
 export interface FsrsState {

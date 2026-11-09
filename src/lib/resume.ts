@@ -21,6 +21,7 @@ export const KIND_LABEL: Record<CardKind, string> = {
   stress: 'Acento',
   gram: 'Casos',
   read: 'Leitura de palavras',
+  verb: 'Verbos (conjugação)',
 };
 
 export const KIND_HREF: Record<CardKind, string> = {
@@ -29,6 +30,7 @@ export const KIND_HREF: Record<CardKind, string> = {
   stress: '/vocabulario/',
   gram: '/gramatica/',
   read: '/alfabeto/',
+  verb: '/gramatica/',
 };
 
 export function continueHref(kind: CardKind): string {

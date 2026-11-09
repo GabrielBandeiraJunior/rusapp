@@ -1,8 +1,8 @@
-// Etapas 2–4 — normalizar → filtrar → gerar arquivos estáticos + seed do D1.
+// Etapas 2–4 — normalizar → filtrar → gerar o conteúdo estático (public/data/content.json) e o relatório.
 import { createHash } from 'node:crypto';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import {
-  loadAdjectives, loadNouns, loadOthers, loadVerbs, readTsv, canon, type RawLemma, type RawForm,
+  loadAdjectives, loadNouns, loadOthers, loadVerbs, readTsv, type RawLemma, type RawForm,
 } from './openrussian.ts';
 import { loadTatoeba } from './tatoeba.ts';
 import { fromApostrophe, normalizeAnswer, stripStress, wordHasRequiredStress } from '../../shared/russian.ts';
@@ -20,9 +20,14 @@ export interface BuildReport {
   forms: number;
   gramNouns: number;
   gramAdjs: number;
+  gramExtNouns: number;
+  gramExtAdjs: number;
   sentences: number;
+  sentencesBySource: Record<string, number>;
   texts: number;
   skippedLemmas: string[];
+  duplicateGlosses: string[];
+  unreviewedGlosses: number;
   rejectedSentences: string[];
   glossSource: Record<string, number>;
 }
@@ -35,22 +40,25 @@ export function levelFor(rank: number): Level {
   return rank <= 150 ? 'A1' : rank <= 320 ? 'A2' : 'B1';
 }
 
-function lemmaGramOk(l: RawLemma): boolean {
+/** O lema tem TODAS as células dos casos `cases` (com acento obrigatório) para o exercício de casos? */
+function lemmaCasesOk(l: RawLemma, cases: string[]): boolean {
   const has = (num: string, c: string, g?: string) =>
     l.forms.some((f) => f.number === num && f.case === c && (g ? f.gender === g : true) && f.variants.every(stressOk));
   if (NO_GRAM.has(l.bare)) return false;
   if (l.pos === 'noun') {
     if (l.indeclinable || !l.gender) return false;
     const nums = l.plOnly ? ['pl'] : l.sgOnly ? ['sg'] : ['sg', 'pl'];
-    return nums.every((n) => ['nom', 'gen', 'acc'].every((c) => has(n, c)));
+    return nums.every((n) => cases.every((c) => has(n, c)));
   }
   if (l.pos === 'adj') {
     if (PRONOMINAL.has(l.bare)) return false;
-    return (['m', 'f', 'n'] as const).every((g) => ['nom', 'gen', 'acc'].every((c) => has('sg', c, g))) &&
-      ['nom', 'gen', 'acc'].every((c) => has('pl', c));
+    return (['m', 'f', 'n'] as const).every((g) => cases.every((c) => has('sg', c, g))) && cases.every((c) => has('pl', c));
   }
   return false;
 }
+const lemmaGramOk = (l: RawLemma) => lemmaCasesOk(l, ['nom', 'gen', 'acc']);
+/** Casos estendidos (dativo, instrumental, preposicional): só para lemas que já têm nom/gen/acc completos. */
+const lemmaExtOk = (l: RawLemma) => lemmaGramOk(l) && lemmaCasesOk(l, ['dat', 'inst', 'prep']);
 
 /** Converte formas brutas do OpenRussian em linhas de `form`; resolve acusativo de adjetivos (animado=genitivo, inanimado=nominativo). */
 function toForms(id: string, l: RawLemma): { forms: Form[]; gramOk: boolean } {
@@ -84,12 +92,6 @@ function toForms(id: string, l: RawLemma): { forms: Form[]; gramOk: boolean } {
     } else out.push(base);
   }
   return { forms: out, gramOk };
-}
-
-function sqlq(v: unknown): string {
-  if (v === undefined || v === null) return 'NULL';
-  if (typeof v === 'number') return String(v);
-  return `'${String(v).replace(/'/g, "''")}'`;
 }
 
 interface Cand { lemmaId: string; form: string; exact: boolean }
@@ -146,7 +148,7 @@ export function resolveSentence(
     const lemma = cands.filter((c) => c.form === form).sort((a, b) => Number(b.exact) - Number(a.exact) || (rank.get(a.lemmaId) ?? 1e9) - (rank.get(b.lemmaId) ?? 1e9))[0].lemmaId;
     const firstChar = [...core][0];
     if (firstChar !== firstChar.toLowerCase()) form = form[0].toUpperCase() + form.slice(1);
-    tokens.push([form, lemma, lead || first ? (lead ? 0 : first ? 0 : 1) : 1]);
+    tokens.push([form, lemma, lead || first ? 0 : 1]);
     if (trail) tokens.push([trail, '', 0]);
     first = false;
   }
@@ -155,7 +157,7 @@ export function resolveSentence(
   return { tokens, ru };
 }
 
-export function build(): BuildReport {
+export async function build(): Promise<BuildReport> {
   const nouns = loadNouns(RAW + 'nouns.csv');
   const adjs = loadAdjectives(RAW + 'adjectives.csv');
   const verbs = loadVerbs(RAW + 'verbs.csv');
@@ -181,7 +183,7 @@ export function build(): BuildReport {
   for (const l of all) byAny.set(normalizeAnswer(l.bare), [...(byAny.get(normalizeAnswer(l.bare)) ?? []), l]);
 
   const skipped: string[] = [];
-  const chosen: { raw: RawLemma; pt: string; score: number }[] = [];
+  const chosen: { raw: RawLemma; pt: string; score: number; reviewed: boolean }[] = [];
   const seen = new Set<string>();
   for (const row of readTsv('data/curated/lemmas.tsv')) {
     const pos = row.pos as RawLemma['pos'];
@@ -196,7 +198,7 @@ export function build(): BuildReport {
     const key = pick.pos + ':' + pick.bare;
     if (seen.has(key)) continue;
     seen.add(key);
-    chosen.push({ raw: pick, pt: row.pt, score: score(pick) });
+    chosen.push({ raw: pick, pt: row.pt, score: score(pick), reviewed: row.rev === '1' });
   }
   chosen.sort((a, b) => b.score - a.score || a.raw.bare.localeCompare(b.raw.bare));
 
@@ -204,7 +206,7 @@ export function build(): BuildReport {
   const forms: Form[] = [];
   const raws = new Map<string, RawLemma>();
   const rank = new Map<string, number>();
-  let gramNouns = 0, gramAdjs = 0;
+  let gramNouns = 0, gramAdjs = 0, extNouns = 0, extAdjs = 0;
   chosen.forEach((c, i) => {
     const l = c.raw;
     const id = `${posId[l.pos]}:${l.bare}`; // id estável (pos:lema)
@@ -214,6 +216,7 @@ export function build(): BuildReport {
       id, t: stripStress(l.stress), s: l.stress, pos: noForms ? 'other' : l.pos, pt: c.pt, en: l.en.split(/\s*;\s*/)[0],
       r: i + 1, lv: levelFor(i + 1), gram: gramOk && (l.pos === 'noun' || l.pos === 'adj') ? 1 : 0,
     };
+    if (lem.gram && lemmaExtOk(l)) lem.gx = 1;
     if (l.gender) lem.g = l.gender;
     if (l.pos === 'noun') lem.an = l.animate ? 1 : 0;
     if (l.sgOnly) lem.sgo = 1;
@@ -221,6 +224,8 @@ export function build(): BuildReport {
     if (l.aspect) lem.asp = l.aspect === 'imperfective' ? 'impf' : 'pf';
     if (lem.gram && l.pos === 'noun') gramNouns++;
     if (lem.gram && l.pos === 'adj') gramAdjs++;
+    if (lem.gx && l.pos === 'noun') extNouns++;
+    if (lem.gx && l.pos === 'adj') extAdjs++;
     lemmas.push(lem);
     forms.push(...fs);
     raws.set(id, l);
@@ -244,13 +249,19 @@ export function build(): BuildReport {
   });
   // Tatoeba: frases curtas que resolvem 100% nos dados (se os dumps estiverem disponíveis)
   let tato = 0;
-  for (const p of loadTatoeba()) {
-    if (tato >= 300) break;
-    if (p.ru.split(/\s+/).length > 9) continue;
+  for (const p of await loadTatoeba()) {
+    if (tato >= 500) break;
+    const nw = p.ru.split(/\s+/).length;
+    if (nw > 9 || nw < 3) continue;
     const res = resolveSentence(p.ru.replace(/ё/g, 'е'), idx, rank);
     if (!res.tokens) continue;
     sentences.push({ id: `s${String(sentences.length + 1).padStart(4, '0')}`, ru: res.ru!, pt: p.pt, src: `tatoeba:${p.id}`, tk: res.tokens });
     tato++;
+  }
+  const sentencesBySource: Record<string, number> = {};
+  for (const s of sentences) {
+    const k = s.src.split(':')[0];
+    sentencesBySource[k] = (sentencesBySource[k] ?? 0) + 1;
   }
   for (const [id, title] of textTitles) {
     const ss = sentences.filter((s) => s.tx === id).map((s) => s.id);
@@ -260,7 +271,7 @@ export function build(): BuildReport {
   const attributions = [
     { name: 'OpenRussian.org (Badestrand/russian-dictionary)', license: 'CC BY-SA 4.0', url: 'https://github.com/Badestrand/russian-dictionary', note: 'Lemas, acentos, tabelas de flexão e glosas em inglês. Derivado do Wiktionary e contribuições da comunidade.' },
     { name: 'FrequencyWords (hermitdave) — OpenSubtitles 2018', license: 'CC BY-SA 4.0 (conteúdo) / MIT (código)', url: 'https://github.com/hermitdave/FrequencyWords', note: 'Ordenação por frequência.' },
-    { name: 'Tatoeba', license: 'CC BY 2.0 FR', url: 'https://tatoeba.org', note: 'Reservado: usado apenas se o pipeline conseguir baixar os dumps (ver DECISIONS.md). Nesta versão as frases são autorais.' },
+    { name: 'Tatoeba', license: 'CC BY 2.0 FR', url: 'https://tatoeba.org', note: tato > 0 ? `${tato} frases ru↔pt (ids tatoeba:N) filtradas para só conter palavras do vocabulário; autores e traduções em tatoeba.org.` : 'Reservado: usado apenas se o pipeline conseguir ler os dumps (ver DECISIONS.md).' },
   ];
 
   const glossSource = { 'autor (pt)': lemmas.length };
@@ -269,29 +280,25 @@ export function build(): BuildReport {
   mkdirSync('public/data', { recursive: true });
   writeFileSync('public/data/content.json', JSON.stringify(content));
 
-  // seed do D1
-  mkdirSync('worker/seed', { recursive: true });
-  const sql: string[] = ['-- GERADO por scripts/pipeline (npm run data). Não editar à mão.', 'DELETE FROM sentence;', 'DELETE FROM form;', 'DELETE FROM lemma;'];
-  for (const l of lemmas)
-    sql.push(`INSERT INTO lemma(id,text,pos,stress_text,gloss_pt,freq_rank,level) VALUES(${sqlq(l.id)},${sqlq(l.t)},${sqlq(l.pos)},${sqlq(l.s)},${sqlq(l.pt)},${l.r},${sqlq(l.lv)});`);
-  for (const f of forms)
-    f.v.forEach((v, i) =>
-      sql.push(`INSERT INTO form(id,lemma_id,form_text,form_stress,"case",number,gender,tense,person,aspect,animacy) VALUES(${sqlq(f.id + '#' + i)},${sqlq(f.l)},${sqlq(stripStress(v))},${sqlq(v)},${sqlq(f.c)},${sqlq(f.n)},${sqlq(f.g)},${sqlq(f.tn)},${sqlq(f.p)},${sqlq(f.as)},${sqlq(f.an)});`));
-  for (const s of sentences)
-    sql.push(`INSERT INTO sentence(id,ru,ru_stress,pt,source) VALUES(${sqlq(s.id)},${sqlq(stripStress(s.ru))},${sqlq(s.ru)},${sqlq(s.pt)},${sqlq(s.src)});`);
-  writeFileSync('worker/seed/content.sql', sql.join('\n') + '\n');
-
   const byPos: Record<string, number> = {};
   for (const l of lemmas) byPos[l.pos] = (byPos[l.pos] ?? 0) + 1;
+  // glosas repetidas (mesmo pt + classe + aspecto) tornam o exercício pt→ru ambíguo
+  const byGloss = new Map<string, string[]>();
+  for (const l of lemmas) {
+    const k = [l.pt.toLowerCase(), l.pos, l.asp ?? ''].join('|');
+    byGloss.set(k, [...(byGloss.get(k) ?? []), l.s]);
+  }
+  const duplicateGlosses = [...byGloss].filter(([, v]) => v.length > 1).map(([k, v]) => `${k.split('|')[0]}: ${v.join(', ')}`);
+  const unreviewedGlosses = chosen.filter((c) => !c.reviewed).length;
   const report: BuildReport = {
-    lemmas: lemmas.length, byPos, forms: forms.length, gramNouns, gramAdjs,
-    sentences: sentences.length, texts: texts.length, skippedLemmas: skipped, rejectedSentences: rejected, glossSource,
+    lemmas: lemmas.length, byPos, forms: forms.length, gramNouns, gramAdjs, gramExtNouns: extNouns, gramExtAdjs: extAdjs,
+    sentences: sentences.length, sentencesBySource, texts: texts.length, skippedLemmas: skipped, duplicateGlosses, unreviewedGlosses,
+    rejectedSentences: rejected, glossSource,
   };
   mkdirSync('data/build', { recursive: true });
   writeFileSync('data/build/report.json', JSON.stringify(report, null, 2));
   // snapshot reproduzível das linhas de origem dos lemas escolhidos (fonte dos testes de aceite)
   writeSourceSubset(chosen.map((c) => c.raw));
-  void canon;
   return report;
 }
 

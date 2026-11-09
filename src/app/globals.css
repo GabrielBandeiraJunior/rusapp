@@ -1,3 +1,37 @@
+/* Fontes autohospedadas (SIL OFL, ver public/fonts/LICENSE-*.txt): o build não depende de rede e o service worker as pré-cacheia. */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url(/fonts/inter-latin-wght-normal.woff2) format('woff2');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url(/fonts/inter-cyrillic-wght-normal.woff2) format('woff2');
+  unicode-range: U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;
+}
+@font-face {
+  font-family: 'Noto Sans';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url(/fonts/noto-sans-latin-wght-normal.woff2) format('woff2');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face {
+  font-family: 'Noto Sans';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url(/fonts/noto-sans-cyrillic-wght-normal.woff2) format('woff2');
+  unicode-range: U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -32,7 +66,7 @@ html, body { background: rgb(var(--bg)); color: rgb(var(--ink)); transition: bac
 html[data-result='bad'], html[data-result='bad'] body { background: color-mix(in srgb, rgb(var(--bad)) 20%, rgb(var(--bg))); }
 html[data-result='ok'], html[data-result='ok'] body { background: color-mix(in srgb, rgb(var(--good)) 20%, rgb(var(--bg))); }
 body {
-  font-family: var(--font-sans), system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   font-feature-settings: 'cv11', 'ss03';
   letter-spacing: -0.011em;
   -webkit-font-smoothing: antialiased;
@@ -40,7 +74,7 @@ body {
   overscroll-behavior-y: none;
 }
 button, a { touch-action: manipulation; }
-.ru { font-family: var(--font-ru), 'Segoe UI', sans-serif; font-feature-settings: 'locl', 'mark', 'mkmk'; letter-spacing: 0; font-kerning: normal; }
+.ru { font-family: 'Noto Sans', 'Segoe UI', sans-serif; font-feature-settings: 'locl', 'mark', 'mkmk'; letter-spacing: 0; font-kerning: normal; }
 .safe-top { padding-top: env(safe-area-inset-top); }
 .safe-bottom { padding-bottom: env(safe-area-inset-bottom); }
 input, select, textarea { font-size: 16px; } /* evita zoom automático no iOS */

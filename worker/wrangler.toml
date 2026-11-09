@@ -2,15 +2,12 @@ name = "rusapp-api"
 main = "src/index.ts"
 compatibility_date = "2025-01-01"
 
-# Secrets (NÃO ficam aqui): APP_TOKEN, TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID  → ver DEPLOY.md
+# Segredo (NÃO fica aqui): APP_TOKEN  → ver DEPLOY.md
 [vars]
-ALLOWED_ORIGIN = "*"   # em produção, troque pela URL do Pages (ex.: https://rusapp.pages.dev)
+ALLOWED_ORIGIN = "https://rusapp.pages.dev"   # em produção, troque pela URL do Pages (ex.: https://rusapp.pages.dev)
 
 [[d1_databases]]
 binding = "DB"
 database_name = "rusapp"
-database_id = "00000000-0000-0000-0000-000000000000"   # substitua pelo id retornado por `wrangler d1 create rusapp`
+database_id = "984141b1-413c-4b52-bfe4-5f5bc30763c4"   # substitua pelo id retornado por `wrangler d1 create rusapp`
 migrations_dir = "migrations"
-
-[triggers]
-crons = ["*/30 * * * *"]   # lembretes externos (só agem se ativados no app e com TELEGRAM_* definidos)

@@ -1,28 +1,23 @@
 import 'fake-indexeddb/auto';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import { dayKey } from '../shared/days';
 import { Store } from '../src/lib/db';
 import { syncOnce } from '../src/lib/sync';
-import { decideReminder, reminderText } from '../worker/src/reminders';
 import { makeWorker } from './helpers';
-
-const TZ = 'America/Sao_Paulo';
-const at = (day: string, hh: number, mm = 0) => Date.parse(`${day}T${String(hh).padStart(2, '0')}:${String(mm).padStart(2, '0')}:00-03:00`);
 
 describe('Worker + D1 emulado (Miniflare)', () => {
   let w: Awaited<ReturnType<typeof makeWorker>>;
   beforeAll(async () => {
-    w = await makeWorker({ telegram: true });
+    w = await makeWorker();
   });
   afterAll(async () => {
     await w.mf.dispose();
   });
 
-  const post = (body: unknown, token: string | null = 'secret-token') =>
+  const post = (body: unknown, token: string | null = 'secret-token', raw?: string) =>
     w.mf.dispatchFetch(`${w.base}/api/sync`, {
       method: 'POST',
       headers: { 'content-type': 'application/json', ...(token ? { authorization: `Bearer ${token}` } : {}) },
-      body: JSON.stringify(body),
+      body: raw ?? JSON.stringify(body),
     });
 
   it('health é público; sync exige token (sem token / token errado → 401)', async () => {
@@ -39,19 +34,38 @@ describe('Worker + D1 emulado (Miniflare)', () => {
     expect(r.headers.get('access-control-allow-headers')).toContain('authorization');
   });
 
+  it('corpo inválido nunca derruba o Worker (400/413/200, nunca 500)', async () => {
+    expect((await post(null, 'secret-token', 'isto não é json')).status).toBe(400);
+    expect((await post(null, 'secret-token', 'null')).status).toBe(400);
+    expect((await post(null, 'secret-token', '[1,2]')).status).toBe(400);
+    expect((await post({ reviews: 'x', settings: { a: 1 }, cursor: 5 })).status).toBe(200); // tipos errados são ignorados
+    expect((await post({ reviews: [null, 7, { id: 'a' }], settings: [null, { key: 'x y', value: 'v', updated_at: 1 }] })).status).toBe(200);
+    const big = await post(null, 'secret-token', JSON.stringify({ pad: 'x'.repeat(1_100_000) }));
+    expect(big.status).toBe(413);
+  });
+
   it('é idempotente por id de revisão e valida entradas', async () => {
     const rev = { id: 'x:1:0', card: 'vprod|n:дом', rating: 3, ts: 1000, resp: 'дом', correct: 1, dev: 'x' };
-    await post({ reviews: [rev, rev, { ...rev, id: 'bad', rating: 9 }] });
+    await post({ reviews: [rev, rev, { ...rev, id: 'bad', rating: 9 }, { ...rev, id: 'frac', rating: 2.5 }] });
     await post({ reviews: [rev] });
-    const n = await w.db.prepare('SELECT COUNT(*) AS n FROM review_log WHERE id IN (?1,?2)').bind('x:1:0', 'bad').first<{ n: number }>();
+    const n = await w.db.prepare('SELECT COUNT(*) AS n FROM review_log WHERE id IN (?1,?2,?3)').bind('x:1:0', 'bad', 'frac').first<{ n: number }>();
     expect(n?.n).toBe(1);
   });
 
-  it('configurações: last-writer-wins por timestamp', async () => {
+  it('configurações: last-writer-wins por timestamp; chaves inválidas são ignoradas', async () => {
     await post({ settings: [{ key: 'dailyGoal', value: '30', updated_at: 2000 }] });
     await post({ settings: [{ key: 'dailyGoal', value: '10', updated_at: 1000 }] }); // mais antigo → ignorado
+    await post({ settings: [{ key: 'bad key!', value: '1', updated_at: 5 }] });
     const row = await w.db.prepare("SELECT value FROM setting WHERE key='dailyGoal'").first<{ value: string }>();
     expect(row?.value).toBe('30');
+    expect(await w.db.prepare("SELECT 1 AS x FROM setting WHERE key='bad key!'").first()).toBeNull();
+  });
+
+  it('a migração 0002 removeu lembretes, cache de cartões e tabelas de conteúdo', async () => {
+    const t = await w.db.prepare("SELECT name FROM sqlite_master WHERE type='table'").all<{ name: string }>();
+    const names = t.results.map((r) => r.name);
+    for (const gone of ['reminder_log', 'card', 'lemma', 'form', 'sentence']) expect(names).not.toContain(gone);
+    for (const kept of ['review_log', 'setting']) expect(names).toContain(kept);
   });
 
   it('dois aparelhos simulados convergem sem perder revisões (offline → reenvio)', async () => {
@@ -91,11 +105,8 @@ describe('Worker + D1 emulado (Miniflare)', () => {
     expect(await A.getSetting('dailyGoal')).toBe('25');
     expect(await B.getSetting('dailyGoal')).toBe('25');
     expect((await A.unsyncedReviews()).length).toBe(0);
-    // servidor tem tudo e o cartão derivado
-    const total = await w.db.prepare("SELECT COUNT(*) AS n FROM review_log WHERE device IN (?1,?2)").bind(A.deviceId, B.deviceId).first<{ n: number }>();
+    const total = await w.db.prepare('SELECT COUNT(*) AS n FROM review_log WHERE device IN (?1,?2)').bind(A.deviceId, B.deviceId).first<{ n: number }>();
     expect(total?.n).toBe(5);
-    const card = await w.db.prepare("SELECT id FROM card WHERE id='vprod|n:вода'").first();
-    expect(card).toBeTruthy();
     A.close(); B.close();
   });
 
@@ -111,66 +122,27 @@ describe('Worker + D1 emulado (Miniflare)', () => {
     for (const r of await A.allReviews()) expect(ids.has(r.id)).toBe(true);
     A.close(); C.close();
   });
-
-  describe('lembretes via Telegram (API mockada)', () => {
-    const day = '2025-08-10';
-    const setSettings = async (kv: Record<string, string>) => {
-      for (const [k, v] of Object.entries(kv))
-        await w.db.prepare('INSERT INTO setting(key,value,updated_at,seq) VALUES(?1,?2,1,(SELECT COALESCE(MAX(seq),0)+1 FROM setting)) ON CONFLICT(key) DO UPDATE SET value=excluded.value').bind(k, v).run();
-    };
-    const tick = async (when: number) => {
-      const wk = await w.mf.getWorker();
-      await wk.scheduled({ scheduledTime: new Date(when), cron: '*/30 * * * *' } as never);
-    };
-    const telegram = () => w.calls.filter((c) => c.url.startsWith('https://api.telegram.org/botBOT:TOKEN/sendMessage'));
-
-    it('desligado por padrão: não envia nada', async () => {
-      w.calls.length = 0;
-      await tick(at(day, 20));
-      expect(telegram()).toHaveLength(0);
-    });
-
-    it('envia lembrete diário no horário; não repete; respeita máx. 2/dia e silêncio se já estudou', async () => {
-      await setSettings({ remindEnabled: '1', remindTime: '19:00', tz: TZ, streakAlertHours: '3' });
-      // ofensiva de 3 dias (07, 08, 09) para ativar o alerta de risco
-      for (const d of ['2025-08-07', '2025-08-08', '2025-08-09'])
-        await w.db.prepare('INSERT INTO review_log(id,card_id,rating,ts,response_text,correct,device,seq) VALUES(?1,?2,3,?3,"",1,"t",(SELECT COALESCE(MAX(seq),0)+1 FROM review_log))').bind('r' + d, 'vprod|n:x', at(d, 10)).run();
-      w.calls.length = 0;
-      await tick(at(day, 18, 30)); // antes do horário
-      expect(telegram()).toHaveLength(0);
-      await tick(at(day, 19, 0));
-      expect(telegram()).toHaveLength(1);
-      expect((telegram()[0].body as { chat_id: string }).chat_id).toBe('4242');
-      await tick(at(day, 19, 30)); // já enviou o diário; ainda longe do alerta de ofensiva
-      expect(telegram()).toHaveLength(1);
-      await tick(at(day, 21, 0)); // janela do alerta de ofensiva (3 h antes da meia-noite)
-      expect(telegram()).toHaveLength(2);
-      expect(String((telegram()[1].body as { text: string }).text)).toMatch(/3/);
-      await tick(at(day, 22, 0)); // limite de 2/dia
-      expect(telegram()).toHaveLength(2);
-    });
-
-    it('não envia se já estudou hoje', async () => {
-      const d2 = '2025-08-11';
-      await w.db.prepare('INSERT INTO review_log(id,card_id,rating,ts,response_text,correct,device,seq) VALUES("today","vprod|n:x",3,?1,"",1,"t",(SELECT COALESCE(MAX(seq),0)+1 FROM review_log))').bind(at(d2, 9)).run();
-      w.calls.length = 0;
-      await tick(at(d2, 21, 30));
-      expect(telegram()).toHaveLength(0);
-    });
-  });
 });
 
-describe('regras de lembrete (puras)', () => {
-  const base = { tz: TZ, enabled: true, remindTime: '19:00', streakAlertHours: 3, freeze: false, dueCount: 5, sentToday: [] as ('daily' | 'streak')[] };
-  it('textos variam entre dias e são pt-BR', () => {
-    const set = new Set(Array.from({ length: 12 }, (_, i) => reminderText('daily', `2025-08-${10 + i}`, { due: 3, streak: 0 })));
-    expect(set.size).toBeGreaterThan(2);
-    expect(reminderText('streak', '2025-08-10', { due: 0, streak: 7 })).toMatch(/\d/);
-  });
-  it('sem ofensiva não há alerta de risco, só o diário', () => {
-    const now = at('2025-08-10', 22);
-    expect(decideReminder({ ...base, now, studyDays: [] })).toBe('daily');
-    expect(decideReminder({ ...base, now, studyDays: [], enabled: false })).toBeNull();
-    expect(dayKey(now, TZ)).toBe('2025-08-10');
+describe('backup (exportar / importar)', () => {
+  it('ida e volta entre aparelhos, mesclando sem duplicar', async () => {
+    const A = await Store.open('bkA-' + Math.random());
+    const B = await Store.open('bkB-' + Math.random());
+    const t0 = Date.UTC(2025, 5, 1, 12);
+    await A.recordReview('vprod|n:дом', 3, true, 'дом', t0);
+    await A.recordReview('vprod|n:дом', 3, true, 'дом', t0 + 86400e3);
+    await A.setSetting('dailyGoal', '33', t0);
+    await B.recordReview('vprod|n:вода', 3, true, 'вода', t0);
+    const file = JSON.parse(JSON.stringify(await A.exportBackup()));
+    expect(file.app).toBe('rusapp');
+    const r = await B.importBackup(file);
+    expect(r).toEqual({ reviews: 2, settings: 1 });
+    expect((await B.allReviews()).length).toBe(3);
+    expect((await B.unsyncedReviews()).length).toBe(3); // as importadas sobem no próximo sync
+    expect((await B.getCard('vprod|n:дом'))?.fsrs.reps).toBe(2);
+    expect(await B.getSetting('dailyGoal')).toBe('33');
+    expect(await B.importBackup(file)).toEqual({ reviews: 0, settings: 0 }); // idempotente
+    await expect(B.importBackup({ app: 'outro' })).rejects.toThrow(/inválido/);
+    A.close(); B.close();
   });
 });

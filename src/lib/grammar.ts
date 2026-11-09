@@ -1,7 +1,9 @@
 // Gramática gerativa: o usuário DIGITA a forma; validação contra a tabela `form` (dados do OpenRussian).
 // As regras aqui só EXPLICAM terminações — nenhuma forma é produzida por regra ou por LLM.
+// Cada regra traz um padrão (`re`) de terminação: ela só é exibida se a forma REAL dos dados a cumpre;
+// caso contrário o app diz que é exceção. Assim uma explicação nunca contradiz os dados.
 import type { Case, Form, Gender, Lemma, Num } from '../../shared/types';
-import { ACUTE, normalizeAnswer, stressIndex, stripStress, syllableCount } from '../../shared/russian';
+import { normalizeAnswer, stressIndex, stripStress, syllableCount } from '../../shared/russian';
 import type { ContentIndex } from './content';
 
 export const CASE_PT: Record<Case, string> = {
@@ -30,8 +32,12 @@ export function parseRef(ref: string): GramKey {
   return k;
 }
 
-/** Etapas do currículo (menor = antes). */
+const EXT_STAGE: Partial<Record<Case, number>> = { prep: 0, dat: 1, inst: 2 };
+
+/** Etapas do currículo (menor = antes). Casos estendidos vêm depois: preposicional → dativo → instrumental. */
 export function stageOf(l: Lemma, k: GramKey): number {
+  const ext = EXT_STAGE[k.c];
+  if (ext !== undefined) return (l.pos === 'noun' ? 9 : 12) + ext;
   if (l.pos === 'noun') {
     if (k.c === 'nom') return 1;
     if (k.c === 'acc' && k.n === 'sg') return 2;
@@ -42,13 +48,23 @@ export function stageOf(l: Lemma, k: GramKey): number {
   return k.c === 'nom' ? 6 : k.c === 'acc' ? 7 : 8;
 }
 
-export type GramFocus = 'all' | 'nom' | 'acc' | 'gen';
+export type GramFocus = 'all' | 'nom' | 'acc' | 'gen' | 'prep' | 'dat' | 'inst';
 
-/** Todas as perguntas possíveis, em ordem de currículo e frequência. */
+const BASE_CASES: Case[] = ['nom', 'acc', 'gen'];
+const EXT_CASES: Case[] = ['prep', 'dat', 'inst'];
+
+const keysCache = new WeakMap<ContentIndex, Map<GramFocus, GramKey[]>>();
+
+/** Todas as perguntas possíveis, em ordem de currículo e frequência (memoizado por índice de conteúdo). */
 export function gramKeys(ix: ContentIndex, focus: GramFocus = 'all'): GramKey[] {
+  let byFocus = keysCache.get(ix);
+  if (!byFocus) keysCache.set(ix, (byFocus = new Map()));
+  const hit = byFocus.get(focus);
+  if (hit) return hit;
   const out: { k: GramKey; stage: number; rank: number }[] = [];
   for (const l of ix.content.lemmas) {
     if (!l.gram) continue;
+    const cases = l.gx ? [...BASE_CASES, ...EXT_CASES] : BASE_CASES;
     const push = (k: GramKey) => {
       if (focus !== 'all' && k.c !== focus) return;
       out.push({ k, stage: stageOf(l, k), rank: l.r });
@@ -56,15 +72,14 @@ export function gramKeys(ix: ContentIndex, focus: GramFocus = 'all'): GramKey[] 
     if (l.pos === 'noun') {
       const nums: Num[] = l.plo ? ['pl'] : l.sgo ? ['sg'] : ['sg', 'pl'];
       for (const n of nums)
-        for (const c of ['nom', 'acc', 'gen'] as Case[]) {
+        for (const c of cases) {
           if (c === 'nom' && (n === 'sg' || l.plo)) continue; // nominativo singular = forma do dicionário
-          if (c === 'nom' && l.sgo) continue;
           push({ lemma: l.id, c, n });
         }
     } else if (l.pos === 'adj') {
-      for (const c of ['nom', 'acc', 'gen'] as Case[]) {
+      for (const c of cases) {
         for (const g of ['m', 'f', 'n'] as Gender[]) {
-          if (c === 'nom' && g === 'm') continue; // acusativo neutro: sem distinção de animacidade (forma(s) do dicionário)
+          if (c === 'nom' && g === 'm') continue; // = forma do dicionário
           if (c === 'acc' && g === 'm') {
             push({ lemma: l.id, c, n: 'sg', g, an: 'inan' });
             push({ lemma: l.id, c, n: 'sg', g, an: 'anim' });
@@ -77,7 +92,9 @@ export function gramKeys(ix: ContentIndex, focus: GramFocus = 'all'): GramKey[] 
       }
     }
   }
-  return out.sort((a, b) => a.stage - b.stage || a.rank - b.rank).map((x) => x.k);
+  const keys = out.sort((a, b) => a.stage - b.stage || a.rank - b.rank).map((x) => x.k);
+  byFocus.set(focus, keys);
+  return keys;
 }
 
 export function findForm(ix: ContentIndex, k: GramKey): Form | undefined {
@@ -110,7 +127,7 @@ export function promptFor(ix: ContentIndex, k: GramKey): { lemma: Lemma; line: s
 }
 
 // ---------- explicações ----------
-type Cls = 'm-hard' | 'm-j' | 'm-soft' | 'm-a' | 'f-a' | 'f-ya' | 'f-iya' | 'f-soft' | 'n-o' | 'n-e' | 'n-ie' | 'n-mya' | 'x';
+export type Cls = 'm-hard' | 'm-j' | 'm-soft' | 'm-a' | 'f-a' | 'f-ya' | 'f-iya' | 'f-soft' | 'n-o' | 'n-e' | 'n-ie' | 'n-mya' | 'x';
 
 export function nounClass(l: Lemma): Cls {
   const t = l.t;
@@ -121,77 +138,161 @@ export function nounClass(l: Lemma): Cls {
   return 'x';
 }
 
-const SPELL7 = 'г, к, х, ж, ш, ч, щ';
+export const SPELL7 = 'г, к, х, ж, ш, ч, щ';
 
-const NOUN_RULES: Partial<Record<Cls, Record<string, string>>> = {
+/** Regra de terminação: `text` é o que o aluno lê; `re` é testado contra a forma dos dados (sem acento, ё≡е). */
+export interface EndingRule {
+  text: string;
+  re?: RegExp;
+}
+const R = (text: string, re?: RegExp): EndingRule => ({ text, re });
+const ZERO = /[^аеиоуыэюя]$/; // sem terminação: a forma acaba em consoante, -ь ou -й
+
+const HARD_PL = {
+  'dat.pl': R('Plural de radical duro: dativo -ам, instrumental -ами, preposicional -ах.', /ам$/),
+  'inst.pl': R('Plural de radical duro: dativo -ам, instrumental -ами, preposicional -ах.', /ами$/),
+  'prep.pl': R('Plural de radical duro: dativo -ам, instrumental -ами, preposicional -ах.', /ах$/),
+};
+const SOFT_PL = {
+  'dat.pl': R('Plural de radical mole: dativo -ям, instrumental -ями, preposicional -ях.', /ям$/),
+  'inst.pl': R('Plural de radical mole: dativo -ям, instrumental -ями, preposicional -ях.', /ями$/),
+  'prep.pl': R('Plural de radical mole: dativo -ям, instrumental -ями, preposicional -ях.', /ях$/),
+};
+const MIXED_PL = {
+  'dat.pl': R('Plural: dativo -ам (-ям se o radical é mole), instrumental -ами (-ями), preposicional -ах (-ях).', /(ам|ям)$/),
+  'inst.pl': R('Plural: dativo -ам (-ям se o radical é mole), instrumental -ами (-ями), preposicional -ах (-ях).', /(ами|ями)$/),
+  'prep.pl': R('Plural: dativo -ам (-ям se o radical é mole), instrumental -ами (-ями), preposicional -ах (-ях).', /(ах|ях)$/),
+};
+const IYA_PL = {
+  'dat.pl': R('Em -ие/-ия o plural é -иям, -иями, -иях.', /иям$/),
+  'inst.pl': R('Em -ие/-ия o plural é -иям, -иями, -иях.', /иями$/),
+  'prep.pl': R('Em -ие/-ия o plural é -иях.', /иях$/),
+};
+
+export const NOUN_RULES: Partial<Record<Cls, Record<string, EndingRule>>> = {
   'm-hard': {
-    'nom.pl': `Masculino terminado em consoante: plural em -ы (-и depois de ${SPELL7}). Alguns têm plural acentuado na terminação: -а́ ou -я́ (дом → дома́).`,
-    'gen.sg': 'Masculino terminado em consoante: genitivo singular = + а.',
-    'gen.pl': 'Masculino terminado em consoante: genitivo plural = + ов (ev/ёв após ц e quando átono; + ей após ж, ш, ч, щ).',
-    'acc.sg': 'Masculino: inanimado → acusativo = nominativo; animado → acusativo = genitivo (+ а).',
+    'nom.pl': R(`Masculino terminado em consoante: plural em -ы (-и depois de ${SPELL7}). Alguns têm plural acentuado na terminação: -а́ ou -я́.`, /(ы|и|а|я)$/),
+    'gen.sg': R('Masculino terminado em consoante: genitivo singular = +а.', /(а|я)$/),
+    'gen.pl': R('Masculino terminado em consoante: genitivo plural = +ов (-ев depois de ц átono; -ей depois de ж, ш, ч, щ).', /(ов|ев|ей)$/),
+    'dat.sg': R('Masculino terminado em consoante: dativo singular = +у.', /у$/),
+    'inst.sg': R('Masculino terminado em consoante: instrumental singular = +ом (-ем depois de ж, ш, ч, щ, ц átonos).', /(ом|ем)$/),
+    'prep.sg': R('Masculino terminado em consoante: preposicional singular = +е. Alguns têm a forma locativa em -у́ depois de в e на.', /(е|у)$/),
+    ...HARD_PL,
   },
   'm-j': {
-    'nom.pl': 'Masculino em -й: -й → -и.', 'gen.sg': 'Masculino em -й: -й → -я.', 'gen.pl': 'Masculino em -й: -й → -ев (-ёв sob acento).',
-    'acc.sg': 'Masculino: inanimado → acusativo = nominativo; animado → acusativo = genitivo (-й → -я).',
+    'nom.pl': R('Masculino em -й: -й → -и.', /и$/), 'gen.sg': R('Masculino em -й: -й → -я.', /я$/), 'gen.pl': R('Masculino em -й: -й → -ев (-ёв sob acento).', /ев$/),
+    'dat.sg': R('Masculino em -й: -й → -ю.', /ю$/), 'inst.sg': R('Masculino em -й: -й → -ем (-ём sob acento).', /ем$/), 'prep.sg': R('Masculino em -й: -й → -е.', /е$/),
+    ...SOFT_PL,
   },
   'm-soft': {
-    'nom.pl': 'Masculino em -ь: -ь → -и.', 'gen.sg': 'Masculino em -ь: -ь → -я.', 'gen.pl': 'Masculino em -ь: -ь → -ей.',
-    'acc.sg': 'Masculino: inanimado → acusativo = nominativo; animado → acusativo = genitivo (-ь → -я).',
+    'nom.pl': R('Masculino em -ь: -ь → -и.', /и$/), 'gen.sg': R('Masculino em -ь: -ь → -я.', /я$/), 'gen.pl': R('Masculino em -ь: -ь → -ей.', /ей$/),
+    'dat.sg': R('Masculino em -ь: -ь → -ю.', /ю$/), 'inst.sg': R('Masculino em -ь: -ь → -ем (-ём sob acento).', /ем$/), 'prep.sg': R('Masculino em -ь: -ь → -е.', /е$/),
+    ...SOFT_PL,
   },
   'm-a': {
-    'nom.pl': `Masculino em -а/-я declina como feminino: -а → -ы (-и depois de ${SPELL7}); -я → -и.`,
-    'gen.sg': `Masculino em -а/-я declina como feminino: -а → -ы (-и depois de ${SPELL7}); -я → -и.`,
-    'gen.pl': 'Masculino em -а/-я: genitivo plural sem terminação (zero), como o feminino.',
-    'acc.sg': 'Terminação -а → -у; -я → -ю (como o feminino).',
+    'nom.pl': R(`Masculino em -а/-я declina como feminino: -а → -ы (-и depois de ${SPELL7}); -я → -и.`, /(ы|и)$/),
+    'gen.sg': R(`Masculino em -а/-я declina como feminino: -а → -ы (-и depois de ${SPELL7}); -я → -и.`, /(ы|и)$/),
+    'gen.pl': R('Masculino em -а/-я: genitivo plural sem terminação (zero), como o feminino.', ZERO),
+    'dat.sg': R('Masculino em -а/-я declina como feminino: dativo -а/-я → -е.', /е$/),
+    'inst.sg': R('Masculino em -а/-я declina como feminino: instrumental -а → -ой; -я → -ей.', /(ой|ей)$/),
+    'prep.sg': R('Masculino em -а/-я declina como feminino: preposicional -а/-я → -е.', /е$/),
+    ...MIXED_PL,
   },
   'f-a': {
-    'nom.pl': `Feminino em -а: -а → -ы (-и depois de ${SPELL7}).`, 'gen.sg': `Feminino em -а: -а → -ы (-и depois de ${SPELL7}).`,
-    'gen.pl': 'Feminino em -а: genitivo plural sem terminação (zero): remove o -а; costuma surgir uma vogal fugitiva (о/е) entre consoantes.',
-    'acc.sg': 'Feminino em -а: -а → -у.',
+    'nom.pl': R(`Feminino em -а: -а → -ы (-и depois de ${SPELL7}).`, /(ы|и)$/), 'gen.sg': R(`Feminino em -а: -а → -ы (-и depois de ${SPELL7}).`, /(ы|и)$/),
+    'gen.pl': R('Feminino em -а: genitivo plural sem terminação (zero): remove o -а; costuma surgir uma vogal fugitiva (о/е) entre consoantes.', ZERO),
+    'dat.sg': R('Feminino em -а: dativo -а → -е.', /е$/),
+    'inst.sg': R('Feminino em -а: instrumental -а → -ой (-ей depois de ж, ш, ч, щ, ц átonos).', /(ой|ей)$/),
+    'prep.sg': R('Feminino em -а: preposicional -а → -е.', /е$/),
+    ...HARD_PL,
   },
   'f-ya': {
-    'nom.pl': 'Feminino em -я: -я → -и.', 'gen.sg': 'Feminino em -я: -я → -и.',
-    'gen.pl': 'Feminino em -я: genitivo plural em -ь, -й ou -ей (depende do radical).', 'acc.sg': 'Feminino em -я: -я → -ю.',
+    'nom.pl': R('Feminino em -я: -я → -и.', /и$/), 'gen.sg': R('Feminino em -я: -я → -и.', /и$/),
+    'gen.pl': R('Feminino em -я: genitivo plural em -ь ou -й (depende do radical).', /(ь|й)$/),
+    'dat.sg': R('Feminino em -я: dativo -я → -е.', /е$/), 'inst.sg': R('Feminino em -я: instrumental -я → -ей (-ёй sob acento).', /ей$/), 'prep.sg': R('Feminino em -я: preposicional -я → -е.', /е$/),
+    ...SOFT_PL,
   },
   'f-iya': {
-    'nom.pl': 'Feminino em -ия: -ия → -ии.', 'gen.sg': 'Feminino em -ия: -ия → -ии.', 'gen.pl': 'Feminino em -ия: -ия → -ий.', 'acc.sg': 'Feminino em -ия: -ия → -ию.',
+    'nom.pl': R('Feminino em -ия: -ия → -ии.', /ии$/), 'gen.sg': R('Feminino em -ия: -ия → -ии.', /ии$/), 'gen.pl': R('Feminino em -ия: -ия → -ий.', /ий$/),
+    'dat.sg': R('Feminino em -ия: dativo -ия → -ии.', /ии$/), 'inst.sg': R('Feminino em -ия: instrumental -ия → -ией.', /ией$/), 'prep.sg': R('Feminino em -ия: preposicional -ия → -ии.', /ии$/),
+    ...IYA_PL,
   },
   'f-soft': {
-    'nom.pl': 'Feminino em -ь: -ь → -и.', 'gen.sg': 'Feminino em -ь: -ь → -и.', 'gen.pl': 'Feminino em -ь: -ь → -ей.',
-    'acc.sg': 'Feminino em -ь: acusativo = nominativo.',
+    'nom.pl': R('Feminino em -ь: -ь → -и.', /и$/), 'gen.sg': R('Feminino em -ь: -ь → -и.', /и$/), 'gen.pl': R('Feminino em -ь: -ь → -ей.', /ей$/),
+    'dat.sg': R('Feminino em -ь: dativo -ь → -и.', /и$/), 'inst.sg': R('Feminino em -ь: instrumental -ь → -ью.', /ью$/), 'prep.sg': R('Feminino em -ь: preposicional -ь → -и.', /и$/),
+    ...SOFT_PL,
   },
   'n-o': {
-    'nom.pl': 'Neutro em -о: -о → -а.', 'gen.sg': 'Neutro em -о: -о → -а.',
-    'gen.pl': 'Neutro em -о: genitivo plural sem terminação (zero); costuma surgir vogal fugitiva (о/е).', 'acc.sg': 'Neutro: acusativo = nominativo.',
+    'nom.pl': R('Neutro em -о: -о → -а.', /а$/), 'gen.sg': R('Neutro em -о: -о → -а.', /а$/),
+    'gen.pl': R('Neutro em -о: genitivo plural sem terminação (zero); costuma surgir vogal fugitiva (о/е).', ZERO),
+    'dat.sg': R('Neutro em -о: dativo -о → -у.', /у$/), 'inst.sg': R('Neutro em -о: instrumental -о → -ом.', /ом$/), 'prep.sg': R('Neutro em -о: preposicional -о → -е.', /е$/),
+    ...HARD_PL,
   },
   'n-e': {
-    'nom.pl': 'Neutro em -е: -е → -я.', 'gen.sg': 'Neutro em -е: -е → -я.', 'gen.pl': 'Neutro em -е: genitivo plural em -й, -ь ou -ей.', 'acc.sg': 'Neutro: acusativo = nominativo.',
+    'nom.pl': R('Neutro em -е: -е → -я.', /я$/), 'gen.sg': R('Neutro em -е: -е → -я.', /я$/), 'gen.pl': R('Neutro em -е: genitivo plural em -й ou -ь.', /(й|ь)$/),
+    'dat.sg': R('Neutro em -е: dativo -е → -ю.', /ю$/), 'inst.sg': R('Neutro em -е: instrumental -е → -ем (-ём sob acento).', /ем$/), 'prep.sg': R('Neutro em -е: o preposicional singular mantém o -е.', /е$/),
+    ...SOFT_PL,
   },
   'n-ie': {
-    'nom.pl': 'Neutro em -ие: -ие → -ия.', 'gen.sg': 'Neutro em -ие: -ие → -ия.', 'gen.pl': 'Neutro em -ие: -ие → -ий.', 'acc.sg': 'Neutro: acusativo = nominativo.',
+    'nom.pl': R('Neutro em -ие: -ие → -ия.', /ия$/), 'gen.sg': R('Neutro em -ие: -ие → -ия.', /ия$/), 'gen.pl': R('Neutro em -ие: -ие → -ий.', /ий$/),
+    'dat.sg': R('Neutro em -ие: dativo -ие → -ию.', /ию$/), 'inst.sg': R('Neutro em -ие: instrumental -ие → -ием.', /ием$/), 'prep.sg': R('Neutro em -ие: preposicional -ие → -ии.', /ии$/),
+    ...IYA_PL,
   },
   'n-mya': {
-    'nom.pl': 'Neutros em -мя: plural em -ена́.', 'gen.sg': 'Neutros em -мя: -мя → -мени.',
-    'gen.pl': 'Neutros em -мя: -мя → -мён/-мен.', 'acc.sg': 'Neutro: acusativo = nominativo.',
+    'nom.pl': R('Neutros em -мя: plural em -ена́.', /ена$/), 'gen.sg': R('Neutros em -мя: -мя → -мени.', /мени$/), 'gen.pl': R('Neutros em -мя: -мя → -мён/-мен.', /мен$/),
+    'dat.sg': R('Neutros em -мя: dativo -мя → -мени.', /мени$/), 'inst.sg': R('Neutros em -мя: instrumental -мя → -менем.', /менем$/), 'prep.sg': R('Neutros em -мя: preposicional -мя → -мени.', /мени$/),
+    'dat.pl': R('Neutros em -мя: plural -мена́м, -мена́ми, -мена́х.', /менам$/), 'inst.pl': R('Neutros em -мя: plural -мена́м, -мена́ми, -мена́х.', /менами$/), 'prep.pl': R('Neutros em -мя: plural -мена́м, -мена́ми, -мена́х.', /менах$/),
   },
 };
 
-const ADJ_NOM: Record<string, string> = {
-  'm.sg': 'Masc. sg.: -ый / -ий / -ой (forma do dicionário).', 'f.sg': 'Fem. sg. nominativo: -ый → -ая (-ий → -яя).',
-  'n.sg': 'Neutro sg. nominativo: -ый → -ое (-ий → -ее).', 'pl': 'Plural nominativo: -ый → -ые (-ий/-ой → -ие/-ые).',
+const ADJ_SPELL = 'Depois de г, к, х, ж, ш, ч, щ escreve-se и no lugar de ы; depois de sibilantes e de radical mole usam-se as terminações em -е/-и.';
+export const ADJ_RULES: Record<string, EndingRule> = {
+  'nom.m.sg': R('Masc. sg.: -ый / -ий / -ой (forma do dicionário).'),
+  'nom.f.sg': R('Fem. sg. nominativo: -ый → -ая (-ий → -яя).', /(ая|яя)$/),
+  'nom.n.sg': R('Neutro sg. nominativo: -ый → -ое (-ий → -ее).', /(ое|ее)$/),
+  'nom.pl': R('Plural nominativo: -ый → -ые (-ий/-ой → -ие/-ые).', /(ые|ие)$/),
+  'gen.m.sg': R('Genitivo masc./neutro sg.: -ого (-его depois de sibilantes ou radical mole); o г lê-se [в].', /(ого|его)$/),
+  'gen.n.sg': R('Genitivo masc./neutro sg.: -ого (-его depois de sibilantes ou radical mole); o г lê-se [в].', /(ого|его)$/),
+  'gen.f.sg': R('Genitivo fem. sg.: -ой (-ей).', /(ой|ей)$/),
+  'gen.pl': R('Genitivo plural: -ых (-их depois de г, к, х, ж, ш, ч, щ e radical mole).', /(ых|их)$/),
+  'acc.f.sg': R('Acusativo feminino: -ая → -ую (-яя → -юю).', /(ую|юю)$/),
+  'dat.m.sg': R('Dativo masc./neutro sg.: -ому (-ему depois de sibilantes ou radical mole).', /(ому|ему)$/),
+  'dat.n.sg': R('Dativo masc./neutro sg.: -ому (-ему depois de sibilantes ou radical mole).', /(ому|ему)$/),
+  'dat.f.sg': R('Dativo fem. sg.: -ой (-ей).', /(ой|ей)$/),
+  'dat.pl': R('Dativo plural: -ым (-им depois de г, к, х, ж, ш, ч, щ e radical mole).', /(ым|им)$/),
+  'inst.m.sg': R('Instrumental masc./neutro sg.: -ым (-им depois de г, к, х, ж, ш, ч, щ e radical mole).', /(ым|им)$/),
+  'inst.n.sg': R('Instrumental masc./neutro sg.: -ым (-им depois de г, к, х, ж, ш, ч, щ e radical mole).', /(ым|им)$/),
+  'inst.f.sg': R('Instrumental fem. sg.: -ой (-ей).', /(ой|ей)$/),
+  'inst.pl': R('Instrumental plural: -ыми (-ими depois de г, к, х, ж, ш, ч, щ e radical mole).', /(ыми|ими)$/),
+  'prep.m.sg': R('Preposicional masc./neutro sg.: -ом (-ем depois de sibilantes ou radical mole).', /(ом|ем)$/),
+  'prep.n.sg': R('Preposicional masc./neutro sg.: -ом (-ем depois de sibilantes ou radical mole).', /(ом|ем)$/),
+  'prep.f.sg': R('Preposicional fem. sg.: -ой (-ей).', /(ой|ей)$/),
+  'prep.pl': R('Preposicional plural: -ых (-их depois de г, к, х, ж, ш, ч, щ e radical mole).', /(ых|их)$/),
 };
-const ADJ_GEN: Record<string, string> = {
-  'm.sg': 'Genitivo masc./neutro sg.: -ого (-его depois de sibilantes ou radical mole); o г lê-se [в].',
-  'n.sg': 'Genitivo masc./neutro sg.: -ого (-его depois de sibilantes ou radical mole); o г lê-se [в].',
-  'f.sg': 'Genitivo fem. sg.: -ой (-ей).', 'pl': 'Genitivo plural: -ых (-их depois de г, к, х, ж, ш, ч, щ e radical mole).',
-};
-const ADJ_ACC: Record<string, string> = {
+const ADJ_ACC_STRUCT: Record<string, string> = {
   'm.sg.inan': 'Acusativo masc. inanimado = nominativo.', 'm.sg.anim': 'Acusativo masc. animado = genitivo (-ого/-его).',
-  'f.sg': 'Acusativo feminino: -ая → -ую (-яя → -юю).', 'n.sg': 'Acusativo neutro = nominativo.',
+  'n.sg': 'Acusativo neutro = nominativo.',
   'pl.inan': 'Acusativo plural inanimado = nominativo plural.', 'pl.anim': 'Acusativo plural animado = genitivo plural (-ых/-их).',
 };
 
-function syllableOfStress(w: string): number {
+/** Forma de comparação com os padrões de terminação: minúscula, sem acento, ё≡е. */
+export function ruleForm(s: string): string {
+  return stripStress(s).toLowerCase().replace(/ё/g, 'е');
+}
+
+/** A regra vale para estas variantes? (sem padrão = regra descritiva, sempre vale.) */
+export function ruleHolds(rule: EndingRule, variants: string[]): boolean {
+  return !rule.re || variants.some((v) => rule.re!.test(ruleForm(v)));
+}
+
+/** Regra de terminação aplicável a uma pergunta (ou undefined). Exportada para os testes regra×dados. */
+export function ruleFor(l: Lemma, k: GramKey): EndingRule | undefined {
+  if (l.pos === 'noun') return NOUN_RULES[nounClass(l)]?.[`${k.c}.${k.n}`];
+  const key = k.n === 'pl' ? `${k.c}.pl` : `${k.c}.${k.g}.sg`;
+  return ADJ_RULES[key];
+}
+
+export function syllableOfStress(w: string): number {
   const p = stressIndex(w);
   if (p < 0) return -1;
   const plain = [...stripStress(w)];
@@ -200,11 +301,13 @@ function syllableOfStress(w: string): number {
   return n + 1;
 }
 
-function commonPrefix(a: string, b: string): number {
+export function commonPrefix(a: string, b: string): number {
   let i = 0;
   while (i < a.length && i < b.length && a[i] === b[i]) i++;
   return i;
 }
+
+export const IRREGULAR = 'Declinação irregular ou rara: memorize esta forma.';
 
 /** Linhas de explicação (pt-BR) para o feedback. `input` = resposta do usuário (pode ser vazio). */
 export function explain(ix: ContentIndex, k: GramKey, variants: string[], input = ''): string[] {
@@ -213,22 +316,35 @@ export function explain(ix: ContentIndex, k: GramKey, variants: string[], input 
   const correct = variants[0];
   if (l.pos === 'noun') {
     const cls = nounClass(l);
-    const key = `${k.c}.${k.n}`;
-    let rule = NOUN_RULES[cls]?.[key];
-    if (k.c === 'acc' && k.n === 'pl') rule = l.an ? 'Plural animado: acusativo = genitivo plural.' : 'Plural inanimado: acusativo = nominativo plural.';
-    if (k.c === 'acc' && k.n === 'sg' && (cls === 'm-hard' || cls === 'm-j' || cls === 'm-soft'))
-      rule = l.an ? 'Masculino animado: acusativo singular = genitivo.' : 'Masculino inanimado: acusativo singular = nominativo.';
-    lines.push(rule ?? 'Declinação irregular ou rara: memorize esta forma.');
+    let text: string | undefined;
+    if (k.c === 'acc' && k.n === 'pl') text = l.an ? 'Plural animado: acusativo = genitivo plural.' : 'Plural inanimado: acusativo = nominativo plural.';
+    else if (k.c === 'acc' && k.n === 'sg' && (cls === 'm-hard' || cls === 'm-j' || cls === 'm-soft'))
+      text = l.an ? 'Masculino animado: acusativo singular = genitivo.' : 'Masculino inanimado: acusativo singular = nominativo.';
+    else if (k.c === 'acc') text = cls === 'm-a' ? 'Terminação -а → -у; -я → -ю (como o feminino).' : cls.startsWith('n-') ? 'Neutro: acusativo = nominativo.' : cls === 'f-soft' ? 'Feminino em -ь: acusativo = nominativo.' : cls === 'f-iya' ? 'Feminino em -ия: -ия → -ию.' : cls === 'f-ya' ? 'Feminino em -я: -я → -ю.' : cls === 'f-a' ? 'Feminino em -а: -а → -у.' : undefined;
+    else {
+      const rule = NOUN_RULES[cls]?.[`${k.c}.${k.n}`];
+      if (rule && ruleHolds(rule, variants)) text = rule.text; // só mostra a regra se a forma dos dados a cumpre
+    }
+    lines.push(text ?? IRREGULAR);
   } else {
     const gk = k.n === 'pl' ? 'pl' : `${k.g}.sg`;
-    if (k.c === 'nom') lines.push(ADJ_NOM[gk]);
-    else if (k.c === 'gen') lines.push(ADJ_GEN[gk]);
-    else lines.push(ADJ_ACC[k.n === 'pl' ? `pl.${k.an}` : k.g === 'm' ? `m.sg.${k.an}` : gk] ?? '');
+    if (k.c === 'acc') {
+      const t = k.n === 'pl' ? ADJ_ACC_STRUCT[`pl.${k.an}`] : k.g === 'm' ? ADJ_ACC_STRUCT[`m.sg.${k.an}`] : k.g === 'n' ? ADJ_ACC_STRUCT['n.sg'] : undefined;
+      const rule = ADJ_RULES['acc.f.sg'];
+      if (t) lines.push(t);
+      else if (ruleHolds(rule, variants)) lines.push(rule.text);
+      else lines.push(IRREGULAR);
+    } else {
+      const rule = ADJ_RULES[`${k.c}.${gk}`];
+      if (rule && ruleHolds(rule, variants)) lines.push(rule.text);
+      else lines.push(IRREGULAR);
+    }
     lines.push('O adjetivo concorda com o substantivo em gênero, número e caso.');
+    if (k.c !== 'nom' && k.c !== 'acc') lines.push(ADJ_SPELL);
   }
   // mutações detectadas por comparação (não geram forma)
   const base = l.t;
-  const target = stripStress(correct).toLowerCase().replace(/ё/g, 'е');
+  const target = ruleForm(correct);
   const b = base.toLowerCase().replace(/ё/g, 'е');
   const stem = /[аеёиоуыэюяьй]$/.test(b) ? b.slice(0, -1) : b;
   const p = commonPrefix(b, target);
@@ -247,5 +363,3 @@ export function explain(ix: ContentIndex, k: GramKey, variants: string[], input 
   if (variants.length > 1) lines.push(`Variantes aceitas: ${variants.join(', ')}.`);
   return lines;
 }
-
-export { ACUTE };

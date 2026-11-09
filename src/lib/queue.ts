@@ -2,8 +2,9 @@
 import { dayKey } from '../../shared/days';
 import { syllableCount } from '../../shared/russian';
 import type { ContentIndex } from './content';
-import { gramKeys, keyRef, type GramFocus } from './grammar';
+import { gramKeys, keyRef, syllableOfStress, type GramFocus } from './grammar';
 import { cardId, parseCardId, type CardKind, type CardRec, type ReviewRec } from './srs';
+import { verbKeys, verbRef } from './verbs';
 
 export interface QItem {
   cardId: string;
@@ -33,29 +34,64 @@ export function newToday(reviews: ReviewRec[], kind: CardKind, tz: string, now: 
   return n;
 }
 
+const shiftCache = new WeakMap<ContentIndex, string[]>();
+
+/**
+ * Formas flexionadas cujo acento cai em sílaba diferente da do lema (o acento móvel — a parte mais difícil do russo).
+ * Devolve ids de `form` (sem repetir a mesma grafia acentuada num lema), em ordem de frequência do lema.
+ */
+export function stressShiftForms(ix: ContentIndex): string[] {
+  const hit = shiftCache.get(ix);
+  if (hit) return hit;
+  const out: string[] = [];
+  for (const l of ix.content.lemmas) {
+    if (l.pos === 'other') continue;
+    const base = syllableOfStress(l.s);
+    const seen = new Set<string>([l.s]);
+    for (const f of ix.formsOf.get(l.id) ?? []) {
+      if (f.id.endsWith('|inan') || f.id.endsWith('|anim')) continue; // duplicam nominativo/genitivo
+      const w = f.v[0];
+      if (seen.has(w) || syllableCount(w) < 2) continue;
+      seen.add(w);
+      const s = syllableOfStress(w);
+      if (base > 0 && s > 0 && s !== base) out.push(f.id);
+    }
+  }
+  shiftCache.set(ix, out);
+  return out;
+}
+
 export function newItems(
   ix: ContentIndex, cards: CardRec[], kind: CardKind, limit: number, focus: GramFocus = 'all',
 ): QItem[] {
   if (limit <= 0) return [];
   const has = new Set(cards.map((c) => c.id));
-  const learnedVprod = (id: string) => (cards.find((c) => c.id === cardId('vprod', id))?.fsrs.reps ?? 0) > 0;
+  const learnedVprod = new Set(cards.filter((c) => c.kind === 'vprod' && c.fsrs.reps > 0).map((c) => c.ref));
   const out: QItem[] = [];
   const push = (ref: string) => out.push({ cardId: cardId(kind, ref), kind, ref, isNew: true });
-  if (kind === 'gram') {
-    for (const k of gramKeys(ix, focus)) {
+  if (kind === 'gram' || kind === 'verb') {
+    const refs = kind === 'gram' ? gramKeys(ix, focus).map(keyRef) : verbKeys(ix).map(verbRef);
+    for (const ref of refs) {
       if (out.length >= limit) break;
-      const ref = keyRef(k);
-      if (!has.has(cardId('gram', ref))) push(ref);
+      if (!has.has(cardId(kind, ref))) push(ref);
     }
     return out;
   }
   for (const l of ix.content.lemmas) {
     if (out.length >= limit) break;
     if (has.has(cardId(kind, l.id))) continue;
-    if (kind === 'vrec' && !learnedVprod(l.id)) continue;
-    if (kind === 'stress' && (syllableCount(l.t) < 2 || !learnedVprod(l.id))) continue;
+    if (kind === 'vrec' && !learnedVprod.has(l.id)) continue;
+    if (kind === 'stress' && (syllableCount(l.t) < 2 || !learnedVprod.has(l.id))) continue;
     if (kind === 'read' && syllableCount(l.t) < 2) continue;
     push(l.id);
+  }
+  if (kind === 'stress') {
+    // depois das palavras-base: acento das formas flexionadas (de lemas que o aluno já estudou)
+    for (const formId of stressShiftForms(ix)) {
+      if (out.length >= limit) break;
+      if (!learnedVprod.has(formId.slice(0, formId.indexOf('|')))) continue;
+      if (!has.has(cardId('stress', formId))) push(formId);
+    }
   }
   return out;
 }

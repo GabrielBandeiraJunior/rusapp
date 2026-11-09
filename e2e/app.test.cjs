@@ -26,7 +26,26 @@ async function next(page) {
   await page.getByTestId('next').click();
   await page.getByTestId('result').waitFor({ state: 'detached' }); // a próxima pergunta já foi renderizada
 }
-const CASE_EN = { nominativo: 'nom', genitivo: 'gen', acusativo: 'acc' };
+const CASE_EN = { nominativo: 'nom', genitivo: 'gen', acusativo: 'acc', preposicional: 'prep', dativo: 'dat', instrumental: 'inst' };
+
+/** Resposta de uma pergunta de verbo a partir do texto do alvo ("→ presente · eu — я"), lida do content.json. */
+function verbAnswer(lemmaS, targetText) {
+  const lemma = content.lemmas.find((l) => l.s === lemmaS.normalize('NFC'));
+  assert.ok(lemma, `verbo não encontrado: ${lemmaS}`);
+  const label = targetText.replace('→', '').split('—')[0].trim();
+  const [tense, who] = label.split('·').map((s) => s.trim());
+  const PERS = { eu: ['1', 'sg'], tu: ['2', 'sg'], 'ele / ela': ['3', 'sg'], 'nós': ['1', 'pl'], 'vós / vocês': ['2', 'pl'], 'eles / elas': ['3', 'pl'] };
+  const forms = content.forms.filter((f) => f.l === lemma.id);
+  let f;
+  if (tense === 'presente' || tense.startsWith('futuro')) {
+    const [p, n] = PERS[who];
+    f = forms.find((x) => x.tn === 'presfut' && x.p === p && x.n === n);
+  } else if (tense === 'passado') {
+    f = forms.find((x) => x.tn === 'past' && (who === 'plural' ? x.n === 'pl' : x.g === { masculino: 'm', feminino: 'f', neutro: 'n' }[who]));
+  } else f = forms.find((x) => x.tn === 'imp' && x.n === (who === 'tu' ? 'sg' : 'pl'));
+  assert.ok(f, `forma não encontrada: ${lemmaS} ${targetText}`);
+  return f.v;
+}
 
 async function audit(page, name) {
   const text = await page.evaluate(() => document.body.innerText);
@@ -138,6 +157,13 @@ test('telas principais: layout mobile, acentos, alvos de toque e capturas', asyn
   await page.getByTestId('result').waitFor();
   await audit(page, 'gramatica-feedback');
   await shot(page, '07-gramatica-feedback');
+  await page.goto(url + '/gramatica/');
+  await ready(page);
+  await page.getByRole('tab', { name: 'Verbos' }).click();
+  await page.getByTestId('start').click();
+  await page.getByTestId('target').waitFor();
+  await audit(page, 'verbos-pergunta');
+  await shot(page, '13-verbos');
 
   await page.goto(url + '/leitura/');
   await ready(page);
@@ -223,7 +249,7 @@ test('fluxo de estudo: vocabulário (novo→digitar), reconhecer, acento, casos,
   // painel
   await page.goto(url + '/');
   await ready(page);
-  assert.match(await page.getByTestId('streak').innerText(), /1/);
+  assert.match(await page.getByTestId('streak-days').innerText(), /1/);
   const goal = await page.getByTestId('goal').innerText();
   assert.ok(Number(goal.split('/')[0]) >= 10, `meta de hoje: ${goal}`);
   await page.getByTestId('errors').waitFor();
@@ -258,7 +284,7 @@ test('OFFLINE: fluxo completo após a primeira carga (rede desligada)', async ()
   await doVocabNewRound(page);
   await page.getByTestId('exit').click();
 
-  await page.getByRole('link', { name: 'Casos' }).click();
+  await page.getByRole('link', { name: 'Gramática' }).click();
   await page.getByTestId('start').click();
   const lemmaS = await page.getByTestId('prompt').innerText();
   const target = await page.getByTestId('target').innerText();
@@ -382,4 +408,120 @@ test('continuar de onde parou: sai no meio da sessão e retoma pela tela inicial
   await page.getByTestId('progress').waitFor();
   assert.match(await page.getByTestId('progress').innerText(), /^3\//, 'retoma na questão 3');
   await ctx.close();
+});
+
+test('verbos: conjugar (certo sem acento/MAIÚSCULAS, errado com explicação) e casos novos', async () => {
+  const ctx = await newPhone(browser);
+  const page = await ctx.newPage();
+  await page.goto(url + '/gramatica/');
+  await ready(page);
+  await page.getByRole('tab', { name: 'Verbos' }).click();
+  await page.getByTestId('start').click();
+  for (let i = 0; i < 7; i++) {
+    const lemmaS = await page.getByTestId('prompt').innerText();
+    const target = await page.getByTestId('target').innerText();
+    const variants = verbAnswer(lemmaS, target);
+    if (i === 3) {
+      await page.getByLabel('Forma verbal em russo').fill('ъъъ');
+      await page.getByTestId('check').click();
+      await page.getByText('Ainda não.').waitFor();
+      assert.equal((await page.getByTestId('answer').innerText()).normalize('NFC'), variants[0].normalize('NFC'));
+      assert.ok((await page.locator('[data-testid=result] li').count()) >= 1, 'explicação do verbo');
+      await audit(page, 'verbos-feedback');
+    } else {
+      await page.getByLabel('Forma verbal em russo').fill(strip(variants[variants.length - 1]).toUpperCase());
+      await page.getByTestId('check').click();
+      await page.getByText('Correto!').waitFor();
+    }
+    await next(page);
+  }
+  await page.getByLabel('Sair da sessão').click();
+
+  // casos novos: o filtro "Prep." só pergunta preposicional (e só para lemas com células completas)
+  await page.goto(url + '/gramatica/');
+  await ready(page);
+  await page.getByRole('tab', { name: 'Prep.' }).click();
+  await page.getByTestId('start').click();
+  for (let i = 0; i < 3; i++) {
+    const lemmaS = await page.getByTestId('prompt').innerText();
+    const target = await page.getByTestId('target').innerText();
+    assert.match(target, /preposicional/);
+    await page.getByLabel('Forma em russo').fill(gramAnswer(lemmaS, target)[0]);
+    await page.getByTestId('check').click();
+    await page.getByText('Correto!').waitFor();
+    await next(page);
+  }
+  await ctx.close();
+});
+
+test('acento de formas flexionadas: aparece depois de estudar palavras e a resposta vem dos dados', async () => {
+  const ctx = await newPhone(browser);
+  const page = await ctx.newPage();
+  // estuda palavras até haver lemas com formas de acento móvel (n:дом etc. estão entre os mais frequentes)
+  await page.goto(url + '/config/');
+  await ready(page);
+  const goalInput = page.getByLabel('Novos por dia');
+  await goalInput.fill('60');
+  await goalInput.blur();
+  await page.goto(url + '/vocabulario/');
+  await ready(page);
+  await page.getByTestId('start').click();
+  for (let i = 0; i < 15; i++) {
+    if (await page.getByTestId('summary').isVisible().catch(() => false)) break;
+    const nw = page.getByTestId('newword');
+    await nw.waitFor({ timeout: 5000 });
+    await page.getByLabel('Resposta em russo').fill(strip(await nw.innerText()));
+    await page.getByTestId('check').click();
+    await next(page);
+  }
+  await page.getByTestId('exit').click();
+  await page.getByRole('tab', { name: 'Acento' }).click();
+  await page.getByTestId('start').click();
+  let seenForm = false;
+  for (let i = 0; i < 15 && !seenForm; i++) {
+    if (await page.getByTestId('summary').isVisible().catch(() => false)) break;
+    if (await page.getByTestId('form-label').isVisible().catch(() => false)) {
+      seenForm = true;
+      const word = strip((await page.getByTestId('letters').innerText()).replace(/\s+/g, '')).toLowerCase();
+      const real = content.forms.find((f) => strip(f.v[0]).toLowerCase() === word);
+      assert.ok(real, `a forma "${word}" existe nos dados`);
+      await page.locator('[data-vowel]').first().click();
+      await page.getByTestId('result').waitFor();
+      assert.equal((await page.getByTestId('answer').innerText()).normalize('NFC'), real.v[0].normalize('NFC'), 'a palavra acentuada vem dos dados');
+      break;
+    }
+    await page.locator('[data-vowel]').first().click();
+    await page.getByTestId('result').waitFor();
+    await next(page);
+  }
+  assert.ok(seenForm, 'apareceu um exercício de acento de forma flexionada');
+  await ctx.close();
+});
+
+test('backup: exportar num aparelho e importar em outro, sem duplicar', async () => {
+  const A = await (await newPhone(browser, { acceptDownloads: true })).newPage();
+  await A.goto(url + '/vocabulario/');
+  await ready(A);
+  await doVocabNewRound(A);
+  await A.getByTestId('exit').click();
+  await A.goto(url + '/config/');
+  await ready(A);
+  const [dl] = await Promise.all([A.waitForEvent('download'), A.getByRole('button', { name: 'Exportar' }).click()]);
+  const file = path.join(require('node:os').tmpdir(), `rusapp-backup-${Date.now()}.json`);
+  await dl.saveAs(file);
+  const data = JSON.parse(fs.readFileSync(file, 'utf8'));
+  assert.equal(data.app, 'rusapp');
+  assert.ok(data.reviews.length >= 8);
+
+  const B = await (await newPhone(browser)).newPage();
+  await B.goto(url + '/config/');
+  await ready(B);
+  await B.getByLabel('Arquivo de backup').setInputFiles(file);
+  await B.getByTestId('backup-msg').getByText(/Importado/).waitFor();
+  await B.getByLabel('Arquivo de backup').setInputFiles(file); // de novo: nada novo
+  await B.getByTestId('backup-msg').getByText(/Importado: 0 revisões/).waitFor();
+  await B.goto(url + '/');
+  await ready(B);
+  assert.ok(Number((await B.getByTestId('goal').innerText()).split('/')[0]) >= 8, 'progresso importado aparece na Home');
+  fs.rmSync(file, { force: true });
 });

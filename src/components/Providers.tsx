@@ -8,27 +8,41 @@ import { loadSettings, saveSetting, type Settings } from '@/lib/stats';
 
 export type SyncStatus = 'off' | 'idle' | 'syncing' | 'ok' | 'error';
 
-interface Ctx {
+/** Dados do estudo. Muda a cada resposta — quem só precisa do estado do sync usa `useSync`. */
+interface AppValue {
   store: Store;
   ix: ContentIndex;
   cards: CardRec[];
   reviews: ReviewRec[];
   settings: Settings;
-  syncStatus: SyncStatus;
-  syncMessage: string;
   review: (cardId: string, rating: 1 | 2 | 3 | 4, correct: boolean, resp?: string) => Promise<void>;
   update: <K extends keyof Settings>(k: K, v: Settings[K]) => Promise<void>;
+  /** Relê tudo do IndexedDB (depois de importar um backup). */
+  reload: () => Promise<void>;
+}
+
+/** Estado e controle da sincronização (muda raramente, separado para não re-renderizar o app todo). */
+interface SyncValue {
+  syncStatus: SyncStatus;
+  syncMessage: string;
   syncNow: () => Promise<void>;
   getSyncConfig: () => SyncConfig | null;
   setSyncConfig: (c: SyncConfig | null) => void;
 }
 
-const AppCtx = createContext<Ctx | null>(null);
+const AppCtx = createContext<AppValue | null>(null);
+const SyncCtx = createContext<SyncValue | null>(null);
 const SYNC_KEY = 'rusapp.sync';
 
-export function useApp(): Ctx {
+export function useApp(): AppValue {
   const c = useContext(AppCtx);
   if (!c) throw new Error('useApp fora do provider');
+  return c;
+}
+
+export function useSync(): SyncValue {
+  const c = useContext(SyncCtx);
+  if (!c) throw new Error('useSync fora do provider');
   return c;
 }
 
@@ -39,6 +53,14 @@ function readSync(): SyncConfig | null {
   } catch {
     return null;
   }
+}
+
+function upsertCard(list: CardRec[], card: CardRec): CardRec[] {
+  const i = list.findIndex((c) => c.id === card.id);
+  if (i < 0) return [...list, card];
+  const next = list.slice();
+  next[i] = card;
+  return next;
 }
 
 export function Providers({ children }: { children: ReactNode }) {
@@ -68,6 +90,8 @@ export function Providers({ children }: { children: ReactNode }) {
         await reload(store);
         setBoot({ store, ix });
         if (readSync()) setSyncStatus('idle');
+        // pede armazenamento persistente: reduz o risco de o navegador apagar o progresso por falta de uso
+        void navigator.storage?.persist?.().catch(() => undefined);
       } catch (e) {
         setErr(String((e as Error).message ?? e));
       }
@@ -84,7 +108,12 @@ export function Providers({ children }: { children: ReactNode }) {
     setSyncStatus('syncing');
     try {
       const r = await syncOnce(boot.store, cfg);
-      await reload(boot.store);
+      if (r.pulled > 0) await reload(boot.store);
+      else {
+        // configurações podem ter vindo do outro aparelho
+        const s = await loadSettings(boot.store);
+        setSettings((prev) => (prev && JSON.stringify(prev) === JSON.stringify(s) ? prev : s));
+      }
       setSyncStatus('ok');
       setSyncMessage(`↑${r.pushed} ↓${r.pulled}`);
     } catch (e) {
@@ -106,24 +135,35 @@ export function Providers({ children }: { children: ReactNode }) {
     const on = () => void syncNow();
     window.addEventListener('online', on);
     void syncNow();
-    return () => window.removeEventListener('online', on);
+    return () => {
+      window.removeEventListener('online', on);
+      if (timer.current) clearTimeout(timer.current);
+    };
   }, [boot, syncNow]);
 
-  const value = useMemo<Ctx | null>(() => {
+  const app = useMemo<AppValue | null>(() => {
     if (!boot || !settings) return null;
+    const { store, ix } = boot;
     return {
-      store: boot.store, ix: boot.ix, cards, reviews, settings, syncStatus, syncMessage,
+      store, ix, cards, reviews, settings,
       review: async (cardId, rating, correct, resp = '') => {
-        await boot.store.recordReview(cardId, rating, correct, resp);
-        await reload(boot.store);
+        const { card, review } = await store.recordReview(cardId, rating, correct, resp);
+        setCards((prev) => upsertCard(prev, card));
+        setReviews((prev) => [...prev, review]);
         scheduleSync();
       },
       update: async (k, v) => {
-        await saveSetting(boot.store, k, v);
-        await reload(boot.store);
+        await saveSetting(store, k, v);
+        setSettings(await loadSettings(store));
         scheduleSync();
       },
-      syncNow,
+      reload: () => reload(store),
+    };
+  }, [boot, cards, reviews, settings, reload, scheduleSync]);
+
+  const sync = useMemo<SyncValue>(
+    () => ({
+      syncStatus, syncMessage, syncNow,
       getSyncConfig: readSync,
       setSyncConfig: (c) => {
         try {
@@ -134,8 +174,9 @@ export function Providers({ children }: { children: ReactNode }) {
         }
         setSyncStatus(c ? 'idle' : 'off');
       },
-    };
-  }, [boot, cards, reviews, settings, syncStatus, syncMessage, reload, scheduleSync, syncNow]);
+    }),
+    [syncStatus, syncMessage, syncNow],
+  );
 
   if (err)
     return (
@@ -144,6 +185,10 @@ export function Providers({ children }: { children: ReactNode }) {
         <p className="text-sm text-muted">{err}</p>
       </div>
     );
-  if (!value) return <div className="p-6 text-muted" data-testid="loading">Carregando…</div>;
-  return <AppCtx.Provider value={value}>{children}</AppCtx.Provider>;
+  if (!app) return <div className="p-6 text-muted" data-testid="loading">Carregando…</div>;
+  return (
+    <AppCtx.Provider value={app}>
+      <SyncCtx.Provider value={sync}>{children}</SyncCtx.Provider>
+    </AppCtx.Provider>
+  );
 }

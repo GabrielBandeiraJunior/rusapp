@@ -6,6 +6,7 @@ export interface ContentIndex {
   formsOf: Map<string, Form[]>;
   sentencesOf: Map<string, Sentence[]>;
   sentence: Map<string, Sentence>;
+  formById: Map<string, Form>;
 }
 
 export function indexContent(content: Content): ContentIndex {
@@ -27,7 +28,11 @@ export function indexContent(content: Content): ContentIndex {
       else sentencesOf.set(l, [s]);
     }
   }
-  return { content, lemma, formsOf, sentencesOf, sentence: new Map(content.sentences.map((s) => [s.id, s])) };
+  return {
+    content, lemma, formsOf, sentencesOf,
+    sentence: new Map(content.sentences.map((s) => [s.id, s])),
+    formById: new Map(content.forms.map((f) => [f.id, f])),
+  };
 }
 
 let cached: Promise<ContentIndex> | null = null;

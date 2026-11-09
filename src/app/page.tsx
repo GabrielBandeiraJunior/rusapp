@@ -2,21 +2,29 @@
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import { addDays, dayKey } from '../../shared/days';
-import { useApp } from '@/components/Providers';
+import { useApp, useSync } from '@/components/Providers';
 import { Bar, Card, Page } from '@/components/ui';
 import { buildQueue, knownLemmas } from '@/lib/queue';
-import { continueHref, KIND_LABEL, loadSession, type SavedSession } from '@/lib/resume';
+import { continueHref, KIND_HREF, KIND_LABEL, loadSession, type SavedSession } from '@/lib/resume';
 import { isLearned, type CardKind } from '@/lib/srs';
 import { dueNow, errorsByCase, matureCount, retention, reviewsOnDay, streakFor } from '@/lib/stats';
 
-const PLAN: { kind: CardKind; label: string; href: string }[] = [
-  { kind: 'vprod', label: 'Vocabulário (digitar)', href: '/vocabulario/' },
-  { kind: 'vrec', label: 'Vocabulário (reconhecer)', href: '/vocabulario/' },
-  { kind: 'stress', label: 'Acento', href: '/vocabulario/' },
-  { kind: 'gram', label: 'Casos (gramática)', href: '/gramatica/' },
-  { kind: 'read', label: 'Leitura de palavras', href: '/alfabeto/' },
-];
+const PLAN_KINDS: CardKind[] = ['vprod', 'vrec', 'stress', 'gram', 'verb', 'read'];
 
+/** Relógio que se atualiza a cada minuto e ao voltar para a aba (a Home vira o dia sozinha). */
+function useNow(everyMs = 60_000): number {
+  const [now, setNow] = useState(() => Date.now());
+  useEffect(() => {
+    const tick = () => setNow(Date.now());
+    const id = setInterval(tick, everyMs);
+    document.addEventListener('visibilitychange', tick);
+    return () => {
+      clearInterval(id);
+      document.removeEventListener('visibilitychange', tick);
+    };
+  }, [everyMs]);
+  return now;
+}
 
 const WD = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'];
 const weekday = (key: string) => WD[new Date(`${key}T12:00:00Z`).getUTCDay()];
@@ -59,8 +67,9 @@ function Path({ steps }: { steps: Step[] }) {
 }
 
 export default function Home() {
-  const { ix, cards, reviews, settings, syncStatus, syncMessage } = useApp();
-  const now = Date.now();
+  const { ix, cards, reviews, settings } = useApp();
+  const { syncStatus, syncMessage } = useSync();
+  const now = useNow();
   const today = dayKey(now, settings.tz);
   const streak = streakFor(reviews, now, settings);
   const doneToday = reviewsOnDay(reviews, today, settings.tz);
@@ -68,13 +77,12 @@ export default function Home() {
   const ret = retention(reviews, now);
   const errs = errorsByCase(reviews).slice(0, 6);
   const plan = useMemo(
-    () => PLAN.map((p) => {
-      const q = buildQueue(ix, cards, reviews, p.kind, now, { newPerDay: settings.newPerDay, tz: settings.tz });
+    () => PLAN_KINDS.map((kind) => {
+      const q = buildQueue(ix, cards, reviews, kind, now, { newPerDay: settings.newPerDay, tz: settings.tz });
       const d = q.filter((x) => !x.isNew).length;
-      return { ...p, due: d, fresh: q.length - d };
+      return { kind, label: KIND_LABEL[kind], href: KIND_HREF[kind], due: d, fresh: q.length - d };
     }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [ix, cards, reviews, settings.newPerDay, settings.tz],
+    [ix, cards, reviews, settings.newPerDay, settings.tz, now],
   );
   const week = Array.from({ length: 7 }, (_, i) => {
     const d = addDays(today, i - 6);
@@ -89,13 +97,10 @@ export default function Home() {
     { id: 'vprod', title: 'Primeiras palavras', hint: 'Digite as palavras em russo', href: '/vocabulario/', have: learned('vprod'), goal: 30 },
     { id: 'stress', title: 'Acento tônico', hint: 'Onde cai a tônica', href: '/vocabulario/', have: learned('stress'), goal: 20 },
     { id: 'vrec', title: 'Reconhecer palavras', hint: 'Do russo para o português', href: '/vocabulario/', have: learned('vrec'), goal: 20 },
-    { id: 'gram', title: 'Casos', hint: 'Nominativo, acusativo e genitivo', href: '/gramatica/', have: learned('gram'), goal: 40 },
+    { id: 'gram', title: 'Casos', hint: 'Nominativo, acusativo, genitivo, preposicional, dativo e instrumental', href: '/gramatica/', have: learned('gram'), goal: 40 },
+    { id: 'verb', title: 'Verbos', hint: 'Presente, passado e imperativo', href: '/gramatica/?continue=verb', have: learned('verb'), goal: 30 },
     { id: 'texts', title: 'Leitura de textos', hint: 'Textos com as palavras que você já conhece', href: '/leitura/', have: knownLemmas(cards).size, goal: 60 },
   ];
-  const calendar = Array.from({ length: 7 }, (_, i) => {
-    const d = addDays(today, i - 6);
-    return { d, n: reviewsOnDay(reviews, d, settings.tz) };
-  });
   const first = reviews.length === 0;
   const next = plan.find((p) => p.due + p.fresh > 0);
 
@@ -110,7 +115,7 @@ export default function Home() {
           <p className="text-right text-xs text-muted">recorde {streak.longest}<br />{doneToday}/{settings.dailyGoal} hoje</p>
         </div>
         <ul className="mt-3 flex justify-between" aria-label="Últimos 7 dias">
-          {calendar.map((c, i) => (
+          {week.map((c, i) => (
             <li key={c.d} className="flex flex-col items-center gap-1">
               <span
                 className={`flex h-9 w-9 items-center justify-center rounded-full text-sm font-bold ${c.n ? 'bg-good text-white' : i === 6 ? 'border-2 border-dashed border-brand text-brand' : 'bg-line text-muted'}`}
@@ -156,26 +161,21 @@ export default function Home() {
       <h2 className="mb-2 mt-4 text-lg font-bold">Seu caminho</h2>
       <Path steps={steps} />
 
-      <div className="mt-4 grid grid-cols-2 gap-3">
-        <Card>
-          <p className="text-sm text-muted">Ofensiva</p>
-          <p className="text-3xl font-bold" data-testid="streak">🔥 {streak.streak}</p>
-          <p className="text-xs text-muted">recorde {streak.longest}{settings.freeze ? ` · ❄️ ${streak.freezes}` : ''}</p>
-        </Card>
-        <Card>
+      <div className="mt-4 grid grid-cols-3 gap-3">
+        <Card className="!p-3">
           <p className="text-sm text-muted">Meta de hoje</p>
-          <p className="text-3xl font-bold" data-testid="goal">{doneToday}<span className="text-lg text-muted">/{settings.dailyGoal}</span></p>
+          <p className="text-2xl font-bold" data-testid="goal">{doneToday}<span className="text-base text-muted">/{settings.dailyGoal}</span></p>
           <Bar value={doneToday} max={settings.dailyGoal} tone={doneToday >= settings.dailyGoal ? 'good' : 'brand'} />
         </Card>
-        <Card>
-          <p className="text-sm text-muted">Retenção (30 d)</p>
-          <p className="text-3xl font-bold" data-testid="retention">{ret.pct === null ? '—' : `${ret.pct}%`}</p>
-          <p className="text-xs text-muted">{ret.n} revisões</p>
+        <Card className="!p-3">
+          <p className="text-sm text-muted">Retenção</p>
+          <p className="text-2xl font-bold" data-testid="retention">{ret.pct === null ? '—' : `${ret.pct}%`}</p>
+          <p className="text-xs text-muted">30 d · {ret.n} rev.</p>
         </Card>
-        <Card>
+        <Card className="!p-3">
           <p className="text-sm text-muted">Cartões</p>
-          <p className="text-3xl font-bold">{cards.length}</p>
-          <p className="text-xs text-muted">{matureCount(cards)} maduros</p>
+          <p className="text-2xl font-bold">{cards.length}</p>
+          <p className="text-xs text-muted">{matureCount(cards)} maduros{settings.freeze ? ` · ❄️ ${streak.freezes}` : ''}</p>
         </Card>
       </div>
 

@@ -45,17 +45,17 @@ export function Page({ title, children, right }: { title: string; children: Reac
 }
 
 export function Tabs<T extends string>({
-  value, onChange, items,
-}: { value: T; onChange: (v: T) => void; items: { id: T; label: string }[] }) {
+  value, onChange, items, scroll = false,
+}: { value: T; onChange: (v: T) => void; items: { id: T; label: string }[]; scroll?: boolean }) {
   return (
-    <div role="tablist" className="mb-3 flex gap-1 rounded-2xl bg-line/50 p-1">
+    <div role="tablist" className={`mb-3 flex gap-1 rounded-2xl bg-line/50 p-1 ${scroll ? 'overflow-x-auto' : ''}`}>
       {items.map((it) => (
         <button
           key={it.id}
           role="tab"
           aria-selected={value === it.id}
           onClick={() => onChange(it.id)}
-          className={`min-h-11 flex-1 rounded-xl px-2 text-sm font-semibold transition ${value === it.id ? 'bg-surface text-ink shadow-sm' : 'text-muted'}`}
+          className={`min-h-11 rounded-xl px-2 text-sm font-semibold transition ${scroll ? 'shrink-0 px-3' : 'flex-1'} ${value === it.id ? 'bg-surface text-ink shadow-sm' : 'text-muted'}`}
         >
           {it.label}
         </button>

@@ -4,6 +4,9 @@ out
 data/raw
 worker/dist
 .wrangler
+worker/.dev.vars
+.dev.vars
+.claude/
 *.tsbuildinfo
 test-results
 e2e/screens
